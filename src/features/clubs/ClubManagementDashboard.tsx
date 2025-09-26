@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useClubMembers } from '@/hooks/useClubMembership';
-import { useUserRoles, useIsClubOfficer, useHasRole, UserRole } from '@/hooks/useRoles';
+// Update existing user_roles table to use new club_role enum
+import { useUserEffectiveRoles } from '@/hooks/useRBAC';
+import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
 import { useAuth } from '@/contexts/AuthContext';
 import { officerRoles } from '@/data/officerRoles';
 import { useToast } from '@/hooks/use-toast';
@@ -43,12 +45,12 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
   const [selectedMember, setSelectedMember] = useState<string>('');
   const [activeTab, setActiveTab] = useState('members');
 
-  const { data: clubMembers = [], isLoading, refetch } = useClubMembers(actualClubId || '');
-  const isOfficer = useIsClubOfficer(actualClubId);
-  const isAdmin = useHasRole('admin');
-  const canManageRoles = isOfficer || isAdmin;
+  const { data: clubMembers = [], isLoading, refetch } = useClubMembersWithRoles(actualClubId || '');
+  const { data: hasManagePermission } = usePermission('club.assign.roles', actualClubId);
+  const { data: hasAdminPermission } = usePermission('platform.admin.full');
+  const canManageRoles = hasManagePermission || hasAdminPermission;
 
-  const handleRoleChange = async (memberId: string, newRole: UserRole) => {
+  const handleRoleChange = async (memberId: string, newRole: ClubRole) => {
     if (!canManageRoles || !actualClubId) {
       toast({
         title: "Permission denied",
@@ -62,10 +64,9 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
       // First, remove any existing officer role for this member in this club
       await supabase
         .from('user_roles')
-        .delete()
+        .update({ is_active: false })
         .eq('user_id', memberId)
-        .eq('club_id', actualClubId)
-        .neq('role', 'member');
+        .eq('club_id', actualClubId);
 
       // Then add the new role if it's not just a member
       if (newRole !== 'member') {
@@ -74,7 +75,22 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
           .insert({
             user_id: memberId,
             club_id: actualClubId,
-            role: newRole === 'club_officer' ? 'club_officer' : 'admin'
+            club_role: newRole,
+            assigned_by: user?.id,
+            is_active: true
+          });
+
+        if (error) throw error;
+      } else {
+        // For member role, create a new active record
+        const { error } = await supabase
+          .from('user_roles')
+          .insert({
+            user_id: memberId,
+            club_id: actualClubId,
+            club_role: 'member',
+            assigned_by: user?.id,
+            is_active: true
           });
 
         if (error) throw error;
@@ -108,7 +124,7 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
     try {
       const { error } = await supabase
         .from('user_roles')
-        .delete()
+        .update({ is_active: false })
         .eq('user_id', memberId)
         .eq('club_id', actualClubId);
 
@@ -139,8 +155,15 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
 
   const getRoleDisplayName = (role: string) => {
     switch (role) {
-      case 'admin': return 'Admin';
-      case 'club_officer': return 'Officer';
+      case 'club_admin': return 'Club Admin';
+      case 'president': return 'President';
+      case 'vice_president': return 'Vice President';
+      case 'tournament_director': return 'Tournament Director';
+      case 'secretary': return 'Secretary';
+      case 'treasurer': return 'Treasurer';
+      case 'conservation_director': return 'Conservation Director';
+      case 'member': return 'Member';
+      case 'guest': return 'Guest';
       default: return 'Member';
     }
   };
@@ -212,8 +235,8 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
                           <p className="font-medium">{member.profile?.name || 'Unknown User'}</p>
                           <p className="text-sm text-muted-foreground">Club Member</p>
                         </div>
-                        <Badge variant={getRoleBadgeVariant(member.role)}>
-                          {getRoleDisplayName(member.role)}
+                        <Badge variant={getRoleBadgeVariant(member.club_role || 'member')}>
+                          {getRoleDisplayName(member.club_role || 'member')}
                         </Badge>
                       </div>
                       
@@ -221,16 +244,21 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
                         {canManageRoles && member.user_id !== user?.id && (
                           <>
                             <Select
-                              value={member.role}
-                              onValueChange={(value) => handleRoleChange(member.user_id, value as UserRole)}
+                              value={member.club_role || 'member'}
+                              onValueChange={(value) => handleRoleChange(member.user_id, value as ClubRole)}
                             >
-                              <SelectTrigger className="w-32">
+                              <SelectTrigger className="w-48">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="member">Member</SelectItem>
-                                <SelectItem value="club_officer">Officer</SelectItem>
-                                {isAdmin && <SelectItem value="admin">Admin</SelectItem>}
+                                <SelectItem value="secretary">Secretary</SelectItem>
+                                <SelectItem value="treasurer">Treasurer</SelectItem>
+                                <SelectItem value="tournament_director">Tournament Director</SelectItem>
+                                <SelectItem value="conservation_director">Conservation Director</SelectItem>
+                                <SelectItem value="vice_president">Vice President</SelectItem>
+                                <SelectItem value="president">President</SelectItem>
+                                {hasAdminPermission && <SelectItem value="club_admin">Club Admin</SelectItem>}
                               </SelectContent>
                             </Select>
                             <Button

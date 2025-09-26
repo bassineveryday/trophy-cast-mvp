@@ -94,6 +94,30 @@ export type Database = {
         }
         Relationships: []
       }
+      permissions: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           aoy_titles: number | null
@@ -162,6 +186,122 @@ export type Database = {
           },
         ]
       }
+      role_audit_log: {
+        Row: {
+          action: string
+          club_id: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          new_role: string | null
+          old_role: string | null
+          reason: string | null
+          role_type: string
+          target_user_id: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          club_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_role?: string | null
+          old_role?: string | null
+          reason?: string | null
+          role_type: string
+          target_user_id: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          club_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_role?: string | null
+          old_role?: string | null
+          reason?: string | null
+          role_type?: string
+          target_user_id?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          club_role: Database["public"]["Enums"]["club_role"] | null
+          created_at: string | null
+          id: string
+          permission_id: string
+          platform_role: Database["public"]["Enums"]["platform_role"] | null
+        }
+        Insert: {
+          club_role?: Database["public"]["Enums"]["club_role"] | null
+          created_at?: string | null
+          id?: string
+          permission_id: string
+          platform_role?: Database["public"]["Enums"]["platform_role"] | null
+        }
+        Update: {
+          club_role?: Database["public"]["Enums"]["club_role"] | null
+          created_at?: string | null
+          id?: string
+          permission_id?: string
+          platform_role?: Database["public"]["Enums"]["platform_role"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_id_fkey"
+            columns: ["permission_id"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      temporary_role_elevations: {
+        Row: {
+          approved_by: string | null
+          club_id: string | null
+          created_at: string | null
+          elevated_to: Database["public"]["Enums"]["club_role"]
+          expires_at: string
+          id: string
+          is_active: boolean | null
+          reason: string
+          requested_by: string
+          user_id: string
+        }
+        Insert: {
+          approved_by?: string | null
+          club_id?: string | null
+          created_at?: string | null
+          elevated_to: Database["public"]["Enums"]["club_role"]
+          expires_at: string
+          id?: string
+          is_active?: boolean | null
+          reason: string
+          requested_by: string
+          user_id: string
+        }
+        Update: {
+          approved_by?: string | null
+          club_id?: string | null
+          created_at?: string | null
+          elevated_to?: Database["public"]["Enums"]["club_role"]
+          expires_at?: string
+          id?: string
+          is_active?: boolean | null
+          reason?: string
+          requested_by?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tournaments: {
         Row: {
           club_id: string | null
@@ -209,25 +349,70 @@ export type Database = {
           },
         ]
       }
+      user_platform_roles: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          platform_role: Database["public"]["Enums"]["platform_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          platform_role: Database["public"]["Enums"]["platform_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          platform_role?: Database["public"]["Enums"]["platform_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
+          assigned_at: string | null
+          assigned_by: string | null
           club_id: string | null
+          club_role: Database["public"]["Enums"]["club_role"] | null
           created_at: string
+          expires_at: string | null
           id: string
+          is_active: boolean | null
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
           club_id?: string | null
+          club_role?: Database["public"]["Enums"]["club_role"] | null
           created_at?: string
+          expires_at?: string | null
           id?: string
+          is_active?: boolean | null
           role?: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
           club_id?: string | null
+          club_role?: Database["public"]["Enums"]["club_role"] | null
           created_at?: string
+          expires_at?: string | null
           id?: string
+          is_active?: boolean | null
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -250,6 +435,15 @@ export type Database = {
         Args: { club_uuid: string }
         Returns: number
       }
+      get_user_effective_roles: {
+        Args: { _club_id?: string; _user_id: string }
+        Returns: {
+          club_id: string
+          expires_at: string
+          role_name: string
+          role_type: string
+        }[]
+      }
       has_role: {
         Args: {
           _club_id?: string
@@ -266,9 +460,24 @@ export type Database = {
         Args: { _club_id?: string; _user_id: string }
         Returns: boolean
       }
+      user_has_permission: {
+        Args: { _club_id?: string; _permission_name: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "club_officer" | "member"
+      club_role:
+        | "club_admin"
+        | "president"
+        | "vice_president"
+        | "tournament_director"
+        | "secretary"
+        | "treasurer"
+        | "conservation_director"
+        | "member"
+        | "guest"
+      platform_role: "super_admin" | "platform_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -397,6 +606,18 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "club_officer", "member"],
+      club_role: [
+        "club_admin",
+        "president",
+        "vice_president",
+        "tournament_director",
+        "secretary",
+        "treasurer",
+        "conservation_director",
+        "member",
+        "guest",
+      ],
+      platform_role: ["super_admin", "platform_admin"],
     },
   },
 } as const
