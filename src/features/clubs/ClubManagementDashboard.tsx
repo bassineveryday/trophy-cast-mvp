@@ -8,9 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useClubMembers } from '@/hooks/useClubMembership';
-// Update existing user_roles table to use new club_role enum
-import { useUserEffectiveRoles } from '@/hooks/useRBAC';
-import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
+import { useUserEffectiveRoles, usePermission, useClubMembersWithRoles, type ClubRole } from '@/hooks/useRBAC';
 import { useAuth } from '@/contexts/AuthContext';
 import { officerRoles } from '@/data/officerRoles';
 import { useToast } from '@/hooks/use-toast';

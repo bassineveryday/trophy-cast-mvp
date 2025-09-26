@@ -14,8 +14,17 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
+import OfficerQuickActions from "@/components/dashboard/OfficerQuickActions";
+import RoleBasedWelcome from "@/components/dashboard/RoleBasedWelcome";
+import { useUserClubs } from "@/hooks/useClubMembership";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
+  const { user } = useAuth();
+  // Get user's clubs to show officer actions for the first club
+  // In a real app, you might want to let users select which club
+  const { data: userClubs = [] } = useUserClubs();
+  const primaryClub = userClubs[0]?.club;
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -31,6 +40,17 @@ const Dashboard = () => {
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Role-based welcome message */}
+        <RoleBasedWelcome 
+          clubId={primaryClub?.id} 
+          userName={user?.email?.split('@')[0]} 
+        />
+        
+        {/* Officer Quick Actions - only shown if user has officer role */}
+        {primaryClub && (
+          <OfficerQuickActions clubId={primaryClub.id} />
+        )}
+        
         {/* Career Stats */}
         <Card>
           <CardHeader>
