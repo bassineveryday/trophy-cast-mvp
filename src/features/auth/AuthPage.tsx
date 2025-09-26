@@ -49,10 +49,10 @@ const US_STATES = [
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
-  const { signIn, signUp, resendConfirmation, user, loading } = useAuth();
   const [lastSignInEmail, setLastSignInEmail] = useState('');
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
+  const { signIn, signUp, resendConfirmation, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
