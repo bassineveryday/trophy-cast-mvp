@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Trophy Cast Design System - Where Every Cast Counts
+Brand Colors: Gold (trophies/success), Green (nature/fishing), Blue (water/trust)
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    /* Card system */
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    /* Popover system */
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Trophy Cast Brand Colors */
+    --trophy-gold: 45 95% 58%;
+    --trophy-gold-light: 45 100% 75%;
+    --trophy-gold-dark: 45 85% 45%;
+    
+    --fishing-green: 142 69% 45%;
+    --fishing-green-light: 142 69% 65%;
+    --fishing-green-dark: 142 69% 35%;
+    
+    --water-blue: 205 87% 55%;
+    --water-blue-light: 205 87% 75%;
+    --water-blue-dark: 205 87% 35%;
+
+    /* Primary system using trophy gold */
+    --primary: 45 95% 58%;
+    --primary-foreground: 215 25% 15%;
+
+    /* Secondary using water blue */
+    --secondary: 205 87% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Success using fishing green */
+    --success: 142 69% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Muted system */
+    --muted: 210 20% 95%;
+    --muted-foreground: 215 15% 45%;
+
+    /* Accent using light gold */
+    --accent: 45 100% 95%;
+    --accent-foreground: 215 25% 15%;
+
+    /* Destructive */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 210 20% 88%;
+    --input: 210 20% 95%;
+    --ring: 45 95% 58%;
+
+    /* Gradients */
+    --gradient-trophy: linear-gradient(135deg, hsl(var(--trophy-gold)), hsl(var(--trophy-gold-light)));
+    --gradient-water: linear-gradient(135deg, hsl(var(--water-blue)), hsl(var(--water-blue-light)));
+    --gradient-nature: linear-gradient(135deg, hsl(var(--fishing-green)), hsl(var(--fishing-green-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--water-blue-dark)), hsl(var(--fishing-green-dark)));
+
+    /* Shadows */
+    --shadow-trophy: 0 10px 30px -10px hsl(var(--trophy-gold) / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(215 25% 15% / 0.1);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.2);
+
+    --radius: 0.5rem;
+
+    /* Animations and transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 215 25% 12%;
+    --foreground: 210 40% 98%;
+
+    --card: 215 25% 15%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 215 25% 15%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary using trophy gold (adjusted for dark) */
+    --primary: 45 95% 65%;
+    --primary-foreground: 215 25% 15%;
+
+    /* Secondary using water blue (adjusted for dark) */
+    --secondary: 205 87% 65%;
+    --secondary-foreground: 215 25% 15%;
+
+    /* Success using fishing green (adjusted for dark) */
+    --success: 142 69% 55%;
+    --success-foreground: 215 25% 15%;
+
+    --muted: 215 25% 20%;
+    --muted-foreground: 215 15% 65%;
+
+    --accent: 215 25% 18%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 215 25% 15%;
+
+    --border: 215 25% 25%;
+    --input: 215 25% 20%;
+    --ring: 45 95% 65%;
+
+    /* Trophy Cast Brand Colors (dark mode adjusted) */
+    --trophy-gold: 45 95% 65%;
+    --trophy-gold-light: 45 100% 80%;
+    --trophy-gold-dark: 45 85% 50%;
+    
+    --fishing-green: 142 69% 55%;
+    --fishing-green-light: 142 69% 75%;
+    --fishing-green-dark: 142 69% 40%;
+    
+    --water-blue: 205 87% 65%;
+    --water-blue-light: 205 87% 80%;
+    --water-blue-dark: 205 87% 45%;
+
+    /* Dark mode gradients */
+    --gradient-trophy: linear-gradient(135deg, hsl(var(--trophy-gold)), hsl(var(--trophy-gold-light)));
+    --gradient-water: linear-gradient(135deg, hsl(var(--water-blue)), hsl(var(--water-blue-light)));
+    --gradient-nature: linear-gradient(135deg, hsl(var(--fishing-green)), hsl(var(--fishing-green-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--water-blue-dark)), hsl(var(--fishing-green-dark)));
+
+    /* Dark mode shadows */
+    --shadow-trophy: 0 10px 30px -10px hsl(var(--trophy-gold) / 0.2);
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.15);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

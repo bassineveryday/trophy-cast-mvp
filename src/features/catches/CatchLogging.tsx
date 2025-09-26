@@ -1,0 +1,252 @@
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Camera, 
+  ChevronLeft, 
+  MapPin, 
+  Clock,
+  Fish,
+  Ruler,
+  Scale,
+  CheckCircle,
+  Upload,
+  Trash2,
+  Mic
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+
+const CatchLogging = () => {
+  const [weight, setWeight] = useState("");
+  const [length, setLength] = useState("");
+  const [location, setLocation] = useState("");
+  const [notes, setNotes] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const { toast } = useToast();
+
+  const handlePhotoUpload = () => {
+    // Simulate photo upload
+    const newPhoto = `https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop`;
+    setPhotos([...photos, newPhoto]);
+    toast({
+      title: "Photo Added",
+      description: "Your catch photo has been uploaded successfully.",
+    });
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = () => {
+    if (!weight) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter the weight for your catch.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Catch Logged Successfully!",
+      description: `Your ${weight} lb bass has been recorded in the tournament.`,
+    });
+
+    // Reset form
+    setWeight("");
+    setLength("");
+    setLocation("");
+    setNotes("");
+    setPhotos([]);
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-success to-fishing-green-light text-white p-4">
+        <div className="flex items-center mb-4">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+          </Link>
+          <h1 className="text-xl font-bold ml-2">Log Your Catch</h1>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">Smith Lake Championship</h2>
+            <p className="text-sm opacity-90">Tournament in Progress</p>
+          </div>
+          <Badge className="bg-white text-success font-semibold">
+            LIVE
+          </Badge>
+        </div>
+      </div>
+
+      <div className="p-4 space-y-6">
+        {/* Current Status */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4 text-muted-foreground" />
+                <span>Time: 2:34:15 remaining</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Fish className="w-4 h-4 text-success" />
+                <span className="font-semibold">3 fish logged</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Photo Upload */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Camera className="w-5 h-5 mr-2 text-water-blue" />
+              Catch Photos
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {photos.length > 0 && (
+              <div className="grid grid-cols-2 gap-3">
+                {photos.map((photo, index) => (
+                  <div key={index} className="relative">
+                    <img 
+                      src={photo} 
+                      alt={`Catch ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2 w-8 h-8 p-0"
+                      onClick={() => handleRemovePhoto(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <Button 
+              variant="outline" 
+              className="w-full h-20 border-dashed"
+              onClick={handlePhotoUpload}
+            >
+              <div className="flex flex-col items-center">
+                <Upload className="w-6 h-6 mb-1" />
+                <span className="text-sm">Add Photo</span>
+              </div>
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Catch Details */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Scale className="w-5 h-5 mr-2 text-trophy-gold" />
+              Catch Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="weight">Weight (lbs)</Label>
+              <div className="relative">
+                <Input
+                  id="weight"
+                  placeholder="0.0"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  type="number"
+                  step="0.1"
+                  className="text-lg"
+                />
+                <Scale className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes (Optional)</Label>
+              <div className="relative">
+                <Textarea
+                  id="notes"
+                  placeholder="Lure used, weather conditions, etc."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={3}
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-2 right-2 w-8 h-8 p-0 text-muted-foreground hover:text-primary"
+                  onClick={() => toast({
+                    title: "Voice Recording",
+                    description: "Voice-to-text feature activated!",
+                  })}
+                >
+                  <Mic className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Current Tournament Standing */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Your Tournament Status</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm">Current Position</span>
+              <Badge className="bg-primary text-primary-foreground">3rd Place</Badge>
+            </div>
+            
+            <div className="flex justify-between">
+              <span className="text-sm">Total Weight</span>
+              <span className="font-semibold">17.33 lbs</span>
+            </div>
+            
+            <div className="flex justify-between">
+              <span className="text-sm">Big Fish</span>
+              <span className="font-semibold">4.1 lbs</span>
+            </div>
+            
+            <div className="flex justify-between">
+              <span className="text-sm">Fish Count</span>
+              <span className="font-semibold">3 / 5</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Submit Button */}
+        <div className="space-y-3">
+          <Button 
+            className="w-full h-12 bg-success hover:bg-success/90 text-lg font-semibold"
+            onClick={handleSubmit}
+          >
+            <CheckCircle className="w-5 h-5 mr-2" />
+            Log This Catch
+          </Button>
+          
+          <p className="text-xs text-center text-muted-foreground">
+            Make sure all details are accurate. Logged catches cannot be edited during the tournament.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CatchLogging;
