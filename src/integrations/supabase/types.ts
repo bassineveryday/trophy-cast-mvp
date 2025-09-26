@@ -14,10 +14,91 @@ export type Database = {
   }
   public: {
     Tables: {
+      catches: {
+        Row: {
+          created_at: string
+          id: string
+          length: number | null
+          notes: string | null
+          photo_url: string | null
+          species: string
+          timestamp: string
+          tournament_id: string | null
+          updated_at: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          length?: number | null
+          notes?: string | null
+          photo_url?: string | null
+          species: string
+          timestamp?: string
+          tournament_id?: string | null
+          updated_at?: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          length?: number | null
+          notes?: string | null
+          photo_url?: string | null
+          species?: string
+          timestamp?: string
+          tournament_id?: string | null
+          updated_at?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catches_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clubs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          location: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           club: string | null
+          club_id: string | null
           created_at: string
           id: string
           name: string
@@ -27,6 +108,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           club?: string | null
+          club_id?: string | null
           created_at?: string
           id?: string
           name: string
@@ -36,13 +118,66 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           club?: string | null
+          club_id?: string | null
           created_at?: string
           id?: string
           name?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tournaments: {
+        Row: {
+          club_id: string | null
+          created_at: string
+          date: string
+          entry_fee: number | null
+          id: string
+          location: string
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          club_id?: string | null
+          created_at?: string
+          date: string
+          entry_fee?: number | null
+          id?: string
+          location: string
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          club_id?: string | null
+          created_at?: string
+          date?: string
+          entry_fee?: number | null
+          id?: string
+          location?: string
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tournaments_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -59,9 +59,12 @@ import MyPlans from "@/features/plans/Plans";
 // Sponsor Features
 import SponsorDeals from "@/features/sponsors/SponsorDeals";
 
-// Shared/Utility Pages
+// Shared Utility Pages
 import Calendar from "@/shared/pages/Calendar";
 import NotFound from "@/shared/pages/NotFound";
+
+// Database Example
+import DatabaseExample from "@/features/admin/DatabaseExample";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +125,7 @@ const App = () => (
 
             {/* Shared Utility Pages */}
             <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+            <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
 
             {/* Legacy/Placeholder Routes */}
             <Route path="tournaments" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
