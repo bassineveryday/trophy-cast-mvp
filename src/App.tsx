@@ -79,6 +79,7 @@ import NotFound from "@/shared/pages/NotFound";
 import DatabaseExample from "@/features/admin/DatabaseExample";
 
 import GearDashboard from "@/features/gear/GearDashboard";
+import HybridDashboard from "@/features/hybrid/HybridDashboard";
 
 // Tournament Features - Enhanced
 import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
@@ -137,6 +138,9 @@ const App = () => (
             <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
             <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
             <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
+
+            {/* Hybrid Demo Dashboard */}
+            <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
 
             {/* Gear Management */}
             <Route path="gear" element={<ProtectedRoute><GearDashboard /></ProtectedRoute>} />

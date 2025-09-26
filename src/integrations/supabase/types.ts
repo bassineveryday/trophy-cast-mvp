@@ -1016,25 +1016,7 @@ export type Database = {
       }
     }
     Views: {
-      enhanced_leaderboard: {
-        Row: {
-          aoy_titles: number | null
-          avatar_url: string | null
-          biggest_catch_location: string | null
-          biggest_catch_species: string | null
-          biggest_catch_weight: number | null
-          city: string | null
-          club: string | null
-          home_state: string | null
-          is_demo: boolean | null
-          name: string | null
-          recent_fish_count: number | null
-          recent_total_weight: number | null
-          tournaments_fished: number | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       check_duplicate_email: {
