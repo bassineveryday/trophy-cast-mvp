@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
+import { DemoUserSwitcher } from "@/components/demo/DemoUserSwitcher";
+import { useDemoMode } from "@/contexts/DemoModeContext";
 
 /**
  * MainLayout - Wrapper for all main application pages
@@ -11,6 +13,8 @@ import { Navigation } from "@/components/Navigation";
  * Excludes standalone pages like auth, error, or specialized layouts
  */
 export const MainLayout = () => {
+  const { isDemoMode } = useDemoMode();
+  
   return (
     <ContextAwareAIProvider>
       <VoiceProvider>
@@ -18,13 +22,19 @@ export const MainLayout = () => {
         <Toaster />
         <Sonner />
         
-        {/* Navigation */}
-        <Navigation />
+        {/* Main layout with demo mode adjustments */}
+        <div className={isDemoMode ? 'pt-12' : ''}>
+          {/* Navigation */}
+          <Navigation />
+          
+          {/* Main content area */}
+          <main className="min-h-screen">
+            <Outlet />
+          </main>
+        </div>
         
-        {/* Main content area */}
-        <main className="min-h-screen">
-          <Outlet />
-        </main>
+        {/* Demo User Switcher - floats over content */}
+        <DemoUserSwitcher />
       </VoiceProvider>
     </ContextAwareAIProvider>
   );

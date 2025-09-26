@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/layouts/MainLayout";
 import { AICoachLayout } from "@/layouts/AICoachLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Auth Feature
@@ -90,7 +91,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <BrowserRouter>
+        <DemoModeProvider>
+          <BrowserRouter>
           <Routes>
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
@@ -172,7 +174,8 @@ const App = () => (
           {/* Standalone Pages - no shared layout needed */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+        </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
