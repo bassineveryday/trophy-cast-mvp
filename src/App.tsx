@@ -54,6 +54,9 @@ import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationH
 // Club Management Dashboard
 import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
 
+// Member Import Wizard
+import MemberImportPage from "@/features/clubs/MemberImportPage";
+
 // Leaderboard & Performance Features
 import Leaderboard from "@/features/leaderboard/Leaderboard";
 import FirstPlaceFinishes from "@/features/leaderboard/FirstPlaceFinishes";
@@ -128,6 +131,7 @@ const App = () => (
             {/* Club Features */}
             <Route path="clubs" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
             <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+            <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
             <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
             <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
             <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />

@@ -13,6 +13,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { officerRoles } from '@/data/officerRoles';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import ImportButton from '@/components/member-import/ImportButton';
+import MemberExportTools from '@/components/member-import/MemberExportTools';
 
 const roleIcons = {
   'admin': Crown,
@@ -193,10 +195,13 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
           <p className="text-muted-foreground">Manage club members, roles, and responsibilities</p>
         </div>
         {canManageRoles && (
-          <Button>
-            <UserPlus className="mr-2 h-4 w-4" />
-            Invite Members
-          </Button>
+          <div className="flex gap-2">
+            <ImportButton clubId={actualClubId || ''} />
+            <Button>
+              <UserPlus className="mr-2 h-4 w-4" />
+              Invite Members
+            </Button>
+          </div>
         )}
       </div>
 
@@ -208,6 +213,8 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
         </TabsList>
 
         <TabsContent value="members" className="space-y-6">
+          <MemberExportTools clubId={actualClubId || ''} />
+          
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
