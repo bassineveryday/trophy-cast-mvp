@@ -45,6 +45,9 @@ import ClubInboxDetail from "@/features/messages/ClubInboxDetail";
 import ClubDashboard from "@/features/clubs/ClubDashboard";
 import ClubFeed from "@/features/clubs/ClubFeed";
 
+// Enhanced Club Features
+import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
+
 // Leaderboard & Performance Features
 import Leaderboard from "@/features/leaderboard/Leaderboard";
 import FirstPlaceFinishes from "@/features/leaderboard/FirstPlaceFinishes";
@@ -117,6 +120,7 @@ const App = () => (
             <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
             {/* Club Features */}
+            <Route path="clubs" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
             <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
             <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
 

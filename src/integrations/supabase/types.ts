@@ -219,12 +219,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_club_member_count: {
+        Args: { club_uuid: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _club_id?: string
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_club_member: {
+        Args: { club_uuid: string; user_uuid: string }
         Returns: boolean
       }
       is_club_officer: {
