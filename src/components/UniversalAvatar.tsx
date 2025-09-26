@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MessageSquare, User } from "lucide-react";
@@ -169,16 +169,14 @@ const UniversalAvatar = ({
     <>
       {/* Desktop: Tooltip */}
       <div className="hidden md:block">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              {avatarElement}
-            </TooltipTrigger>
-            <TooltipContent className="p-3 max-w-xs">
-              {microCopyContent}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {avatarElement}
+          </TooltipTrigger>
+          <TooltipContent className="p-3 max-w-xs">
+            {microCopyContent}
+          </TooltipContent>
+        </Tooltip>
       </div>
       
       {/* Mobile: Sheet on long press */}
