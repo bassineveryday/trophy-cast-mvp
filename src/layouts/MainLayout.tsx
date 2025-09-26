@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
+import { Navigation } from "@/components/Navigation";
 
 /**
  * MainLayout - Wrapper for all main application pages
@@ -16,6 +17,9 @@ export const MainLayout = () => {
         {/* Global toast notifications */}
         <Toaster />
         <Sonner />
+        
+        {/* Navigation */}
+        <Navigation />
         
         {/* Main content area */}
         <main className="min-h-screen">

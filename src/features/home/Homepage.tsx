@@ -286,25 +286,25 @@ const Homepage = () => {
               AI-powered tournament fishing companion
             </motion.p>
             
-            {/* Main CTA */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6,
-            delay: 0.4
-          }}>
-               <Link to="/ai-coach">
-                 <Button size="lg" className="bg-water-blue hover:bg-water-blue-dark text-white font-bold px-8 py-3 shadow-trophy">
-                   <Brain className="w-5 h-5 mr-2" />
-                   Start AI Coaching Session
-                   <ArrowRight className="w-5 h-5 ml-2" />
-                 </Button>
-               </Link>
-            </motion.div>
+          {/* Main CTA */}
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6,
+          delay: 0.4
+        }}>
+             <Link to="/ai-coach">
+               <Button size="lg" className="bg-water-blue hover:bg-water-blue-dark text-white font-bold px-8 py-3 shadow-trophy">
+                 <Brain className="w-5 h-5 mr-2" />
+                 Start AI Coaching Session
+                 <ArrowRight className="w-5 h-5 ml-2" />
+               </Button>
+             </Link>
+          </motion.div>
           </div>
         </div>
       </div>

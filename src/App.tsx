@@ -3,6 +3,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/layouts/MainLayout";
 import { AICoachLayout } from "@/layouts/AICoachLayout";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+
+// Auth Feature
+import AuthPage from "@/features/auth/AuthPage";
 
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
@@ -63,75 +68,80 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Main Application Routes - wrapped with MainLayout for shared context */}
-          <Route path="/" element={<MainLayout />}>
-            {/* Home & Dashboard */}
-            <Route index element={<Homepage />} />
-            <Route path="dashboard" element={<Dashboard />} />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Auth Route - standalone, no layout */}
+            <Route path="/auth" element={<AuthPage />} />
+
+            {/* Main Application Routes - wrapped with MainLayout and protected */}
+            <Route path="/" element={<MainLayout />}>
+              {/* Home & Dashboard */}
+              <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
-            <Route path="leaderboard" element={<Leaderboard />} />
-            <Route path="tournament-finishes/first-place" element={<FirstPlaceFinishes />} />
-            <Route path="tournament-finishes/second-place" element={<SecondPlaceFinishes />} />
-            <Route path="tournament-finishes/third-place" element={<ThirdPlaceFinishes />} />
-            <Route path="tournament-finishes/top-10" element={<Top10Finishes />} />
-            <Route path="tournament-finishes/top-20" element={<Top20Finishes />} />
+            <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+            <Route path="tournament-finishes/first-place" element={<ProtectedRoute><FirstPlaceFinishes /></ProtectedRoute>} />
+            <Route path="tournament-finishes/second-place" element={<ProtectedRoute><SecondPlaceFinishes /></ProtectedRoute>} />
+            <Route path="tournament-finishes/third-place" element={<ProtectedRoute><ThirdPlaceFinishes /></ProtectedRoute>} />
+            <Route path="tournament-finishes/top-10" element={<ProtectedRoute><Top10Finishes /></ProtectedRoute>} />
+            <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
 
             {/* Tournament Management */}
-            <Route path="tournament/:tournamentId" element={<TournamentDetail />} />
-            <Route path="tournament-alerts" element={<TournamentAlerts />} />
+            <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
+            <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
 
             {/* Catch Management */}
-            <Route path="catch-logging" element={<CatchLogging />} />
-            <Route path="tournament/:tournamentId/catch/:catchId" element={<CatchDetail />} />
-            <Route path="my-catches" element={<MyCatches />} />
-            <Route path="catches-this-month" element={<CatchesThisMonth />} />
+            <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
+            <Route path="tournament/:tournamentId/catch/:catchId" element={<ProtectedRoute><CatchDetail /></ProtectedRoute>} />
+            <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
+            <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
 
             {/* Profile & Achievement */}
-            <Route path="profile" element={<Profile />} />
-            <Route path="anglers/:anglerId" element={<PublicProfile />} />
-            <Route path="badges" element={<BadgeCollection />} />
+            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+            <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
 
             {/* Messages */}
-            <Route path="messages" element={<MessagesInbox />} />
-            <Route path="messages/new" element={<MessageNew />} />
-            <Route path="messages/:threadId" element={<MessageThread />} />
-            <Route path="messages/club/:itemId" element={<ClubInboxDetail />} />
+            <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
+            <Route path="messages/new" element={<ProtectedRoute><MessageNew /></ProtectedRoute>} />
+            <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
+            <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
             {/* Club Features */}
-            <Route path="club-dashboard" element={<ClubDashboard />} />
-            <Route path="club-feed" element={<ClubFeed />} />
+            <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
+            <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
 
             {/* Plans Management */}
-            <Route path="plans" element={<MyPlans />} />
-            <Route path="my-plans" element={<MyPlans />} />
+            <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
+            <Route path="my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
 
             {/* Sponsor Features */}
-            <Route path="sponsor-deals" element={<SponsorDeals />} />
+            <Route path="sponsor-deals" element={<ProtectedRoute><SponsorDeals /></ProtectedRoute>} />
 
             {/* Shared Utility Pages */}
-            <Route path="calendar" element={<Calendar />} />
+            <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
 
             {/* Legacy/Placeholder Routes */}
-            <Route path="tournaments" element={<Dashboard />} />
-            <Route path="catches" element={<Dashboard />} />
+            <Route path="tournaments" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Route>
 
           {/* AI Coach Feature Routes - specialized layout with shared context and UI */}
           <Route path="/ai-coach" element={<AICoachLayout />}>
-            <Route index element={<AICoach />} />
-            <Route path="pre-trip" element={<AICoachPreTrip />} />
-            <Route path="tournament-plan" element={<TournamentPlanReport />} />
-            <Route path="at-lake" element={<AICoachAtLake />} />
-            <Route path="adjusted-plan" element={<AICoachAdjustedPlan />} />
+            <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
+            <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
+            <Route path="tournament-plan" element={<ProtectedRoute><TournamentPlanReport /></ProtectedRoute>} />
+            <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
+            <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
           </Route>
 
           {/* Standalone Pages - no shared layout needed */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
