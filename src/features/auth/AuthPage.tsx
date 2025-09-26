@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Fish, Trophy, Target } from 'lucide-react';
+import { SignatureTechniques } from '@/components/SignatureTechniques';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 
@@ -22,7 +23,8 @@ const signUpSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters').max(100, 'Password must be less than 100 characters'),
   confirmPassword: z.string(),
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
-  club: z.string().trim().max(100, 'Club name must be less than 100 characters').optional()
+  club: z.string().trim().max(100, 'Club name must be less than 100 characters').optional(),
+  signatureTechniques: z.array(z.string()).min(1, 'Please select at least 1 signature technique').max(3, 'Maximum 3 techniques allowed')
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -55,7 +57,8 @@ export default function AuthPage() {
       password: '',
       confirmPassword: '',
       name: '',
-      club: ''
+      club: '',
+      signatureTechniques: []
     }
   });
 
@@ -84,7 +87,8 @@ export default function AuthPage() {
       const { error } = await signUp(data.email, data.password, {
         name: data.name,
         club: data.club || '',
-        avatar_url: ''
+        avatar_url: '',
+        signature_techniques: data.signatureTechniques
       });
       
       if (!error) {
@@ -276,6 +280,22 @@ export default function AuthPage() {
                               placeholder="Confirm your password"
                               disabled={isLoading}
                               {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={signUpForm.control}
+                      name="signatureTechniques"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <SignatureTechniques
+                              value={field.value}
+                              onChange={field.onChange}
+                              disabled={isLoading}
                             />
                           </FormControl>
                           <FormMessage />

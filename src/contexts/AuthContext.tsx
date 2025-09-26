@@ -11,6 +11,7 @@ interface Profile {
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
+  signature_techniques?: string[];
 }
 
 interface AuthContextType {
@@ -18,7 +19,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string }) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[] }) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -80,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, userData: { name: string; club: string; avatar_url?: string }) => {
+  const signUp = async (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[] }) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
@@ -92,7 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           data: {
             name: userData.name,
             club: userData.club,
-            avatar_url: userData.avatar_url || ''
+            avatar_url: userData.avatar_url || '',
+            signature_techniques: userData.signature_techniques || []
           }
         }
       });

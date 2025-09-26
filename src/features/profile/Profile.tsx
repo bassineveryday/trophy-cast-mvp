@@ -1,13 +1,38 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Trophy, Fish, Target, TrendingUp, Award, MapPin, MessageSquare } from "lucide-react";
+import { ArrowLeft, Trophy, Fish, Target, TrendingUp, Award, MapPin, MessageSquare, Edit3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
 import { mockUser, mockCareerStats } from "@/data/mockData";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSignatureTechniques } from "@/hooks/useSignatureTechniques";
+import { EditSignatureTechniques } from "./EditSignatureTechniques";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 const Profile = () => {
+  const { profile } = useAuth();
+  const { getSignatureTechniques } = useSignatureTechniques();
+  const [signatureTechniques, setSignatureTechniques] = useState<string[]>([]);
+  const [showEditTechniques, setShowEditTechniques] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadSignatureTechniques = async () => {
+      setLoading(true);
+      const { techniques } = await getSignatureTechniques();
+      setSignatureTechniques(techniques);
+      setLoading(false);
+    };
+
+    loadSignatureTechniques();
+  }, [getSignatureTechniques]);
+
+  const handleTechniquesUpdate = (newTechniques: string[]) => {
+    setSignatureTechniques(newTechniques);
+  };
   return (
     <div className="min-h-screen bg-background p-4">
       {/* Header */}
@@ -100,6 +125,59 @@ const Profile = () => {
         </CardContent>
       </Card>
 
+      {/* Signature Techniques */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Target className="w-5 h-5 mr-2 text-primary" />
+              Signature Techniques
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowEditTechniques(true)}
+              className="flex items-center gap-2"
+            >
+              <Edit3 className="w-3 h-3" />
+              Edit
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="flex justify-center py-4">
+              <LoadingSpinner message="Loading techniques..." />
+            </div>
+          ) : signatureTechniques.length > 0 ? (
+            <div className="space-y-3">
+              {signatureTechniques.map((technique, index) => (
+                <div key={technique} className="flex items-center gap-3 p-3 bg-accent rounded-lg">
+                  <Badge variant="secondary" className="text-xs font-bold">
+                    #{index + 1}
+                  </Badge>
+                  <span className="font-medium">{technique}</span>
+                  {index === 0 && (
+                    <Badge className="ml-auto bg-primary/10 text-primary text-xs">
+                      Primary
+                    </Badge>
+                  )}
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground mt-2">
+                Techniques listed by preference. #1 is your strongest technique.
+              </p>
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <Target className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm font-medium">No signature techniques set</p>
+              <p className="text-xs">Click "Edit" to add your signature techniques</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Club Newsletter */}
       <Card className="mb-6">
         <CardHeader>
@@ -154,6 +232,14 @@ const Profile = () => {
 
       {/* Context-Aware AI Button */}
       <ContextAwareFloatingButton />
+
+      {/* Edit Signature Techniques Modal */}
+      <EditSignatureTechniques
+        open={showEditTechniques}
+        onOpenChange={setShowEditTechniques}
+        currentTechniques={signatureTechniques}
+        onUpdate={handleTechniquesUpdate}
+      />
     </div>
   );
 };
