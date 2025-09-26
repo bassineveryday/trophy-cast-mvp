@@ -19,7 +19,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[] }) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[]; home_state?: string; city?: string }) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[] }) => {
+  const signUp = async (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[]; home_state?: string; city?: string }) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
@@ -94,7 +94,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             name: userData.name,
             club: userData.club,
             avatar_url: userData.avatar_url || '',
-            signature_techniques: userData.signature_techniques || []
+            signature_techniques: userData.signature_techniques || [],
+            home_state: userData.home_state || '',
+            city: userData.city || ''
           }
         }
       });
