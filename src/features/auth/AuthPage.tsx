@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Fish, Trophy, Target } from 'lucide-react';
 import { SignatureTechniques } from '@/components/SignatureTechniques';
 import { useAuth } from '@/contexts/AuthContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 const signInSchema = z.object({
@@ -48,7 +49,10 @@ const US_STATES = [
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
-  const { signIn, signUp, user, loading } = useAuth();
+  const { signIn, signUp, resendConfirmation, user, loading } = useAuth();
+  const [lastSignInEmail, setLastSignInEmail] = useState('');
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -85,13 +89,27 @@ export default function AuthPage() {
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
+    setEmailNotConfirmed(false);
+    setLastSignInEmail(data.email.trim());
     try {
-      const { error } = await signIn(data.email, data.password);
+      const { error } = await signIn(data.email.trim(), data.password);
       if (!error) {
         navigate(from, { replace: true });
+      } else if ((error.message || '').toLowerCase().includes('email not confirmed')) {
+        setEmailNotConfirmed(true);
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    if (!lastSignInEmail) return;
+    setResendLoading(true);
+    try {
+      await resendConfirmation(lastSignInEmail);
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -162,6 +180,16 @@ export default function AuthPage() {
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4">
+                {emailNotConfirmed && (
+                  <Alert>
+                    <AlertDescription>
+                      Please confirm your email to sign in. Didn't get it?
+                      <Button variant="outline" size="sm" className="ml-2" onClick={handleResendConfirmation} disabled={resendLoading}>
+                        {resendLoading ? 'Resending...' : 'Resend confirmation email'}
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+                )}
                 <Form {...signInForm}>
                   <form onSubmit={signInForm.handleSubmit(handleSignIn)} className="space-y-4">
                     <FormField

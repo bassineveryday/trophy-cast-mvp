@@ -21,6 +21,7 @@ interface AuthContextType {
   loading: boolean;
   signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[]; home_state?: string; city?: string }) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  resendConfirmation: (email: string) => Promise<{ error: any } | void>;
   signOut: () => Promise<void>;
 }
 
@@ -173,6 +174,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const resendConfirmation = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email
+      });
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Resend Email Failed",
+          description: error.message
+        });
+      } else {
+        toast({
+          title: "Confirmation Email Sent",
+          description: "Check your inbox and spam folder for the verification link."
+        });
+      }
+      return { error };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        variant: "destructive",
+        title: "Resend Email Failed",
+        description: errorMessage
+      });
+    }
+  };
+
   const value = {
     user,
     session,
@@ -180,6 +210,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     signUp,
     signIn,
+    resendConfirmation,
     signOut
   };
 
