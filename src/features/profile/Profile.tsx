@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home } from "lucide-react";
+import { ArrowLeft, Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home, Anchor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -299,10 +299,10 @@ const Profile = () => {
       </Card>
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <Link to="/my-catches">
+        <Link to="/gear">
           <Button variant="outline" className="w-full h-12">
-            <Fish className="w-4 h-4 mr-2" />
-            My Catches
+            <Anchor className="w-4 h-4 mr-2" />
+            My Gear
           </Button>
         </Link>
         <Link to="/badges">

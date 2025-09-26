@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      catch_gear_usage: {
+        Row: {
+          catch_id: string
+          combo_id: string | null
+          created_at: string | null
+          id: string
+          lure_brand: string | null
+          lure_color: string | null
+          lure_model: string | null
+          reel_id: string | null
+          rod_id: string | null
+        }
+        Insert: {
+          catch_id: string
+          combo_id?: string | null
+          created_at?: string | null
+          id?: string
+          lure_brand?: string | null
+          lure_color?: string | null
+          lure_model?: string | null
+          reel_id?: string | null
+          rod_id?: string | null
+        }
+        Update: {
+          catch_id?: string
+          combo_id?: string | null
+          created_at?: string | null
+          id?: string
+          lure_brand?: string | null
+          lure_color?: string | null
+          lure_model?: string | null
+          reel_id?: string | null
+          rod_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catch_gear_usage_catch_id_fkey"
+            columns: ["catch_id"]
+            isOneToOne: false
+            referencedRelation: "catches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catch_gear_usage_combo_id_fkey"
+            columns: ["combo_id"]
+            isOneToOne: false
+            referencedRelation: "user_combos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catch_gear_usage_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "user_reels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catch_gear_usage_rod_id_fkey"
+            columns: ["rod_id"]
+            isOneToOne: false
+            referencedRelation: "user_rods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catches: {
         Row: {
           created_at: string
@@ -299,6 +364,155 @@ export type Database = {
           },
         ]
       }
+      reel_line_setups: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_current: boolean | null
+          leader_length_feet: number | null
+          leader_type: string | null
+          leader_weight: string | null
+          line_brand: string
+          line_type: string
+          line_weight: string
+          notes: string | null
+          reel_id: string
+          spool_date: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_current?: boolean | null
+          leader_length_feet?: number | null
+          leader_type?: string | null
+          leader_weight?: string | null
+          line_brand: string
+          line_type: string
+          line_weight: string
+          notes?: string | null
+          reel_id: string
+          spool_date?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_current?: boolean | null
+          leader_length_feet?: number | null
+          leader_type?: string | null
+          leader_weight?: string | null
+          line_brand?: string
+          line_type?: string
+          line_weight?: string
+          notes?: string | null
+          reel_id?: string
+          spool_date?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reel_line_setups_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "user_reels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reel_specifications: {
+        Row: {
+          bearings: number | null
+          brand: string
+          created_at: string | null
+          gear_ratio: string
+          id: string
+          line_capacity: string | null
+          max_drag: number | null
+          model: string
+          msrp: number | null
+          reel_type: string
+          serial_number: string
+          updated_at: string | null
+          weight_oz: number | null
+        }
+        Insert: {
+          bearings?: number | null
+          brand: string
+          created_at?: string | null
+          gear_ratio: string
+          id?: string
+          line_capacity?: string | null
+          max_drag?: number | null
+          model: string
+          msrp?: number | null
+          reel_type: string
+          serial_number: string
+          updated_at?: string | null
+          weight_oz?: number | null
+        }
+        Update: {
+          bearings?: number | null
+          brand?: string
+          created_at?: string | null
+          gear_ratio?: string
+          id?: string
+          line_capacity?: string | null
+          max_drag?: number | null
+          model?: string
+          msrp?: number | null
+          reel_type?: string
+          serial_number?: string
+          updated_at?: string | null
+          weight_oz?: number | null
+        }
+        Relationships: []
+      }
+      rod_specifications: {
+        Row: {
+          action: string
+          brand: string
+          created_at: string | null
+          id: string
+          length_feet: number
+          length_inches: number | null
+          model: string
+          msrp: number | null
+          power: string
+          rod_type: string
+          serial_number: string
+          updated_at: string | null
+        }
+        Insert: {
+          action: string
+          brand: string
+          created_at?: string | null
+          id?: string
+          length_feet: number
+          length_inches?: number | null
+          model: string
+          msrp?: number | null
+          power: string
+          rod_type: string
+          serial_number: string
+          updated_at?: string | null
+        }
+        Update: {
+          action?: string
+          brand?: string
+          created_at?: string | null
+          id?: string
+          length_feet?: number
+          length_inches?: number | null
+          model?: string
+          msrp?: number | null
+          power?: string
+          rod_type?: string
+          serial_number?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       role_audit_log: {
         Row: {
           action: string
@@ -462,6 +676,144 @@ export type Database = {
           },
         ]
       }
+      user_boats: {
+        Row: {
+          beam_feet: number | null
+          brand: string
+          created_at: string | null
+          fish_finder: string | null
+          gps_unit: string | null
+          id: string
+          is_private: boolean | null
+          length_feet: number | null
+          livewell_count: number | null
+          model: string
+          motor_brand: string | null
+          motor_horsepower: number | null
+          motor_type: string | null
+          nickname: string | null
+          notes: string | null
+          photo_url: string | null
+          rod_storage_capacity: number | null
+          special_features: string[] | null
+          tournament_top10: number | null
+          tournament_top3: number | null
+          tournament_wins: number | null
+          trolling_motor: string | null
+          updated_at: string | null
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          beam_feet?: number | null
+          brand: string
+          created_at?: string | null
+          fish_finder?: string | null
+          gps_unit?: string | null
+          id?: string
+          is_private?: boolean | null
+          length_feet?: number | null
+          livewell_count?: number | null
+          model: string
+          motor_brand?: string | null
+          motor_horsepower?: number | null
+          motor_type?: string | null
+          nickname?: string | null
+          notes?: string | null
+          photo_url?: string | null
+          rod_storage_capacity?: number | null
+          special_features?: string[] | null
+          tournament_top10?: number | null
+          tournament_top3?: number | null
+          tournament_wins?: number | null
+          trolling_motor?: string | null
+          updated_at?: string | null
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          beam_feet?: number | null
+          brand?: string
+          created_at?: string | null
+          fish_finder?: string | null
+          gps_unit?: string | null
+          id?: string
+          is_private?: boolean | null
+          length_feet?: number | null
+          livewell_count?: number | null
+          model?: string
+          motor_brand?: string | null
+          motor_horsepower?: number | null
+          motor_type?: string | null
+          nickname?: string | null
+          notes?: string | null
+          photo_url?: string | null
+          rod_storage_capacity?: number | null
+          special_features?: string[] | null
+          tournament_top10?: number | null
+          tournament_top3?: number | null
+          tournament_wins?: number | null
+          trolling_motor?: string | null
+          updated_at?: string | null
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      user_combos: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_private: boolean | null
+          nickname: string
+          notes: string | null
+          primary_techniques: string[] | null
+          reel_id: string
+          rod_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          nickname: string
+          notes?: string | null
+          primary_techniques?: string[] | null
+          reel_id: string
+          rod_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          nickname?: string
+          notes?: string | null
+          primary_techniques?: string[] | null
+          reel_id?: string
+          rod_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_combos_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "user_reels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_combos_rod_id_fkey"
+            columns: ["rod_id"]
+            isOneToOne: false
+            referencedRelation: "user_rods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_platform_roles: {
         Row: {
           assigned_at: string | null
@@ -488,6 +840,126 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           platform_role?: Database["public"]["Enums"]["platform_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_reels: {
+        Row: {
+          bearings: number | null
+          brand: string
+          created_at: string | null
+          gear_ratio: string
+          id: string
+          is_private: boolean | null
+          line_capacity: string | null
+          max_drag: number | null
+          model: string
+          nickname: string | null
+          notes: string | null
+          purchase_date: string | null
+          reel_type: string
+          serial_number: string | null
+          updated_at: string | null
+          user_id: string
+          weight_oz: number | null
+        }
+        Insert: {
+          bearings?: number | null
+          brand: string
+          created_at?: string | null
+          gear_ratio: string
+          id?: string
+          is_private?: boolean | null
+          line_capacity?: string | null
+          max_drag?: number | null
+          model: string
+          nickname?: string | null
+          notes?: string | null
+          purchase_date?: string | null
+          reel_type: string
+          serial_number?: string | null
+          updated_at?: string | null
+          user_id: string
+          weight_oz?: number | null
+        }
+        Update: {
+          bearings?: number | null
+          brand?: string
+          created_at?: string | null
+          gear_ratio?: string
+          id?: string
+          is_private?: boolean | null
+          line_capacity?: string | null
+          max_drag?: number | null
+          model?: string
+          nickname?: string | null
+          notes?: string | null
+          purchase_date?: string | null
+          reel_type?: string
+          serial_number?: string | null
+          updated_at?: string | null
+          user_id?: string
+          weight_oz?: number | null
+        }
+        Relationships: []
+      }
+      user_rods: {
+        Row: {
+          action: string
+          brand: string
+          created_at: string | null
+          id: string
+          is_private: boolean | null
+          length_feet: number
+          length_inches: number | null
+          model: string
+          nickname: string | null
+          notes: string | null
+          power: string
+          primary_technique: string | null
+          purchase_date: string | null
+          rod_type: string
+          serial_number: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          brand: string
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          length_feet: number
+          length_inches?: number | null
+          model: string
+          nickname?: string | null
+          notes?: string | null
+          power: string
+          primary_technique?: string | null
+          purchase_date?: string | null
+          rod_type: string
+          serial_number?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          brand?: string
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          length_feet?: number
+          length_inches?: number | null
+          model?: string
+          nickname?: string | null
+          notes?: string | null
+          power?: string
+          primary_technique?: string | null
+          purchase_date?: string | null
+          rod_type?: string
+          serial_number?: string | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
