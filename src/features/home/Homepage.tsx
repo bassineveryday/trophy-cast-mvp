@@ -372,59 +372,22 @@ const Homepage = () => {
               </Card>
             </Link>
 
-            <Card className="bg-gradient-to-br from-water-blue/10 to-water-blue/20 border-water-blue/30 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setTournamentsExpanded(!tournamentsExpanded)} aria-label="Toggle tournaments list">
-              <CardContent className="p-3">
-                <div className="flex items-start justify-between mb-2">
-                  <Calendar className="w-5 h-5 text-water-blue" />
-                  <ChevronDown className={`w-4 h-4 text-water-blue transition-transform ${tournamentsExpanded ? 'rotate-180' : ''}`} />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-water-blue mb-1">{demoStats.upcomingTournaments}</p>
-                  <p className="text-sm text-muted-foreground mb-2">Tournaments</p>
-                  <Badge variant="secondary" className="text-xs text-water-blue bg-water-blue/10 border-water-blue/20">
-                    3 Upcoming
-                  </Badge>
-                </div>
-                <AnimatePresence>
-                  {tournamentsExpanded && <motion.div initial={{
-                  height: 0,
-                  opacity: 0
-                }} animate={{
-                  height: 'auto',
-                  opacity: 1
-                }} exit={{
-                  height: 0,
-                  opacity: 0
-                }} className="mt-3 space-y-2 overflow-hidden border-t border-water-blue/20 pt-2">
-                      {enhancedMockTournaments.slice(0, 3).map(tournament => <div key={tournament.id}>
-                          <div className="flex justify-between items-start text-xs">
-                            <div>
-                              <p className="font-medium">{tournament.name.split(' ')[0]} • {tournament.date} • {tournament.time}</p>
-                              <p className="text-muted-foreground">${tournament.fee.replace('$', '')}</p>
-                            </div>
-                            <div className="text-right">
-                              {tournament.confidence && <Badge className="bg-fishing-green/10 text-fishing-green text-xs mb-1">
-                                  {tournament.confidence}%
-                                </Badge>}
-                              <p className="text-xs text-muted-foreground">Try spinnerbaits</p>
-                            </div>
-                          </div>
-                          <div className="flex space-x-1 mt-1">
-                            {tournament.hasPlan ? <Link to="/ai-coach/tournament-plan" className="flex-1">
-                                <Button size="sm" className="w-full h-6 text-xs bg-fishing-green hover:bg-fishing-green-dark text-white">
-                                  View Plan
-                                </Button>
-                              </Link> : <Link to="/ai-coach/pre-trip" className="flex-1">
-                                <Button size="sm" className="w-full h-6 text-xs bg-water-blue hover:bg-water-blue-dark text-white">
-                                  Build Plan
-                                </Button>
-                              </Link>}
-                          </div>
-                        </div>)}
-                    </motion.div>}
-                </AnimatePresence>
-              </CardContent>
-            </Card>
+            <Link to="/tournaments" aria-label="Open Tournaments">
+              <Card className="bg-gradient-to-br from-water-blue/10 to-water-blue/20 border-water-blue/30 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-3">
+                  <div className="flex items-start justify-between mb-2">
+                    <Trophy className="w-5 h-5 text-water-blue" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-water-blue mb-1">{demoStats.upcomingTournaments}</p>
+                    <p className="text-sm text-muted-foreground mb-2">Tournaments</p>
+                    <Badge variant="secondary" className="text-xs text-water-blue bg-water-blue/10 border-water-blue/20">
+                      3 Upcoming
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
 
             <Link to="/ai-coach" aria-label="Open AI Coach">
               <Card className="bg-gradient-to-br from-water-blue/10 to-water-blue/20 border-water-blue/30 cursor-pointer hover:shadow-lg transition-shadow">
