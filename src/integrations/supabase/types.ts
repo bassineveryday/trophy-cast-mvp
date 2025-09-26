@@ -94,6 +94,119 @@ export type Database = {
         }
         Relationships: []
       }
+      member_import_logs: {
+        Row: {
+          club_id: string
+          completed_at: string | null
+          created_at: string | null
+          errors: Json | null
+          failed_imports: number | null
+          file_name: string
+          file_size: number | null
+          id: string
+          import_data: Json | null
+          imported_by: string
+          status: string
+          successful_imports: number | null
+          total_rows: number | null
+        }
+        Insert: {
+          club_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          errors?: Json | null
+          failed_imports?: number | null
+          file_name: string
+          file_size?: number | null
+          id?: string
+          import_data?: Json | null
+          imported_by: string
+          status?: string
+          successful_imports?: number | null
+          total_rows?: number | null
+        }
+        Update: {
+          club_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          errors?: Json | null
+          failed_imports?: number | null
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          import_data?: Json | null
+          imported_by?: string
+          status?: string
+          successful_imports?: number | null
+          total_rows?: number | null
+        }
+        Relationships: []
+      }
+      member_import_staging: {
+        Row: {
+          boat_registration: string | null
+          city: string | null
+          club_role: string | null
+          created_at: string | null
+          email: string | null
+          emergency_contact: string | null
+          home_state: string | null
+          id: string
+          import_log_id: string
+          is_duplicate: boolean | null
+          is_valid: boolean | null
+          name: string | null
+          phone: string | null
+          row_number: number
+          signature_techniques: string[] | null
+          validation_errors: Json | null
+        }
+        Insert: {
+          boat_registration?: string | null
+          city?: string | null
+          club_role?: string | null
+          created_at?: string | null
+          email?: string | null
+          emergency_contact?: string | null
+          home_state?: string | null
+          id?: string
+          import_log_id: string
+          is_duplicate?: boolean | null
+          is_valid?: boolean | null
+          name?: string | null
+          phone?: string | null
+          row_number: number
+          signature_techniques?: string[] | null
+          validation_errors?: Json | null
+        }
+        Update: {
+          boat_registration?: string | null
+          city?: string | null
+          club_role?: string | null
+          created_at?: string | null
+          email?: string | null
+          emergency_contact?: string | null
+          home_state?: string | null
+          id?: string
+          import_log_id?: string
+          is_duplicate?: boolean | null
+          is_valid?: boolean | null
+          name?: string | null
+          phone?: string | null
+          row_number?: number
+          signature_techniques?: string[] | null
+          validation_errors?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_import_staging_import_log_id_fkey"
+            columns: ["import_log_id"]
+            isOneToOne: false
+            referencedRelation: "member_import_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissions: {
         Row: {
           category: string
@@ -431,6 +544,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_duplicate_email: {
+        Args: { email: string }
+        Returns: boolean
+      }
       get_club_member_count: {
         Args: { club_uuid: string }
         Returns: number
@@ -458,6 +575,10 @@ export type Database = {
       }
       is_club_officer: {
         Args: { _club_id?: string; _user_id: string }
+        Returns: boolean
+      }
+      is_valid_email: {
+        Args: { email: string }
         Returns: boolean
       }
       user_has_permission: {
