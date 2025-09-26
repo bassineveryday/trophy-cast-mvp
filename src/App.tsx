@@ -66,6 +66,9 @@ import NotFound from "@/shared/pages/NotFound";
 // Database Example
 import DatabaseExample from "@/features/admin/DatabaseExample";
 
+// Tournament Features - Enhanced
+import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -92,6 +95,7 @@ const App = () => (
             <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
 
             {/* Tournament Management */}
+            <Route path="tournaments" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
             <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
             <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
 
@@ -128,7 +132,6 @@ const App = () => (
             <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
 
             {/* Legacy/Placeholder Routes */}
-            <Route path="tournaments" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Route>
 

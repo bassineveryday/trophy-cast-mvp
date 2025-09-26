@@ -139,6 +139,7 @@ export type Database = {
         Row: {
           club_id: string | null
           created_at: string
+          created_by: string | null
           date: string
           entry_fee: number | null
           id: string
@@ -150,6 +151,7 @@ export type Database = {
         Insert: {
           club_id?: string | null
           created_at?: string
+          created_by?: string | null
           date: string
           entry_fee?: number | null
           id?: string
@@ -161,6 +163,7 @@ export type Database = {
         Update: {
           club_id?: string | null
           created_at?: string
+          created_by?: string | null
           date?: string
           entry_fee?: number | null
           id?: string
@@ -179,15 +182,58 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          club_id: string | null
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          club_id?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          club_id?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _club_id?: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_club_officer: {
+        Args: { _club_id?: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "club_officer" | "member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -314,6 +360,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "club_officer", "member"],
+    },
   },
 } as const

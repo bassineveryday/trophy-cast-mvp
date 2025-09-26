@@ -88,7 +88,7 @@ export const tournamentService = {
       `)
       .order('date', { ascending: false });
     
-    return { data: data as Tournament[] | null, error };
+    return { data: data as any, error };
   },
 
   // Get tournaments by club
@@ -106,7 +106,7 @@ export const tournamentService = {
       .eq('club_id', clubId)
       .order('date', { ascending: false });
     
-    return { data: data as Tournament[] | null, error };
+    return { data: data as any, error };
   },
 
   // Get tournament by ID
@@ -124,14 +124,17 @@ export const tournamentService = {
       .eq('id', id)
       .maybeSingle();
     
-    return { data: data as Tournament | null, error };
+    return { data: data as any, error };
   },
 
   // Create new tournament
   async create(tournamentData: CreateTournamentData): Promise<{ data: Tournament | null; error: any }> {
     const { data, error } = await supabase
       .from('tournaments')
-      .insert(tournamentData)
+      .insert({
+        ...tournamentData,
+        created_by: (await supabase.auth.getUser()).data.user?.id
+      })
       .select(`
         *,
         club:club_id (
@@ -142,7 +145,7 @@ export const tournamentService = {
       `)
       .single();
     
-    return { data: data as Tournament | null, error };
+    return { data: data as any, error };
   },
 
   // Update tournament
@@ -161,7 +164,7 @@ export const tournamentService = {
       `)
       .single();
     
-    return { data: data as Tournament | null, error };
+    return { data: data as any, error };
   },
 
   // Delete tournament

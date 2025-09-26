@@ -18,7 +18,8 @@ export interface Tournament {
   status: 'upcoming' | 'active' | 'completed' | 'cancelled';
   created_at: string;
   updated_at: string;
-  club?: Club; // Optional relation
+  created_by?: string;
+  club?: Partial<Club>; // Optional partial relation
 }
 
 export interface Catch {
@@ -33,7 +34,7 @@ export interface Catch {
   timestamp: string;
   created_at: string;
   updated_at: string;
-  tournament?: Tournament; // Optional relation
+  tournament?: Partial<Tournament>; // Optional partial relation
 }
 
 export interface Profile {
@@ -45,7 +46,7 @@ export interface Profile {
   club_id: string | null;
   created_at: string;
   updated_at: string;
-  club_data?: Club; // Optional relation
+  club_data?: Partial<Club>; // Optional partial relation
 }
 
 export interface CreateClubData {
