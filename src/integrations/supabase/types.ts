@@ -96,35 +96,59 @@ export type Database = {
       }
       profiles: {
         Row: {
+          aoy_titles: number | null
           avatar_url: string | null
+          biggest_catch_location: string | null
+          biggest_catch_species: string | null
+          biggest_catch_weight: number | null
+          city: string | null
           club: string | null
           club_id: string | null
           created_at: string
+          favorite_water: string | null
+          home_state: string | null
           id: string
           name: string
           signature_techniques: string[] | null
+          tournaments_fished: number | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          aoy_titles?: number | null
           avatar_url?: string | null
+          biggest_catch_location?: string | null
+          biggest_catch_species?: string | null
+          biggest_catch_weight?: number | null
+          city?: string | null
           club?: string | null
           club_id?: string | null
           created_at?: string
+          favorite_water?: string | null
+          home_state?: string | null
           id?: string
           name: string
           signature_techniques?: string[] | null
+          tournaments_fished?: number | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          aoy_titles?: number | null
           avatar_url?: string | null
+          biggest_catch_location?: string | null
+          biggest_catch_species?: string | null
+          biggest_catch_weight?: number | null
+          city?: string | null
           club?: string | null
           club_id?: string | null
           created_at?: string
+          favorite_water?: string | null
+          home_state?: string | null
           id?: string
           name?: string
           signature_techniques?: string[] | null
+          tournaments_fished?: number | null
           updated_at?: string
           user_id?: string
         }
