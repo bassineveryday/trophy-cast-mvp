@@ -24,7 +24,7 @@ export const BottomNavigation = () => {
               )}
             >
               <div className="mb-1">
-                {item.icon}
+                {item.icon()}
               </div>
               <span className="text-xs font-medium truncate">
                 {item.label}
