@@ -1,10 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Calendar, Clock, DollarSign, Users, Cloud, Sun, CloudRain, Wind, Trophy, Brain, AlertTriangle, Eye } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, DollarSign, Users, Cloud, Sun, CloudRain, Wind, Trophy, Brain, AlertTriangle } from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
-import { UniversalHeader } from "@/components/UniversalHeader";
 import { mockOfficerNotes } from "@/data/mockMessages";
 import OfficerNote from "@/components/OfficerNote";
 import { useToast } from "@/hooks/use-toast";
@@ -96,20 +95,16 @@ const TournamentDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <UniversalHeader 
-        title={tournament.name}
-        customActions={
-          <Button size="sm" variant="outline" asChild>
-            <Link to="/club-dashboard">
-              <Eye className="mr-2 h-4 w-4" />
-              View Club
-            </Link>
-          </Button>
-        }
-      />
-      
-      {/* Hero Section */}
+      {/* Header */}
       <div className="bg-gradient-to-r from-water-blue-dark/80 to-fishing-green-dark/80 text-white p-4">
+        <div className="flex items-center mb-2">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 mr-2">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
         <h1 className="text-xl font-bold">{tournament.name}</h1>
         <p className="text-sm opacity-90">{tournament.club}</p>
       </div>

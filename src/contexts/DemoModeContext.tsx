@@ -25,23 +25,6 @@ export const DEMO_CLUB = {
 
 export const DEMO_USERS: DemoUser[] = [
   {
-    id: 'demo-jake-patterson',
-    name: 'Jake Patterson',
-    role: 'member',
-    club_role: 'member',
-    club: 'Alabama Bass Nation - Chapter 12',
-    club_abbreviation: 'ABN-12',
-    avatar_url: '/src/assets/profiles/jake-patterson.jpg',
-    permissions: [
-      'personal_profile',
-      'catch_logging',
-      'tournament_participation',
-      'view_leaderboards',
-      'club_communication'
-    ],
-    description: 'Experience TrophyCast as a regular tournament angler - view tournaments, log catches, and connect with fellow club members'
-  },
-  {
     id: 'demo-mike-rodriguez',
     name: 'Mike Rodriguez',
     nickname: 'Big Mike',
@@ -58,7 +41,7 @@ export const DEMO_USERS: DemoUser[] = [
       'tournament_management',
       'all_admin_functions'
     ],
-    description: 'See the full club management experience - create tournaments, manage members, access officer tools, and oversee club operations'
+    description: 'Full admin access to club management and oversight tools'
   },
   {
     id: 'demo-sarah-johnson',
@@ -76,6 +59,23 @@ export const DEMO_USERS: DemoUser[] = [
       'backup_admin_access'
     ],
     description: 'Deputy access to most president functions and event coordination'
+  },
+  {
+    id: 'demo-jake-patterson',
+    name: 'Jake Patterson',
+    role: 'tournament_director',
+    club_role: 'tournament_director',
+    club: 'Alabama Bass Nation - Chapter 12',
+    club_abbreviation: 'ABN-12',
+    avatar_url: '/src/assets/profiles/jake-patterson.jpg',
+    permissions: [
+      'tournament_creation',
+      'tournament_management',
+      'live_scoring',
+      'registration_tools',
+      'equipment_management'
+    ],
+    description: 'Tournament creation, live scoring, and event logistics management'
   },
   {
     id: 'demo-lisa-thompson',
@@ -191,11 +191,17 @@ export function DemoModeProvider({ children }: { children: React.ReactNode }) {
     setCurrentDemoUser(user);
     setIsDemoMode(true);
     
-    // Navigate to homepage to show role-based dashboard
+    // Navigate to appropriate club page based on role
     if (navigate) {
+      const isOfficer = ['president', 'vice_president', 'tournament_director', 'secretary', 'treasurer', 'conservation_director'].includes(user.club_role);
+      
       // Use setTimeout to ensure state update completes before navigation
       setTimeout(() => {
-        window.location.href = '/';
+        if (isOfficer) {
+          window.location.href = `/clubs/${DEMO_CLUB.id}/manage`;
+        } else {
+          window.location.href = '/club-dashboard';
+        }
       }, 100);
     }
   };
