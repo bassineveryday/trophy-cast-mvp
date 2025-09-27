@@ -149,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         toast({
           title: "Welcome back!",
-          description: "Redirecting to your personalized dashboard..."
+          description: "Redirecting to your profile..."
         });
       }
 

@@ -57,7 +57,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as any)?.from || '/dashboard';
+  const from = (location.state as any)?.from || '/profile';
 
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -141,7 +141,7 @@ export default function AuthPage() {
     return (
       <PersonalizedAuthRedirect>
         <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
-          <LoadingSpinner message="Redirecting to your personalized dashboard..." />
+          <LoadingSpinner message="Redirecting to your profile..." />
         </div>
       </PersonalizedAuthRedirect>
     );
