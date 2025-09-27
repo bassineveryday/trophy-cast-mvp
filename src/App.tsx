@@ -7,7 +7,7 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { MainLayout } from "@/layouts/MainLayout";
 import { AICoachLayout } from "@/layouts/AICoachLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -152,6 +152,169 @@ import NotFound from "@/shared/pages/NotFound";
 const queryClient = new QueryClient();
 
 // ============================================================================
+// APP CONTENT COMPONENT - HANDLES CONDITIONAL CHROME RENDERING
+// ============================================================================
+const AppContent = () => {
+  const location = useLocation();
+  const isAuthRoute = location.pathname.startsWith('/auth');
+
+  return (
+    <>
+      {/* Phase 7: Universal Header - Hidden on auth routes */}
+      {!isAuthRoute && <UniversalHeader />}
+
+      <Routes>
+        {/* ================================================================ */}
+        {/* AUTHENTICATION - Standalone Routes */}
+        {/* ================================================================ */}
+        <Route path="/auth" element={<AuthPage />} />
+
+        {/* ================================================================ */}
+        {/* PHASE 1: DEMO SYSTEM & ROLE SWITCHER */}
+        {/* ================================================================ */}
+        {/* Demo routes will be added when components are created */}
+
+        {/* ================================================================ */}
+        {/* MAIN APPLICATION - MainLayout Wrapper */}
+        {/* ================================================================ */}
+        <Route path="/" element={<MainLayout />}>
+          
+          {/* ========================================================== */}
+          {/* PHASE 2: PERSONALIZED HOME DASHBOARD */}
+          {/* ========================================================== */}
+          <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+          {/* Additional Phase 2 routes will be added when components are created */}
+          <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* PHASE 3: MOBILE-FIRST ANGLER PROFILE */}
+          {/* ========================================================== */}
+          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+          <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
+          {/* Additional Phase 3 routes will be added when components are created */}
+
+          {/* ========================================================== */}
+          {/* PHASE 4: SMART GEAR & BOAT TRACKING */}
+          {/* ========================================================== */}
+          <Route path="gear" element={<ProtectedRoute><GearDashboard /></ProtectedRoute>} />
+          {/* Additional Phase 4 routes will be added when components are created */}
+
+          {/* ========================================================== */}
+          {/* PHASE 5: AI-POWERED NEWSLETTER GENERATOR */}
+          {/* ========================================================== */}
+          {/* Newsletter routes will be added when components are created */}
+
+          {/* ========================================================== */}
+          {/* EXISTING PERFORMANCE TRACKING & LEADERBOARDS */}
+          {/* ========================================================== */}
+          <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+          <Route path="tournament-finishes/first-place" element={<ProtectedRoute><FirstPlaceFinishes /></ProtectedRoute>} />
+          <Route path="tournament-finishes/second-place" element={<ProtectedRoute><SecondPlaceFinishes /></ProtectedRoute>} />
+          <Route path="tournament-finishes/third-place" element={<ProtectedRoute><ThirdPlaceFinishes /></ProtectedRoute>} />
+          <Route path="tournament-finishes/top-10" element={<ProtectedRoute><Top10Finishes /></ProtectedRoute>} />
+          <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING TOURNAMENT MANAGEMENT & COMPETITION */}
+          {/* ========================================================== */}
+          <Route path="tournaments" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
+          <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
+          <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING CATCH LOGGING & TRACKING */}
+          {/* ========================================================== */}
+          <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
+          <Route path="tournament/:tournamentId/catch/:catchId" element={<ProtectedRoute><CatchDetail /></ProtectedRoute>} />
+          <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
+          <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
+          <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING MESSAGING & COMMUNICATION */}
+          {/* ========================================================== */}
+          <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
+          <Route path="messages/new" element={<ProtectedRoute><MessageNew /></ProtectedRoute>} />
+          <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
+          <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING CLUB MANAGEMENT & SOCIAL FEATURES */}
+          {/* ========================================================== */}
+          <Route path="clubs" element={<ProtectedRoute><StreamlinedClubHub /></ProtectedRoute>} />
+          <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+          <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
+          <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
+          <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+          <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
+
+          {/* Demo Club Routes - Development & Testing */}
+          <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING PLANNING & STRATEGY TOOLS */}
+          {/* ========================================================== */}
+          <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
+          <Route path="my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING PARTNERSHIPS & MONETIZATION */}
+          {/* ========================================================== */}
+          <Route path="sponsor-deals" element={<ProtectedRoute><SponsorDeals /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* PHASE 8: FOUNDER & PLATFORM ADMIN TOOLS */}
+          {/* ========================================================== */}
+          <Route path="admin/dashboard" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+          <Route path="admin/impersonation" element={<ProtectedRoute><UserImpersonationPanel /></ProtectedRoute>} />
+          <Route path="admin/system" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+          <Route path="admin/users" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+          <Route path="admin/clubs" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+          <Route path="admin/debug" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+          <Route path="admin/features" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING HYBRID DEMO & DEVELOPMENT FEATURES */}
+          {/* ========================================================== */}
+          <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
+
+          {/* ========================================================== */}
+          {/* EXISTING SHARED UTILITIES & TOOLS */}
+          {/* ========================================================== */}
+          <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+          <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
+
+        </Route>
+
+        {/* ================================================================ */}
+        {/* PHASE 6: ENVIRONMENTAL DATA & AI COACHING - Specialized Layout */}
+        {/* ================================================================ */}
+        <Route path="/ai-coach" element={<AICoachLayout />}>
+          <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
+          <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
+          <Route path="tournament-plan" element={<ProtectedRoute><TournamentPlanReport /></ProtectedRoute>} />
+          <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
+          <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
+          {/* Additional Phase 6 routes will be added when components are created */}
+        </Route>
+
+        {/* ================================================================ */}
+        {/* FALLBACK & ERROR HANDLING */}
+        {/* ================================================================ */}
+        <Route path="*" element={<NotFound />} />
+
+      </Routes>
+
+      {/* Phase 7: Bottom Navigation - Hidden on auth routes */}
+      {!isAuthRoute && <BottomNavigation />}
+
+      {/* Phase 7: Breadcrumbs - will be added when component is created */}
+    </>
+  );
+};
+
+// ============================================================================
 // MAIN APPLICATION COMPONENT
 // ============================================================================
 const App = () => (
@@ -160,156 +323,7 @@ const App = () => (
       <AuthProvider>
         <DemoModeProvider>
           <BrowserRouter>
-            {/* Phase 7: Universal Header */}
-            <UniversalHeader />
-
-            <Routes>
-              {/* ================================================================ */}
-              {/* AUTHENTICATION - Standalone Routes */}
-              {/* ================================================================ */}
-              <Route path="/auth" element={<AuthPage />} />
-
-              {/* ================================================================ */}
-              {/* PHASE 1: DEMO SYSTEM & ROLE SWITCHER */}
-              {/* ================================================================ */}
-              {/* Demo routes will be added when components are created */}
-
-              {/* ================================================================ */}
-              {/* MAIN APPLICATION - MainLayout Wrapper */}
-              {/* ================================================================ */}
-              <Route path="/" element={<MainLayout />}>
-                
-                {/* ========================================================== */}
-                {/* PHASE 2: PERSONALIZED HOME DASHBOARD */}
-                {/* ========================================================== */}
-                <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
-                {/* Additional Phase 2 routes will be added when components are created */}
-                <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* PHASE 3: MOBILE-FIRST ANGLER PROFILE */}
-                {/* ========================================================== */}
-                <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
-                <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
-                {/* Additional Phase 3 routes will be added when components are created */}
-
-                {/* ========================================================== */}
-                {/* PHASE 4: SMART GEAR & BOAT TRACKING */}
-                {/* ========================================================== */}
-                <Route path="gear" element={<ProtectedRoute><GearDashboard /></ProtectedRoute>} />
-                {/* Additional Phase 4 routes will be added when components are created */}
-
-                {/* ========================================================== */}
-                {/* PHASE 5: AI-POWERED NEWSLETTER GENERATOR */}
-                {/* ========================================================== */}
-                {/* Newsletter routes will be added when components are created */}
-
-                {/* ========================================================== */}
-                {/* EXISTING PERFORMANCE TRACKING & LEADERBOARDS */}
-                {/* ========================================================== */}
-                <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-                <Route path="tournament-finishes/first-place" element={<ProtectedRoute><FirstPlaceFinishes /></ProtectedRoute>} />
-                <Route path="tournament-finishes/second-place" element={<ProtectedRoute><SecondPlaceFinishes /></ProtectedRoute>} />
-                <Route path="tournament-finishes/third-place" element={<ProtectedRoute><ThirdPlaceFinishes /></ProtectedRoute>} />
-                <Route path="tournament-finishes/top-10" element={<ProtectedRoute><Top10Finishes /></ProtectedRoute>} />
-                <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING TOURNAMENT MANAGEMENT & COMPETITION */}
-                {/* ========================================================== */}
-                <Route path="tournaments" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
-                <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
-                <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING CATCH LOGGING & TRACKING */}
-                {/* ========================================================== */}
-                <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
-                <Route path="tournament/:tournamentId/catch/:catchId" element={<ProtectedRoute><CatchDetail /></ProtectedRoute>} />
-                <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
-                <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
-                <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING MESSAGING & COMMUNICATION */}
-                {/* ========================================================== */}
-                <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
-                <Route path="messages/new" element={<ProtectedRoute><MessageNew /></ProtectedRoute>} />
-                <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
-                <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING CLUB MANAGEMENT & SOCIAL FEATURES */}
-                {/* ========================================================== */}
-                <Route path="clubs" element={<ProtectedRoute><StreamlinedClubHub /></ProtectedRoute>} />
-                <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
-                <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
-                <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
-                <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
-                <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
-
-                {/* Demo Club Routes - Development & Testing */}
-                <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING PLANNING & STRATEGY TOOLS */}
-                {/* ========================================================== */}
-                <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
-                <Route path="my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING PARTNERSHIPS & MONETIZATION */}
-                {/* ========================================================== */}
-                <Route path="sponsor-deals" element={<ProtectedRoute><SponsorDeals /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* PHASE 8: FOUNDER & PLATFORM ADMIN TOOLS */}
-                {/* ========================================================== */}
-                <Route path="admin/dashboard" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-                <Route path="admin/impersonation" element={<ProtectedRoute><UserImpersonationPanel /></ProtectedRoute>} />
-                <Route path="admin/system" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
-                <Route path="admin/users" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-                <Route path="admin/clubs" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-                <Route path="admin/debug" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
-                <Route path="admin/features" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING HYBRID DEMO & DEVELOPMENT FEATURES */}
-                {/* ========================================================== */}
-                <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
-
-                {/* ========================================================== */}
-                {/* EXISTING SHARED UTILITIES & TOOLS */}
-                {/* ========================================================== */}
-                <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
-                <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
-
-              </Route>
-
-              {/* ================================================================ */}
-              {/* PHASE 6: ENVIRONMENTAL DATA & AI COACHING - Specialized Layout */}
-              {/* ================================================================ */}
-              <Route path="/ai-coach" element={<AICoachLayout />}>
-                <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
-                <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
-                <Route path="tournament-plan" element={<ProtectedRoute><TournamentPlanReport /></ProtectedRoute>} />
-                <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
-                <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
-                {/* Additional Phase 6 routes will be added when components are created */}
-              </Route>
-
-              {/* ================================================================ */}
-              {/* FALLBACK & ERROR HANDLING */}
-              {/* ================================================================ */}
-              <Route path="*" element={<NotFound />} />
-
-            </Routes>
-
-            {/* Phase 7: Bottom Navigation */}
-            <BottomNavigation />
-
-            {/* Phase 7: Breadcrumbs - will be added when component is created */}
+            <AppContent />
           </BrowserRouter>
         </DemoModeProvider>
       </AuthProvider>
