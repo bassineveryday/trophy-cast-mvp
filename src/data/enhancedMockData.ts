@@ -728,6 +728,41 @@ export const mockPublicProfiles: Record<string, PublicProfile> = {
       { lake: "Canyon Lake", weight: "5.2 lbs", length: "20.6\"", date: "Sept 17" }
     ],
     clubs: ["trophy-cast"]
+  },
+  "mike-johnson": {
+    id: "mike-johnson",
+    name: "Mike Johnson",
+    initials: "MJ",
+    avatar: mikeJohnson,
+    titleLine: "President, ABC-12",
+    homeClub: "Alabama Bass Nation – Chapter 12",
+    location: "Birmingham, AL",
+    stats: {
+      wins: 8,
+      aoyTitles: 2,
+      top10: 50,
+      pbWeight: "12.3 lbs"
+    },
+    achievements: [
+      { id: "aoy-2024", name: "Angler of the Year 2024", icon: Trophy },
+      { id: "top10-50", name: "50 Top-10 Finishes", icon: Target },
+      { id: "biggest-catch", name: "Biggest Catch: 12.3 lb Bass", icon: Fish }
+    ],
+    seasonSnapshot: {
+      tournamentsFished: 12,
+      aoyPoints: 1247,
+      avgFinish: "7th",
+      trend: "up",
+      top10Finishes: 6,
+      top20Finishes: 10,
+      finishesInMoney: 11
+    },
+    recentCatches: [
+      { lake: "Lake Guntersville", weight: "12.3 lbs", length: "26.2\"", date: "Sept 15" },
+      { lake: "Wheeler Lake", weight: "7.8 lbs", length: "23.1\"", date: "Sept 8" },
+      { lake: "Smith Lake", weight: "6.4 lbs", length: "21.9\"", date: "Aug 30" }
+    ],
+    clubs: ["alabama-bass-nation"]
   }
 };
 

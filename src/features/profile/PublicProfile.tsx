@@ -153,6 +153,9 @@ const PublicProfile = () => {
                 
                 <div className="flex-1">
                   <h1 className="text-2xl font-bold mb-1">{angler.name}</h1>
+                  {angler.titleLine && (
+                    <div className="profile-titleLine text-sm font-medium text-primary mb-1">{angler.titleLine}</div>
+                  )}
                   <p className="text-sm text-muted-foreground mb-1">{angler.homeClub}</p>
                   <p className="text-sm text-muted-foreground mb-3">{angler.location}</p>
                   

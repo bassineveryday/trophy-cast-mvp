@@ -91,6 +91,7 @@ export interface PublicProfile {
   name: string;
   initials: string;
   avatar: string;
+  titleLine?: string;
   homeClub: string;
   location: string;
   stats: {
