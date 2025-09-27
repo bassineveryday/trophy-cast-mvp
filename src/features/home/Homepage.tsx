@@ -174,14 +174,14 @@ const Homepage = () => {
     logo: trophyCastLogo
   }];
 
-  // Sample statistics for demo (club-specific)
+  // Sample statistics adjusted for demo mode
   const currentClub = userClubs.find(club => club.id === selectedClub) || userClubs[0];
   const demoStats = {
-    catchesThisMonth: 23,
+    catchesThisMonth: !enabled ? 0 : (role === "jake" ? 23 : 5), // Ty=0, Jake=23, Mike=5
     topClubLeader: currentClub.leader,
     clubPoints: currentClub.points,
     recentAiTip: "Try spinnerbaits on windy north shores",
-    upcomingTournaments: 3
+    upcomingTournaments: !enabled ? 0 : 3 // Ty=0, others=3
   };
 
   // Mock followed anglers data
