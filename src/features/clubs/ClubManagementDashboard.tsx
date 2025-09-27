@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { UniversalHeader } from '@/components/UniversalHeader';
 import { useClubMembers } from '@/hooks/useClubMembership';
 import { useUserEffectiveRoles, usePermission, useClubMembersWithRoles, type ClubRole } from '@/hooks/useRBAC';
 import { useAuth } from '@/contexts/AuthContext';
@@ -193,31 +194,28 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Add top padding if demo mode is active */}
-      {isDemoMode && <div className="h-12" />}
+      <UniversalHeader 
+        title="Club Management"
+        showBreadcrumb={true}
+        breadcrumbItems={[
+          { label: 'Clubs', href: '/clubs' },
+          { label: isDemoMode ? getDemoClub().name : 'Club Management' }
+        ]}
+        customActions={
+          canManageRoles ? (
+            <div className="flex gap-2">
+              <ImportButton clubId={actualClubId || ''} />
+              <Button size="sm">
+                <UserPlus className="mr-2 h-4 w-4" />
+                {isDemoMode ? 'Invite Demo Members' : 'Invite Members'}
+              </Button>
+            </div>
+          ) : undefined
+        }
+      />
       
       {/* Demo Club Banner */}
       {isDemoMode && <DemoClubBanner />}
-      
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">
-            {isDemoMode ? `${getDemoClub().name} - Management` : 'Club Management'}
-          </h1>
-          <p className="text-muted-foreground">
-            {isDemoMode ? 'Manage demo club members, roles, and responsibilities' : 'Manage club members, roles, and responsibilities'}
-          </p>
-        </div>
-        {canManageRoles && (
-          <div className="flex gap-2">
-            <ImportButton clubId={actualClubId || ''} />
-            <Button>
-              <UserPlus className="mr-2 h-4 w-4" />
-              {isDemoMode ? 'Invite Demo Members' : 'Invite Members'}
-            </Button>
-          </div>
-        )}
-      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
