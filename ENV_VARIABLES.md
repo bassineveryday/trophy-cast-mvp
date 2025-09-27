@@ -18,10 +18,15 @@ NODE_ENV=development
 # Used in DemoUserSwitcher to detect lovableproject.com
 ```
 
-## Environment Variables NOT Found
-- No Supabase configuration environment variables referenced in routing code
-- No API keys or secrets referenced in router/auth components  
+## Supabase Configuration
+- Supabase client uses hardcoded values in `src/integrations/supabase/client.ts`
+- VITE_* environment variables are not supported by Lovable
+- Current project uses direct configuration instead of environment variables
+
+## Environment Variables NOT Found in Router/Auth Code
+- No API keys or secrets referenced directly in router/auth components  
 - No custom environment variables for feature flags or configuration
+- Supabase configuration is handled via hardcoded client setup
 
 ## .env.example Template
 
@@ -32,9 +37,10 @@ NODE_ENV=development
 # Note: Vite automatically provides import.meta.env.DEV
 # No additional environment variables needed for routing/auth functionality
 
-# Supabase configuration (if needed for auth context)
-# VITE_SUPABASE_URL=your_supabase_url
-# VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Supabase configuration (currently hardcoded in client.ts)
+# Note: VITE_* variables are not supported by Lovable
+# VITE_SUPABASE_URL=...    # your project URL  
+# VITE_SUPABASE_ANON_KEY=... # your anon key
 ```
 
 ## Usage Context
