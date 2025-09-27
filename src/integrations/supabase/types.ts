@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      catch_environmental_correlation: {
+        Row: {
+          catch_id: string | null
+          created_at: string | null
+          environmental_condition_id: string | null
+          id: string
+          overall_score: number | null
+          pressure_score: number | null
+          solunar_score: number | null
+          temperature_score: number | null
+          weather_score: number | null
+        }
+        Insert: {
+          catch_id?: string | null
+          created_at?: string | null
+          environmental_condition_id?: string | null
+          id?: string
+          overall_score?: number | null
+          pressure_score?: number | null
+          solunar_score?: number | null
+          temperature_score?: number | null
+          weather_score?: number | null
+        }
+        Update: {
+          catch_id?: string | null
+          created_at?: string | null
+          environmental_condition_id?: string | null
+          id?: string
+          overall_score?: number | null
+          pressure_score?: number | null
+          solunar_score?: number | null
+          temperature_score?: number | null
+          weather_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catch_environmental_correlation_catch_id_fkey"
+            columns: ["catch_id"]
+            isOneToOne: false
+            referencedRelation: "catches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catch_environmental_correlation_environmental_condition_id_fkey"
+            columns: ["environmental_condition_id"]
+            isOneToOne: false
+            referencedRelation: "environmental_conditions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catch_gear_usage: {
         Row: {
           catch_id: string
@@ -158,6 +209,142 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      environmental_alerts: {
+        Row: {
+          active_from: string
+          active_until: string | null
+          alert_type: string
+          created_at: string | null
+          id: string
+          message: string
+          severity: string | null
+          title: string
+          water_body_id: string | null
+        }
+        Insert: {
+          active_from?: string
+          active_until?: string | null
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          message: string
+          severity?: string | null
+          title: string
+          water_body_id?: string | null
+        }
+        Update: {
+          active_from?: string
+          active_until?: string | null
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          message?: string
+          severity?: string | null
+          title?: string
+          water_body_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "environmental_alerts_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      environmental_conditions: {
+        Row: {
+          air_temperature: number | null
+          barometric_pressure: number | null
+          cloud_cover: number | null
+          created_at: string | null
+          current_flow: string | null
+          data_source: string | null
+          humidity: number | null
+          id: string
+          moon_overhead_time: string | null
+          moon_phase: number | null
+          moon_underfoot_time: string | null
+          precipitation: number | null
+          recorded_at: string
+          solunar_rating: number | null
+          sunrise_time: string | null
+          sunset_time: string | null
+          surface_temperature_source: string | null
+          user_id: string | null
+          water_body_id: string | null
+          water_clarity: string | null
+          water_level: string | null
+          water_temperature: number | null
+          weather_condition: string | null
+          wind_direction: number | null
+          wind_speed: number | null
+        }
+        Insert: {
+          air_temperature?: number | null
+          barometric_pressure?: number | null
+          cloud_cover?: number | null
+          created_at?: string | null
+          current_flow?: string | null
+          data_source?: string | null
+          humidity?: number | null
+          id?: string
+          moon_overhead_time?: string | null
+          moon_phase?: number | null
+          moon_underfoot_time?: string | null
+          precipitation?: number | null
+          recorded_at?: string
+          solunar_rating?: number | null
+          sunrise_time?: string | null
+          sunset_time?: string | null
+          surface_temperature_source?: string | null
+          user_id?: string | null
+          water_body_id?: string | null
+          water_clarity?: string | null
+          water_level?: string | null
+          water_temperature?: number | null
+          weather_condition?: string | null
+          wind_direction?: number | null
+          wind_speed?: number | null
+        }
+        Update: {
+          air_temperature?: number | null
+          barometric_pressure?: number | null
+          cloud_cover?: number | null
+          created_at?: string | null
+          current_flow?: string | null
+          data_source?: string | null
+          humidity?: number | null
+          id?: string
+          moon_overhead_time?: string | null
+          moon_phase?: number | null
+          moon_underfoot_time?: string | null
+          precipitation?: number | null
+          recorded_at?: string
+          solunar_rating?: number | null
+          sunrise_time?: string | null
+          sunset_time?: string | null
+          surface_temperature_source?: string | null
+          user_id?: string | null
+          water_body_id?: string | null
+          water_clarity?: string | null
+          water_level?: string | null
+          water_temperature?: number | null
+          weather_condition?: string | null
+          wind_direction?: number | null
+          wind_speed?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "environmental_conditions_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       member_import_logs: {
         Row: {
@@ -593,6 +780,77 @@ export type Database = {
           },
         ]
       }
+      solunar_forecasts: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          major_period_1_end: string | null
+          major_period_1_start: string | null
+          major_period_2_end: string | null
+          major_period_2_start: string | null
+          minor_period_1_end: string | null
+          minor_period_1_start: string | null
+          minor_period_2_end: string | null
+          minor_period_2_start: string | null
+          moon_phase: number | null
+          moon_rise: string | null
+          moon_set: string | null
+          overall_rating: number | null
+          sunrise: string | null
+          sunset: string | null
+          water_body_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          major_period_1_end?: string | null
+          major_period_1_start?: string | null
+          major_period_2_end?: string | null
+          major_period_2_start?: string | null
+          minor_period_1_end?: string | null
+          minor_period_1_start?: string | null
+          minor_period_2_end?: string | null
+          minor_period_2_start?: string | null
+          moon_phase?: number | null
+          moon_rise?: string | null
+          moon_set?: string | null
+          overall_rating?: number | null
+          sunrise?: string | null
+          sunset?: string | null
+          water_body_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          major_period_1_end?: string | null
+          major_period_1_start?: string | null
+          major_period_2_end?: string | null
+          major_period_2_start?: string | null
+          minor_period_1_end?: string | null
+          minor_period_1_start?: string | null
+          minor_period_2_end?: string | null
+          minor_period_2_start?: string | null
+          moon_phase?: number | null
+          moon_rise?: string | null
+          moon_set?: string | null
+          overall_rating?: number | null
+          sunrise?: string | null
+          sunset?: string | null
+          water_body_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solunar_forecasts_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       temporary_role_elevations: {
         Row: {
           approved_by: string | null
@@ -817,6 +1075,65 @@ export type Database = {
           },
         ]
       }
+      user_environmental_reports: {
+        Row: {
+          created_at: string | null
+          current_flow: string | null
+          fishing_conditions: string | null
+          id: string
+          reported_at: string
+          user_id: string
+          verified: boolean | null
+          verified_at: string | null
+          verified_by: string | null
+          water_body_id: string | null
+          water_clarity: string | null
+          water_level: string | null
+          water_temperature: number | null
+          weather_notes: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_flow?: string | null
+          fishing_conditions?: string | null
+          id?: string
+          reported_at?: string
+          user_id: string
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          water_body_id?: string | null
+          water_clarity?: string | null
+          water_level?: string | null
+          water_temperature?: number | null
+          weather_notes?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_flow?: string | null
+          fishing_conditions?: string | null
+          id?: string
+          reported_at?: string
+          user_id?: string
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+          water_body_id?: string | null
+          water_clarity?: string | null
+          water_level?: string | null
+          water_temperature?: number | null
+          weather_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_environmental_reports_water_body_id_fkey"
+            columns: ["water_body_id"]
+            isOneToOne: false
+            referencedRelation: "water_bodies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_platform_roles: {
         Row: {
           assigned_at: string | null
@@ -1013,6 +1330,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      water_bodies: {
+        Row: {
+          average_depth: number | null
+          created_at: string | null
+          id: string
+          latitude: number
+          longitude: number
+          max_depth: number | null
+          name: string
+          state: string
+          surface_area: number | null
+          updated_at: string | null
+          water_type: string | null
+        }
+        Insert: {
+          average_depth?: number | null
+          created_at?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          max_depth?: number | null
+          name: string
+          state: string
+          surface_area?: number | null
+          updated_at?: string | null
+          water_type?: string | null
+        }
+        Update: {
+          average_depth?: number | null
+          created_at?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          max_depth?: number | null
+          name?: string
+          state?: string
+          surface_area?: number | null
+          updated_at?: string | null
+          water_type?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
