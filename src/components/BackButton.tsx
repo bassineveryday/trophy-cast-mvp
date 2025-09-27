@@ -19,7 +19,7 @@ export default function BackButton() {
   };
 
   return (
-    <div className="fixed left-4 top-20 z-40">
+    <div className="fixed left-4 top-24 z-40">
       <Button variant="outline" size="sm" onClick={handleBack} aria-label="Go back">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back

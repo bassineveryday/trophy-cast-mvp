@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 
 function setQueryParam(name: string, value: string | null) {
@@ -13,10 +14,19 @@ function setQueryParam(name: string, value: string | null) {
 
 export default function DemoSwitcher() {
   const { enabled, role } = useDemoMode();
+  const navigate = useNavigate();
 
-  const setOff = useCallback(() => setQueryParam("demo", null), []);
-  const setJake = useCallback(() => setQueryParam("demo", "jake"), []);
-  const setPres = useCallback(() => setQueryParam("demo", "president"), []);
+  const setOff = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
+  
+  const setJake = useCallback(() => {
+    navigate("/?demo=jake");
+  }, [navigate]);
+  
+  const setPres = useCallback(() => {
+    navigate("/?demo=president");
+  }, [navigate]);
 
   // Keep the switcher subtle; only show a small pill in bottom-right
   return (
