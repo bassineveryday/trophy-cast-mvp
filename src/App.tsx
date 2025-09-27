@@ -13,6 +13,7 @@ import AuthPage from "@/features/auth/AuthPage";
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
 import StreamlinedHomepage from "@/features/home/StreamlinedHomepage";
+import HomeDashboard from "@/features/home/HomeDashboard";
 import PlatformDashboard from "@/features/admin/PlatformDashboard";
 import UserImpersonationPanel from "@/features/admin/UserImpersonationPanel";
 import SystemHealthDashboard from "@/features/admin/SystemHealthDashboard";
@@ -106,8 +107,8 @@ const App = () => (
             {/* Main Application Routes - wrapped with MainLayout and protected */}
             <Route path="/" element={<MainLayout />}>
             {/* Home & Dashboard */}
-            <Route index element={<ProtectedRoute><StreamlinedHomepage /></ProtectedRoute>} />
-            <Route path="dashboard" element={<ProtectedRoute><StreamlinedHomepage /></ProtectedRoute>} />
+            <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+            <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
             <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
