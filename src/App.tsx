@@ -33,8 +33,10 @@ import CatchDetail from "@/features/catches/CatchDetail";
 import MyCatches from "@/features/catches/MyCatches";
 import CatchesThisMonth from "@/features/catches/CatchesThisMonth";
 
-// Unified Profile System
-import UnifiedProfile from "@/features/profile/UnifiedProfile";
+// Profile Features
+import Profile from "@/features/profile/Profile";
+import PublicProfile from "@/features/profile/PublicProfile";
+import BadgeCollection from "@/features/profile/BadgeCollection";
 
 // Messages Features  
 import MessagesInbox from "@/features/messages/MessagesInbox";
@@ -92,8 +94,8 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <DemoModeProvider>
-          <BrowserRouter>
-            <PersonalizedAuthRedirect>
+          <PersonalizedAuthRedirect>
+            <BrowserRouter>
           <Routes>
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
@@ -124,12 +126,10 @@ const App = () => (
             <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
             <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
 
-            {/* Unified Profile System */}
-            <Route path="profile" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
-            <Route path="anglers/:anglerId" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
-            
-            {/* Legacy profile routes - redirect to unified profile */}
-            <Route path="badges" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+            {/* Profile & Achievement */}
+            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+            <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
 
             {/* Messages */}
             <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
@@ -181,8 +181,8 @@ const App = () => (
           {/* Standalone Pages - no shared layout needed */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-            </PersonalizedAuthRedirect>
-          </BrowserRouter>
+        </BrowserRouter>
+        </PersonalizedAuthRedirect>
         </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
