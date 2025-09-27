@@ -30,8 +30,6 @@ import AuthPage from "@/features/auth/AuthPage";
 // ============================================================================
 // Hero welcome, career stats, boat & gear snapshot, club tiles, tournaments carousel
 import HomeDashboard from "@/features/home/HomeDashboard";
-import Homepage from "@/features/home/Homepage";
-import StreamlinedHomepage from "@/features/home/StreamlinedHomepage";
 import Dashboard from "@/features/home/Dashboard";
 
 // ============================================================================
@@ -99,9 +97,8 @@ import CatchesThisMonth from "@/features/catches/CatchesThisMonth";
 // EXISTING CLUB MANAGEMENT & SOCIAL FEATURES
 // ============================================================================
 import ClubDashboard from "@/features/clubs/ClubDashboard";
-import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
 import ClubFeed from "@/features/clubs/ClubFeed";
-import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub.tsx";
+import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub";
 import ClubDirectory from "@/features/clubs/ClubDirectory";
 import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
 import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
@@ -156,12 +153,12 @@ const queryClient = new QueryClient();
 // ============================================================================
 const AppContent = () => {
   const location = useLocation();
-  const isAuthRoute = location.pathname.startsWith('/auth');
+  const isAuthRoute = /^\/auth(\/|$)/.test(location.pathname);
 
   return (
     <>
       {/* Phase 7: Universal Header - Hidden on auth routes */}
-      {!isAuthRoute && <UniversalHeader />}
+      {!isAuthRoute && <UniversalHeader data-testid="universal-header" />}
 
       <Routes>
         {/* ================================================================ */}
@@ -307,7 +304,7 @@ const AppContent = () => {
       </Routes>
 
       {/* Phase 7: Bottom Navigation - Hidden on auth routes */}
-      {!isAuthRoute && <BottomNavigation />}
+      {!isAuthRoute && <BottomNavigation data-testid="bottom-navigation" />}
 
       {/* Phase 7: Breadcrumbs - will be added when component is created */}
     </>
