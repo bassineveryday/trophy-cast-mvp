@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useIsClubOfficer } from '@/hooks/useRoles';
+import { useDemoAwareRoles } from '@/hooks/useDemoRoles';
 import UniversalAvatar from '@/components/UniversalAvatar';
 import { mockUser, mockCareerStats } from '@/data/mockData';
 
@@ -35,7 +35,15 @@ interface QuickAction {
 
 export function RoleBasedDashboard() {
   const { profile } = useAuth();
-  const isClubOfficer = useIsClubOfficer();
+  const { isClubOfficer, isPresident, isMember, isDemoMode, currentDemoUser, getUserProfile } = useDemoAwareRoles();
+  
+  // Get user profile (demo or real)
+  const userProfile = getUserProfile() || {
+    name: profile?.name || mockUser.name,
+    role: 'member',
+    club: 'Alabama Bass Nation - Chapter 12',
+    avatar_url: profile?.avatar_url || '/placeholder.svg'
+  };
 
   // Define actions based on user role
   const getMemberActions = (): QuickAction[] => [
@@ -92,35 +100,54 @@ export function RoleBasedDashboard() {
     }
   ];
 
-  const getOfficerActions = (): QuickAction[] => [
-    ...getMemberActions().slice(0, 3), // Keep first 3 member actions
-    {
-      title: 'Manage Club',
-      description: 'Officer dashboard',
-      icon: Crown,
-      href: '/clubs/demo-alabama-bass-chapter-12/manage',
-      color: 'from-orange-500/10 to-orange-500/20 border-orange-500/30',
-      badge: 'Officer',
-      priority: 'primary'
-    },
-    {
-      title: 'Create Tournament',
-      description: 'Schedule new events',
-      icon: PlusCircle,
-      href: '/tournaments',
-      color: 'from-trophy-gold/10 to-trophy-gold/20 border-trophy-gold/30',
-      priority: 'secondary'
-    },
-    {
-      title: 'Officer Notes',
-      description: 'Club communications',
-      icon: FileText,
-      href: '/messages?tab=club',
-      color: 'from-red-500/10 to-red-500/20 border-red-500/30',
-      badge: '3 pending',
-      priority: 'secondary'
+  const getOfficerActions = (): QuickAction[] => {
+    const baseActions = getMemberActions().slice(0, 3); // Keep first 3 member actions
+    
+    const officerSpecificActions: QuickAction[] = [
+      {
+        title: 'Manage Club',
+        description: 'Officer dashboard & tools',
+        icon: Crown,
+        href: '/clubs/demo-alabama-bass-chapter-12/manage',
+        color: 'from-orange-500/10 to-orange-500/20 border-orange-500/30',
+        badge: isPresident ? 'President' : 'Officer',
+        priority: 'primary'
+      }
+    ];
+
+    const secondaryOfficerActions: QuickAction[] = [
+      {
+        title: 'Create Tournament',
+        description: 'Schedule new events',
+        icon: PlusCircle,
+        href: '/tournaments',
+        color: 'from-trophy-gold/10 to-trophy-gold/20 border-trophy-gold/30',
+        priority: 'secondary'
+      },
+      {
+        title: 'Officer Notes',
+        description: 'Club communications',
+        icon: FileText,
+        href: '/messages?tab=club',
+        color: 'from-red-500/10 to-red-500/20 border-red-500/30',
+        badge: '3 pending',
+        priority: 'secondary'
+      }
+    ];
+
+    if (isPresident) {
+      secondaryOfficerActions.unshift({
+        title: 'Member Management',
+        description: 'Add, remove & assign roles',
+        icon: Users,
+        href: '/clubs/demo-alabama-bass-chapter-12/manage?tab=members',
+        color: 'from-primary/10 to-primary/20 border-primary/30',
+        priority: 'secondary'
+      });
     }
-  ];
+
+    return [...baseActions, ...officerSpecificActions, ...secondaryOfficerActions];
+  };
 
   const actions = isClubOfficer ? getOfficerActions() : getMemberActions();
   const primaryActions = actions.filter(action => action.priority === 'primary');
@@ -131,26 +158,32 @@ export function RoleBasedDashboard() {
       {/* Welcome Section */}
       <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg border">
         <UniversalAvatar 
-          name={mockUser.name}
-          photoUrl="/placeholder.svg"
+          name={userProfile.name}
+          photoUrl={userProfile.avatar_url}
           club={{ id: "alabama-bass-nation", abbreviation: "ABN-12" }}
-          role={isClubOfficer ? "Officer" : "2019 AOY Champion"}
+          role={isClubOfficer ? (isPresident ? "Club President" : "Club Officer") : "2019 AOY Champion"}
           city="Huntsville, AL"
-          anglerId="jake-patterson"
+          anglerId={isDemoMode ? currentDemoUser?.id.replace('demo-', '') : "jake-patterson"}
           size="card"
-          isAOYChampion={!isClubOfficer}
+          isAOYChampion={isMember}
         />
         <div className="flex-1">
           <h2 className="text-xl font-bold">
-            Welcome back, {mockUser.name.split(' ')[0]}!
+            Welcome back, {userProfile.name.split(' ')[0]}!
           </h2>
           <p className="text-muted-foreground">
-            {isClubOfficer ? 'Club Officer' : mockUser.title}
+            {isDemoMode ? currentDemoUser?.club : userProfile.club}
           </p>
           {isClubOfficer && (
             <Badge className="mt-1 bg-orange-500/10 text-orange-700 border-orange-500/20">
               <Shield className="w-3 h-3 mr-1" />
-              Officer Access
+              {isPresident ? 'President Access' : 'Officer Access'}
+            </Badge>
+          )}
+          {isMember && !isClubOfficer && (
+            <Badge className="mt-1 bg-water-blue/10 text-water-blue border-water-blue/20">
+              <Fish className="w-3 h-3 mr-1" />
+              Tournament Angler
             </Badge>
           )}
         </div>
@@ -159,8 +192,17 @@ export function RoleBasedDashboard() {
       {/* Primary Actions */}
       <div>
         <h3 className="text-lg font-semibold mb-4 flex items-center">
-          <Target className="w-5 h-5 mr-2 text-primary" />
-          Quick Actions
+          {isClubOfficer ? (
+            <>
+              <Crown className="w-5 h-5 mr-2 text-orange-500" />
+              {isPresident ? 'President Dashboard' : 'Officer Tools'}
+            </>
+          ) : (
+            <>
+              <Target className="w-5 h-5 mr-2 text-primary" />
+              Quick Actions
+            </>
+          )}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {primaryActions.map((action) => (
@@ -190,7 +232,7 @@ export function RoleBasedDashboard() {
         <div>
           <h3 className="text-lg font-semibold mb-4 flex items-center">
             <Settings className="w-5 h-5 mr-2 text-muted-foreground" />
-            More Features
+            {isClubOfficer ? 'Management Tools' : 'More Features'}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {secondaryActions.map((action) => (
@@ -212,16 +254,31 @@ export function RoleBasedDashboard() {
         </div>
       )}
 
-      {/* Quick Stats for Members */}
-      {!isClubOfficer && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center">
-              <BarChart3 className="w-5 h-5 mr-2 text-primary" />
-              Your Season
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+      {/* Quick Stats - Show for Members and Officers differently */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center">
+            <BarChart3 className="w-5 h-5 mr-2 text-primary" />
+            {isClubOfficer ? 'Club Overview' : 'Your Season'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isClubOfficer ? (
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-2xl font-bold text-water-blue">47</p>
+                <p className="text-sm text-muted-foreground">Active Members</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-trophy-gold">12</p>
+                <p className="text-sm text-muted-foreground">Tournaments</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-fishing-green">234</p>
+                <p className="text-sm text-muted-foreground">Total Catches</p>
+              </div>
+            </div>
+          ) : (
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-fishing-green">{mockCareerStats.wins}</p>
@@ -236,9 +293,9 @@ export function RoleBasedDashboard() {
                 <p className="text-sm text-muted-foreground">Personal Best</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

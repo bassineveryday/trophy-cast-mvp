@@ -4,11 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { RoleBasedDashboard } from '@/components/RoleBasedDashboard';
 import { OnboardingTour } from '@/components/OnboardingTour';
+import { DemoUserSwitcher } from '@/components/demo/DemoUserSwitcher';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDemoMode } from '@/contexts/DemoModeContext';
 
 export default function StreamlinedHomepage() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const { user } = useAuth();
+  const { isDemoMode } = useDemoMode();
 
   useEffect(() => {
     // Check if this is a new user (in real app, this would check localStorage or user preferences)
@@ -28,12 +31,28 @@ export default function StreamlinedHomepage() {
     setShowOnboarding(false);
   };
 
-  if (!user) {
+  if (!user && !isDemoMode) {
     return (
       <div className="container mx-auto p-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Welcome to TrophyCast</h1>
-          <p className="text-muted-foreground">Please sign in to continue</p>
+        <div className="text-center space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold mb-4">Welcome to TrophyCast</h1>
+            <p className="text-muted-foreground">Please sign in to continue</p>
+          </div>
+          
+          {/* Demo Mode Entry Point */}
+          <Card className="max-w-md mx-auto border-dashed border-primary/30 bg-primary/5">
+            <CardContent className="p-6 text-center">
+              <Badge className="mb-3 bg-primary/10 text-primary border-primary/20">
+                Try Demo Mode
+              </Badge>
+              <h3 className="font-semibold mb-2">Experience TrophyCast</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Test drive the platform with demo accounts from Alabama Bass Nation - Chapter 12
+              </p>
+              <DemoUserSwitcher />
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -41,6 +60,9 @@ export default function StreamlinedHomepage() {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      {/* Demo User Switcher */}
+      <DemoUserSwitcher />
+      
       {/* Onboarding Tour */}
       {showOnboarding && (
         <OnboardingTour 
