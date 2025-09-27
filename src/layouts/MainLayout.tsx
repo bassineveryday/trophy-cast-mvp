@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import DemoSwitcher from "@/components/DemoSwitcher";
 import BackButton from "@/components/BackButton";
 
@@ -26,9 +27,13 @@ export const MainLayout = () => {
         <BackButton />
         
         {/* Main content area */}
-        <main className="min-h-screen">
+        <main className="min-h-screen pb-16">
           <Outlet />
         </main>
+        
+        {/* Bottom Navigation */}
+        <BottomNavigation />
+        
         <DemoSwitcher />
       </VoiceProvider>
     </ContextAwareAIProvider>
