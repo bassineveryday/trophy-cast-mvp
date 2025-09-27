@@ -99,8 +99,8 @@ const App = () => (
                 <Route path="demo/mike" element={<ProtectedRoute><PresidentDashboard /></ProtectedRoute>} />
 
                 {/* PHASE 2: PERSONALIZED HOME DASHBOARD */}
-                <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-                <Route path="dashboard" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+                <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
               {/* Leaderboard & Performance Tracking */}
               <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
