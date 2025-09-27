@@ -10,7 +10,7 @@ export const demoUsers = {
   president: {
     id: "demo-user-president",
     email: "president@alabama-demo.club",
-    display_name: "Club President (Demo)",
+    display_name: "Mike",
     avatar_url: null,
   },
 } as const;

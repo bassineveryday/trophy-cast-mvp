@@ -42,6 +42,10 @@ const Homepage = () => {
     return lb > 0 ? `${lb} lb ${rem} oz` : `${oz} oz`;
   };
 
+  // Dynamic greeting based on demo mode
+  const greetName = !enabled ? "Ty Hunt" : role === "president" ? "Mike" : mockUser.name.split(' ')[0];
+  const avatarName = !enabled ? "Ty Hunt" : mockUser.name;
+
   // Demo mode logic - show different content based on role
   if (!enabled) {
     // Basic homepage when demo is OFF (enabled = false)
@@ -333,14 +337,14 @@ const Homepage = () => {
           {/* User greeting */}
           <div className="flex items-center space-x-3 mb-4">
             <div>
-              <UniversalAvatar name={mockUser.name} photoUrl="/placeholder.svg" club={{
+              <UniversalAvatar name={avatarName} photoUrl="/placeholder.svg" club={{
               id: "alabama-bass-nation",
               abbreviation: "ABN-12"
             }} role="2019 AOY Champion" city="Huntsville, AL" anglerId="jake-patterson" size="hero" isAOYChampion={true} className="border-2 border-white/30" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
-                Welcome back, {mockUser.name.split(' ')[0]}!
+                Welcome back, {greetName}!
               </h2>
               <p className="text-sm opacity-90 mb-1">{mockUser.title}</p>
               
