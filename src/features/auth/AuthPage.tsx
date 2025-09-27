@@ -9,14 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Fish, Trophy, Target, Users, ArrowRight } from 'lucide-react';
+import { Fish, Trophy, Target } from 'lucide-react';
 import { SignatureTechniques } from '@/components/SignatureTechniques';
 import { useAuth } from '@/contexts/AuthContext';
-import { useDemoMode, DEMO_USERS } from '@/contexts/DemoModeContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { PersonalizedAuthRedirect } from '@/components/auth/PersonalizedAuthRedirect';
-import { useToast } from '@/hooks/use-toast';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email address').max(255, 'Email must be less than 255 characters'),
@@ -31,7 +29,7 @@ const signUpSchema = z.object({
   club: z.string().trim().max(100, 'Club name must be less than 100 characters').optional(),
   home_state: z.string().min(1, 'Home state is required'),
   city: z.string().trim().max(100, 'City must be less than 100 characters').optional(),
-  signatureTechniques: z.array(z.string()).min(0, 'Invalid selection').max(3, 'Maximum 3 techniques allowed').optional()
+  signatureTechniques: z.array(z.string()).min(1, 'Please select at least 1 signature technique').max(3, 'Maximum 3 techniques allowed')
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -55,10 +53,7 @@ export default function AuthPage() {
   const [lastSignInEmail, setLastSignInEmail] = useState('');
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
-  const [showValidation, setShowValidation] = useState(false);
   const { signIn, signUp, resendConfirmation, user, loading } = useAuth();
-  const { switchToDemoUser } = useDemoMode();
-  const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -74,7 +69,6 @@ export default function AuthPage() {
 
   const signUpForm = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onBlur', // Only validate after user interaction
     defaultValues: {
       email: '',
       password: '',
@@ -120,13 +114,12 @@ export default function AuthPage() {
 
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);
-    setShowValidation(true);
     try {
       const { error } = await signUp(data.email, data.password, {
         name: data.name,
         club: data.club || '',
         avatar_url: '',
-        signature_techniques: data.signatureTechniques || [],
+        signature_techniques: data.signatureTechniques,
         home_state: data.home_state,
         city: data.city || ''
       });
@@ -134,33 +127,10 @@ export default function AuthPage() {
       if (!error) {
         // Stay on sign up tab to show success message
         signUpForm.reset();
-        setShowValidation(false);
       }
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleDemoAccess = () => {
-    console.log('🎭 Starting demo mode access');
-    // Switch to the president demo user by default
-    const presidentUser = DEMO_USERS.find(user => user.role === 'president');
-    if (presidentUser) {
-      switchToDemoUser(presidentUser, true);
-      toast({
-        title: "Demo Mode Activated",
-        description: `Experiencing TrophyCast as ${presidentUser.name}`,
-      });
-    }
-  };
-
-  const handleGuestAccess = () => {
-    console.log('👤 Allowing guest access');
-    toast({
-      title: "Guest Access",
-      description: "Exploring TrophyCast without an account",
-    });
-    navigate('/profile');
   };
 
   if (loading) {
@@ -204,41 +174,11 @@ export default function AuthPage() {
           <CardHeader className="text-center">
             <CardTitle>Welcome to TrophyCast</CardTitle>
             <CardDescription>
-              Your tournament fishing companion - Try the demo or create your account
+              Sign in to access your tournament fishing companion
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Demo and Guest Access Options */}
-            <div className="space-y-3 mb-6">
-              <Button 
-                onClick={handleDemoAccess}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
-                size="lg"
-              >
-                <Users className="w-4 h-4 mr-2" />
-                Try Demo Mode
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-              <Button 
-                onClick={handleGuestAccess}
-                variant="outline"
-                className="w-full"
-                size="lg"
-              >
-                Continue as Guest
-              </Button>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or sign in</span>
-              </div>
-            </div>
-
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -443,12 +383,12 @@ export default function AuthPage() {
                         <FormItem>
                           <FormControl>
                             <SignatureTechniques
-                              value={field.value || []}
+                              value={field.value}
                               onChange={field.onChange}
                               disabled={isLoading}
                             />
                           </FormControl>
-                          {showValidation && <FormMessage />}
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -466,12 +406,9 @@ export default function AuthPage() {
           </CardContent>
         </Card>
 
-        <div className="text-center text-white/70 text-sm mt-4 space-y-2">
-          <p>AI-powered tournament fishing companion</p>
-          <p className="text-xs opacity-80">
-            🎭 Demo mode lets you explore officer dashboards • 👤 Guest mode for profile features
-          </p>
-        </div>
+        <p className="text-center text-white/70 text-sm mt-4">
+          AI-powered tournament fishing companion
+        </p>
       </div>
     </div>
   );

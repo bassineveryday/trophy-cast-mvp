@@ -97,17 +97,13 @@ const App = () => (
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
 
-            {/* Main Application Routes - wrapped with MainLayout */}
+            {/* Main Application Routes - wrapped with MainLayout and protected */}
             <Route path="/" element={<MainLayout />}>
-              {/* Home & Dashboard - Allow guest access */}
-              <Route index element={<Homepage />} />
-              <Route path="dashboard" element={<PersonalizedDashboard />} />
-              
-              {/* Demo Access Route */}
-              <Route path="demo" element={<PersonalizedDashboard />} />
-              
+              {/* Home & Dashboard */}
+              <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><PersonalizedDashboard /></ProtectedRoute>} />
             {/* Legacy dashboard routes - redirect to profile for members */}
-            <Route path="dashboard-legacy" element={<UnifiedProfile />} />
+            <Route path="dashboard-legacy" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
             <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
@@ -128,12 +124,12 @@ const App = () => (
             <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
             <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
 
-            {/* Unified Profile System - Allow guest access */}
-            <Route path="profile" element={<UnifiedProfile />} />
-            <Route path="anglers/:anglerId" element={<UnifiedProfile />} />
+            {/* Unified Profile System */}
+            <Route path="profile" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+            <Route path="anglers/:anglerId" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
             
             {/* Legacy profile routes - redirect to unified profile */}
-            <Route path="badges" element={<UnifiedProfile />} />
+            <Route path="badges" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
 
             {/* Messages */}
             <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
@@ -141,16 +137,16 @@ const App = () => (
             <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
             <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
-            {/* Club Features - Allow demo access */}
-            <Route path="clubs" element={<ClubDashboardNew />} />
-            <Route path="clubs/:id/manage" element={<ClubManagementDashboard />} />
-            <Route path="clubs/:id/import" element={<MemberImportPage />} />
-            <Route path="club-dashboard" element={<ClubDashboard />} />
-            <Route path="club-feed" element={<ClubFeed />} />
-            <Route path="club-organization" element={<ClubOrganizationHub />} />
+            {/* Club Features */}
+            <Route path="clubs" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
+            <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+            <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
+            <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
+            <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+            <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
 
             {/* Demo Club Routes - using demo club ID */}
-            <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ClubManagementDashboard />} />
+            <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
 
             {/* Hybrid Demo Dashboard */}
             <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
