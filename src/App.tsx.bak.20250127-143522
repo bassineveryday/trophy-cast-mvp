@@ -74,9 +74,6 @@ import DatabaseExample from "@/features/admin/DatabaseExample";
 // Tournament Features - Enhanced
 import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
 
-// Prototype Features
-import PrototypeRoutes from "@/features/prototype/PrototypeRoutes";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -153,13 +150,6 @@ const App = () => (
               <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
               <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
             </Route>
-
-            {/* Prototype Routes - investor demo system */}
-            <Route path="/prototype/*" element={
-              <ProtectedRoute>
-                <PrototypeRoutes />
-              </ProtectedRoute>
-            } />
 
             {/* Standalone Pages - no shared layout needed */}
             <Route path="*" element={<NotFound />} />
