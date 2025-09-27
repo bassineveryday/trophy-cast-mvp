@@ -52,10 +52,10 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
         }, 1500);
       }
     }
-  }, [user, profile, isDemoMode, currentDemoUser, loading, isReady, location, navigate, getPersonalizedRoute]);
+  }, [user, profile, isDemoMode, currentDemoUser, loading, isReady, location.pathname, navigate, getPersonalizedRoute]);
 
   // Show personalized loading screen during redirect
-  if (redirecting || (user && !isReady)) {
+  if (redirecting || ((user || isDemoMode) && !isReady)) {
     const displayUser = currentDemoUser || profile;
     const userName = displayUser?.name || user?.email?.split('@')[0] || 'User';
     const userRole = currentDemoUser?.club_role || 'member';

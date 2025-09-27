@@ -15,11 +15,12 @@ export function usePersonalizedNavigation() {
   const { data: userClubs = [] } = useUserClubs();
   const [personalizedDestination, setPersonalizedDestination] = useState<PersonalizedDestination | null>(null);
 
-  // Get user's primary club (first club they're in)
+  // Get user's primary club (first club they're in) - memoize to prevent infinite loops
   const primaryClub = userClubs[0]?.club;
+  const primaryClubId = primaryClub?.id;
   
   // Get user's roles in their primary club
-  const { data: userRoles = [] } = useUserEffectiveRoles(primaryClub?.id);
+  const { data: userRoles = [] } = useUserEffectiveRoles(primaryClubId);
 
   useEffect(() => {
     if (!user && !isDemoMode) {
@@ -31,15 +32,25 @@ export function usePersonalizedNavigation() {
     if (isDemoMode && currentDemoUser) {
       const isOfficer = ['president', 'vice_president', 'tournament_director', 'secretary', 'treasurer', 'conservation_director'].includes(currentDemoUser.club_role);
       
-      if (isOfficer) {
-        setPersonalizedDestination({
-          route: `/clubs/${getDemoClub().id}/manage`,
-          reason: `Demo ${currentDemoUser.club_role.replace('_', ' ')} dashboard`
-        });
-      } else {
+      try {
+        const demoClub = getDemoClub();
+        
+        if (isOfficer) {
+          setPersonalizedDestination({
+            route: `/clubs/${demoClub.id}/manage`,
+            reason: `Loading ${currentDemoUser.club_role.replace('_', ' ')} experience for ${currentDemoUser.club}`
+          });
+        } else {
+          setPersonalizedDestination({
+            route: '/profile',
+            reason: 'Demo member profile'
+          });
+        }
+      } catch (error) {
+        console.error('Demo club data missing:', error);
         setPersonalizedDestination({
           route: '/profile',
-          reason: 'Demo member profile'
+          reason: 'Club data missing for demo user - loading fallback profile'
         });
       }
       return;
@@ -47,8 +58,9 @@ export function usePersonalizedNavigation() {
 
     // Handle real user navigation
     if (user && profile) {
-      // Check if user is an officer in any club
-      const isOfficer = userRoles.some(role => 
+      // Check if user is an officer in any club - use length check to prevent array reference issues
+      const hasRoles = userRoles.length > 0;
+      const isOfficer = hasRoles && userRoles.some(role => 
         ['president', 'vice_president', 'tournament_director', 'secretary', 'treasurer', 'conservation_director', 'club_admin'].includes(role.role_name)
       );
 
@@ -69,7 +81,7 @@ export function usePersonalizedNavigation() {
         });
       }
     }
-  }, [user, profile, isDemoMode, currentDemoUser, primaryClub, userRoles]);
+  }, [user, profile, isDemoMode, currentDemoUser, primaryClubId, userRoles.length, getDemoClub]);
 
   const getPersonalizedRoute = (intendedRoute?: string): string => {
     // If user was trying to access a specific route, honor that
