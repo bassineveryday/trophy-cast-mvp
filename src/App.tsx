@@ -13,7 +13,9 @@ import AuthPage from "@/features/auth/AuthPage";
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
 import StreamlinedHomepage from "@/features/home/StreamlinedHomepage";
-import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub";
+import PlatformDashboard from "@/features/admin/PlatformDashboard";
+import UserImpersonationPanel from "@/features/admin/UserImpersonationPanel";
+import SystemHealthDashboard from "@/features/admin/SystemHealthDashboard";
 import Dashboard from "@/features/home/Dashboard";
 
 // AI Coach Feature (grouped under AICoachLayout)
@@ -50,6 +52,7 @@ import ClubFeed from "@/features/clubs/ClubFeed";
 
 // Enhanced Club Features
 import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
+import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub";
 
 // Club Organization Hub
 import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
@@ -145,6 +148,15 @@ const App = () => (
 
             {/* Demo Club Routes - using demo club ID */}
             <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+
+            {/* Admin Routes */}
+            <Route path="admin/dashboard" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+            <Route path="admin/impersonation" element={<ProtectedRoute><UserImpersonationPanel /></ProtectedRoute>} />
+            <Route path="admin/system" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+            <Route path="admin/users" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+            <Route path="admin/clubs" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+            <Route path="admin/debug" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+            <Route path="admin/features" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
 
             {/* Hybrid Demo Dashboard */}
             <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />

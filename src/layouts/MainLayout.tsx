@@ -4,10 +4,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
+import { AdminNavigation } from "@/components/admin/AdminNavigation";
 import { UniversalHeader } from "@/components/UniversalHeader";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { DemoUserSwitcher } from "@/components/demo/DemoUserSwitcher";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { useIsPlatformAdmin } from "@/hooks/usePlatformAdmin";
 
 /**
  * MainLayout - Wrapper for all main application pages
@@ -16,34 +19,39 @@ import { useDemoMode } from "@/contexts/DemoModeContext";
  */
 export const MainLayout = () => {
   const { isDemoMode } = useDemoMode();
+  const isPlatformAdmin = useIsPlatformAdmin();
   
   return (
-    <ContextAwareAIProvider>
-      <VoiceProvider>
-        {/* Global toast notifications */}
-        <Toaster />
-        <Sonner />
-        
-        {/* Main layout with demo mode adjustments */}
-        <div className={isDemoMode ? 'pt-12' : ''}>
-          {/* Universal Header */}
-          <UniversalHeader />
+    <ErrorBoundary>
+      <ContextAwareAIProvider>
+        <VoiceProvider>
+          {/* Global toast notifications */}
+          <Toaster />
+          <Sonner />
           
-          {/* Navigation - now reduced in prominence */}
-          <Navigation />
+          {/* Main layout with demo mode adjustments */}
+          <div className={isDemoMode ? 'pt-12' : ''}>
+            {/* Universal Header with Admin Navigation */}
+            <UniversalHeader 
+              customActions={isPlatformAdmin ? <AdminNavigation /> : undefined}
+            />
+            
+            {/* Navigation - now reduced in prominence */}
+            <Navigation />
+            
+            {/* Main content area with bottom padding for navigation */}
+            <main className="min-h-screen pb-20">
+              <Outlet />
+            </main>
+            
+            {/* Bottom Navigation */}
+            <BottomNavigation />
+          </div>
           
-          {/* Main content area with bottom padding for navigation */}
-          <main className="min-h-screen pb-20">
-            <Outlet />
-          </main>
-          
-          {/* Bottom Navigation */}
-          <BottomNavigation />
-        </div>
-        
-        {/* Demo User Switcher - floats over content */}
-        <DemoUserSwitcher />
-      </VoiceProvider>
-    </ContextAwareAIProvider>
+          {/* Demo User Switcher - floats over content */}
+          <DemoUserSwitcher />
+        </VoiceProvider>
+      </ContextAwareAIProvider>
+    </ErrorBoundary>
   );
 };
