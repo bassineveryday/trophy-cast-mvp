@@ -6,7 +6,7 @@ import { AICoachLayout } from "@/layouts/AICoachLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import DemoSwitcher from "@/components/DemoSwitcher";
+import DemoAutoRoute from "@/components/DemoAutoRoute";
 
 // Auth Feature
 import AuthPage from "@/features/auth/AuthPage";
@@ -87,6 +87,7 @@ const App = () => (
       <AuthProvider>
         <DemoModeProvider>
           <BrowserRouter>
+            <DemoAutoRoute />
             <Routes>
               {/* Auth Route - standalone, no layout */}
               <Route path="/auth" element={<AuthPage />} />

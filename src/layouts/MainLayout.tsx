@@ -5,7 +5,7 @@ import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
 import DemoSwitcher from "@/components/DemoSwitcher";
-import DemoAutoRoute from "@/components/DemoAutoRoute";
+
 
 /**
  * MainLayout - Wrapper for all main application pages
@@ -28,7 +28,6 @@ export const MainLayout = () => {
           <Outlet />
         </main>
         <DemoSwitcher />
-        <DemoAutoRoute />
       </VoiceProvider>
     </ContextAwareAIProvider>
   );
