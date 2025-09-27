@@ -618,10 +618,10 @@ const UnifiedProfile = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {earnedBadges.map((badge) => {
-                    const IconComponent = badge.icon;
+                    const Icon = badge.icon;
                     return (
                       <div key={badge.id} className={`${badge.color} rounded-lg p-4 text-center min-h-[120px] flex flex-col justify-center`}>
-                        <IconComponent className="w-8 h-8 mx-auto mb-2" />
+                        <Icon className="w-8 h-8 mx-auto mb-2" />
                         <h4 className="font-semibold text-sm mb-1">{badge.name}</h4>
                         <p className="text-xs opacity-90 leading-tight">{badge.description}</p>
                       </div>
@@ -637,11 +637,11 @@ const UnifiedProfile = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {lockedBadges.map((badge) => {
-                    const IconComponent = badge.icon;
+                    const Icon = badge.icon;
                     return (
                       <div key={badge.id} className="bg-muted/30 rounded-lg p-4 border-2 border-dashed border-muted text-center min-h-[120px] flex flex-col justify-center">
                         <div className="relative inline-block mb-2">
-                          <IconComponent className="w-8 h-8 text-muted-foreground" />
+                          <Icon className="w-8 h-8 text-muted-foreground" />
                           <Lock className="w-4 h-4 absolute -top-1 -right-1 text-muted-foreground bg-background rounded-full p-0.5" />
                         </div>
                         <h4 className="font-semibold text-sm mb-1 text-muted-foreground">{badge.name}</h4>
