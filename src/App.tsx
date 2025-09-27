@@ -141,6 +141,9 @@ const App = () => (
             <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
             <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
 
+            {/* Demo Club Routes - using demo club ID */}
+            <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+
             {/* Hybrid Demo Dashboard */}
             <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
 

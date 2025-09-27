@@ -3,9 +3,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Users, Crown, Shield, Calendar, FileText, DollarSign, Leaf, User } from 'lucide-react';
+import { Users, Crown, Shield, Calendar, FileText, DollarSign, Leaf, User, ArrowLeft, Settings } from 'lucide-react';
 import { useDemoMode, DEMO_USERS } from '@/contexts/DemoModeContext';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const roleIcons = {
   president: Crown,
@@ -30,6 +31,7 @@ const roleColors = {
 export function DemoUserSwitcher() {
   const { isDemoMode, currentDemoUser, switchToDemoUser, exitDemoMode } = useDemoMode();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Only show in non-production environments
   const isDevMode = import.meta.env.DEV || window.location.hostname.includes('lovableproject.com');
@@ -41,28 +43,45 @@ export function DemoUserSwitcher() {
     setIsOpen(false);
   };
 
+  const openUserSwitcher = () => {
+    setIsOpen(true);
+  };
+
   return (
     <>
-      {/* Demo Mode Banner */}
+      {/* Enhanced Demo Mode Banner */}
       {isDemoMode && currentDemoUser && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 shadow-lg">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
                 DEMO MODE
               </Badge>
-              <span className="text-sm font-medium">
-                Viewing as: <strong>{currentDemoUser.name}</strong> - {currentDemoUser.club_role.replace('_', ' ').toTitle()}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">
+                  You are viewing TrophyCast as: <strong>{currentDemoUser.name}</strong> – {currentDemoUser.club_role.replace('_', ' ').toTitle()} (Demo Mode)
+                </span>
+              </div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={exitDemoMode}
-              className="text-white hover:bg-white/20"
-            >
-              Exit Demo
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={openUserSwitcher}
+                className="text-white hover:bg-white/20 flex items-center gap-1"
+              >
+                <Settings className="w-3 h-3" />
+                Switch User
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={exitDemoMode}
+                className="text-white hover:bg-white/20"
+              >
+                Exit Demo
+              </Button>
+            </div>
           </div>
         </div>
       )}
@@ -87,10 +106,10 @@ export function DemoUserSwitcher() {
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-center">
-              Choose Your Demo Experience
+              TrophyCast Demo Experience
             </DialogTitle>
             <p className="text-muted-foreground text-center">
-              Experience TrophyCast from different club officer perspectives
+              Experience different club officer perspectives in <strong>Alabama Bass Nation - Chapter 12</strong>
             </p>
           </DialogHeader>
 
@@ -180,7 +199,7 @@ export function DemoUserSwitcher() {
                 <Badge className="bg-orange-500">Demo Mode Active</Badge>
               </div>
               <p className="text-sm text-orange-800 mb-3">
-                You're currently experiencing TrophyCast in demo mode. All actions only affect demo data and won't impact real users or clubs.
+                You're experiencing TrophyCast in demo mode with <strong>Alabama Bass Nation - Chapter 12</strong>. All actions only affect demo data and won't impact real users or clubs.
               </p>
               <Button 
                 onClick={exitDemoMode} 

@@ -15,6 +15,9 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import ImportButton from '@/components/member-import/ImportButton';
 import MemberExportTools from '@/components/member-import/MemberExportTools';
+import { useDemoMode, DEMO_CLUB } from '@/contexts/DemoModeContext';
+import { DemoClubBanner } from '@/components/demo/DemoClubBanner';
+import { DemoOfficerQuickActions } from '@/components/demo/DemoOfficerQuickActions';
 
 const roleIcons = {
   'admin': Crown,
@@ -41,6 +44,7 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
   const actualClubId = clubId || id;
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isDemoMode, currentDemoUser, getDemoClub } = useDemoMode();
   const [selectedRole, setSelectedRole] = useState<string>('');
   const [selectedMember, setSelectedMember] = useState<string>('');
   const [activeTab, setActiveTab] = useState('members');
@@ -189,28 +193,54 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      {/* Add top padding if demo mode is active */}
+      {isDemoMode && <div className="h-12" />}
+      
+      {/* Demo Club Banner */}
+      {isDemoMode && <DemoClubBanner />}
+      
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Club Management</h1>
-          <p className="text-muted-foreground">Manage club members, roles, and responsibilities</p>
+          <h1 className="text-3xl font-bold">
+            {isDemoMode ? `${getDemoClub().name} - Management` : 'Club Management'}
+          </h1>
+          <p className="text-muted-foreground">
+            {isDemoMode ? 'Manage demo club members, roles, and responsibilities' : 'Manage club members, roles, and responsibilities'}
+          </p>
         </div>
         {canManageRoles && (
           <div className="flex gap-2">
             <ImportButton clubId={actualClubId || ''} />
             <Button>
               <UserPlus className="mr-2 h-4 w-4" />
-              Invite Members
+              {isDemoMode ? 'Invite Demo Members' : 'Invite Members'}
             </Button>
           </div>
         )}
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="members">Members & Roles</TabsTrigger>
           <TabsTrigger value="roles">Role Descriptions</TabsTrigger>
           <TabsTrigger value="onboarding">Onboarding Tips</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+          {isDemoMode && <DemoOfficerQuickActions />}
+          {!isDemoMode && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Club Overview</CardTitle>
+                <CardDescription>General club management and statistics</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Club overview features will be available here.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
         <TabsContent value="members" className="space-y-6">
           <MemberExportTools clubId={actualClubId || ''} />
@@ -219,10 +249,13 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Club Members ({clubMembers.length})
+                {isDemoMode ? 'Demo Club Members' : 'Club Members'} ({clubMembers.length})
               </CardTitle>
               <CardDescription>
-                Manage member roles and permissions
+                {isDemoMode 
+                  ? 'Manage demo member roles and permissions - all changes are for demonstration only'
+                  : 'Manage member roles and permissions'
+                }
               </CardDescription>
             </CardHeader>
             <CardContent>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface DemoUser {
   id: string;
@@ -12,6 +13,15 @@ export interface DemoUser {
   permissions: string[];
   description: string;
 }
+
+// Demo Club Constants
+export const DEMO_CLUB = {
+  id: 'demo-alabama-bass-chapter-12',
+  name: 'Alabama Bass Nation - Chapter 12',
+  abbreviation: 'ABN-12',
+  location: 'Alabama',
+  description: 'Official Alabama Bass Nation chapter focused on tournament fishing and conservation'
+};
 
 export const DEMO_USERS: DemoUser[] = [
   {
@@ -140,10 +150,11 @@ export const DEMO_USERS: DemoUser[] = [
 interface DemoModeContextType {
   isDemoMode: boolean;
   currentDemoUser: DemoUser | null;
-  switchToDemoUser: (user: DemoUser) => void;
+  switchToDemoUser: (user: DemoUser, navigate?: boolean) => void;
   exitDemoMode: () => void;
   hasPermission: (permission: string) => boolean;
   getDemoUserRole: () => string | null;
+  getDemoClub: () => typeof DEMO_CLUB;
 }
 
 const DemoModeContext = createContext<DemoModeContextType | undefined>(undefined);
@@ -176,9 +187,23 @@ export function DemoModeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('trophycast_demo_state', JSON.stringify(demoState));
   }, [isDemoMode, currentDemoUser]);
 
-  const switchToDemoUser = (user: DemoUser) => {
+  const switchToDemoUser = (user: DemoUser, navigate = true) => {
     setCurrentDemoUser(user);
     setIsDemoMode(true);
+    
+    // Navigate to appropriate club page based on role
+    if (navigate) {
+      const isOfficer = ['president', 'vice_president', 'tournament_director', 'secretary', 'treasurer', 'conservation_director'].includes(user.club_role);
+      
+      // Use setTimeout to ensure state update completes before navigation
+      setTimeout(() => {
+        if (isOfficer) {
+          window.location.href = `/clubs/${DEMO_CLUB.id}/manage`;
+        } else {
+          window.location.href = '/club-dashboard';
+        }
+      }, 100);
+    }
   };
 
   const exitDemoMode = () => {
@@ -197,6 +222,8 @@ export function DemoModeProvider({ children }: { children: React.ReactNode }) {
     return currentDemoUser.club_role;
   };
 
+  const getDemoClub = () => DEMO_CLUB;
+
   return (
     <DemoModeContext.Provider value={{
       isDemoMode,
@@ -204,7 +231,8 @@ export function DemoModeProvider({ children }: { children: React.ReactNode }) {
       switchToDemoUser,
       exitDemoMode,
       hasPermission,
-      getDemoUserRole
+      getDemoUserRole,
+      getDemoClub
     }}>
       {children}
     </DemoModeContext.Provider>
