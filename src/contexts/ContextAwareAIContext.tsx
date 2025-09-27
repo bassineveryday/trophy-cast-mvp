@@ -56,7 +56,7 @@ export const ContextAwareAIProvider: React.FC<{ children: React.ReactNode }> = (
       const tournamentId = params.tournamentId;
       const tournament = mockTournaments.find(t => t.id === tournamentId) || mockTournaments[0];
       setContextData({ tournament, hasHistory: Math.random() > 0.5 });
-    } else if (path.includes("/calendar") || path.includes("/profile")) {
+    } else if (path.includes("/calendar") || path.includes("/dashboard")) {
       setContext("calendar");
       setContextData({ tournaments: mockTournaments });
     } else if (path.includes("/profile") || path.includes("/my-catches") || path.includes("/badges")) {

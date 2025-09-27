@@ -13,6 +13,7 @@ import AuthPage from "@/features/auth/AuthPage";
 
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
+import Dashboard from "@/features/home/Dashboard";
 import PersonalizedDashboard from "@/features/home/PersonalizedDashboard";
 
 // AI Coach Feature (grouped under AICoachLayout)
@@ -102,8 +103,7 @@ const App = () => (
               {/* Home & Dashboard */}
               <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
               <Route path="dashboard" element={<ProtectedRoute><PersonalizedDashboard /></ProtectedRoute>} />
-            {/* Legacy dashboard routes - redirect to profile for members */}
-            <Route path="dashboard-legacy" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+              <Route path="dashboard-legacy" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
             <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
@@ -166,7 +166,7 @@ const App = () => (
             <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
 
             {/* Legacy/Placeholder Routes */}
-            <Route path="catches" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+            <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Route>
 
           {/* AI Coach Feature Routes - specialized layout with shared context and UI */}

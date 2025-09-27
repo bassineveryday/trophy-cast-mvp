@@ -100,7 +100,7 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
             )}
             
             <p className="text-xs text-center text-muted-foreground">
-              Setting up your profile with club context and role permissions...
+              Setting up your dashboard with club context and role permissions...
             </p>
           </CardContent>
         </Card>

@@ -86,7 +86,7 @@ export function usePersonalizedNavigation() {
       return `Returning to requested page: ${intendedRoute}`;
     }
 
-    return personalizedDestination?.reason || 'Loading your personalized profile';
+    return personalizedDestination?.reason || 'Loading your personalized dashboard';
   };
 
   return {
