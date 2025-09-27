@@ -1,35 +1,29 @@
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 
-function setQueryParam(name: string, value: string | null) {
-  const url = new URL(window.location.href);
-  if (value === null) url.searchParams.delete(name);
-  else url.searchParams.set(name, value);
-  // Use pushState so our DemoModeProvider popstate listener will pick it up
+function goHomeWithDemo(value: string | null) {
+  const url = new URL(window.location.origin + "/");
+  if (value === null) url.searchParams.delete("demo");
+  else url.searchParams.set("demo", value);
+  // Push new URL and notify listeners
   window.history.pushState({}, "", url.toString());
-  // Manually dispatch popstate so listeners update immediately
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
 export default function DemoSwitcher() {
   const { enabled, role } = useDemoMode();
-  const navigate = useNavigate();
-
+  
   const setOff = useCallback(() => {
-    setQueryParam("demo", null);
-    navigate("/");
-  }, [navigate]);
+    goHomeWithDemo(null);
+  }, []);
   
   const setJake = useCallback(() => {
-    setQueryParam("demo", "jake"); 
-    navigate("/");
-  }, [navigate]);
+    goHomeWithDemo("jake");
+  }, []);
   
   const setPres = useCallback(() => {
-    setQueryParam("demo", "president");
-    navigate("/");
-  }, [navigate]);
+    goHomeWithDemo("president");
+  }, []);
 
   // Keep the switcher subtle; only show a small pill in bottom-right
   return (
