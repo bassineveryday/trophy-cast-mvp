@@ -73,14 +73,15 @@ export function RoleBasedDashboard() {
       badge: '3 active',
       priority: 'primary'
     },
-    {
-      title: 'Club Directory',
-      description: 'Connect with members',
-      icon: Users,
-      href: '/clubs',
-      color: 'from-primary/10 to-primary/20 border-primary/30',
-      priority: 'secondary'
-    },
+      {
+        title: 'Club Directory',
+        description: 'Browse and connect with members',
+        icon: Users,
+        href: '/clubs/directory',
+        color: 'from-water-blue/10 to-water-blue/20 border-water-blue/30',
+        badge: '47 members',
+        priority: 'secondary' as const
+      },
     {
       title: 'Messages',
       description: 'Club communications',

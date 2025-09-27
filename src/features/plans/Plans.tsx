@@ -447,7 +447,7 @@ const Plans = () => {
       <div className="bg-gradient-to-r from-water-blue-dark to-fishing-green-dark text-white p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <Link to="/dashboard">
+            <Link to="/">
               <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
                 <ChevronLeft className="w-5 h-5" />
               </Button>

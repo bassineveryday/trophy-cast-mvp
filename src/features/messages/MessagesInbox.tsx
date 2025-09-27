@@ -13,18 +13,23 @@ import {
   Plus,
   ArrowLeft,
   Calendar,
-  Star
+  Star,
+  Crown,
+  PlusCircle
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { mockMessageThreads, mockClubInbox } from "@/data/mockMessages";
 import OfficerNotesSection from "@/components/OfficerNotesSection";
 import { useToast } from "@/hooks/use-toast";
+import { useDemoAwareRoles } from '@/hooks/useDemoRoles';
+import UniversalAvatar from '@/components/UniversalAvatar';
 
 const MessagesInbox = () => {
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'chats';
   const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
+  const { isDemoMode, currentDemoUser, isClubOfficer } = useDemoAwareRoles();
 
   const filteredThreads = mockMessageThreads.filter(thread =>
     thread.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -99,6 +104,15 @@ const MessagesInbox = () => {
           </TabsList>
 
           <TabsContent value="chats" className="space-y-4">
+            {/* New Message Button */}
+            <div className="flex justify-end mb-4">
+              <Link to="/messages/new">
+                <Button>
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  New Message
+                </Button>
+              </Link>
+            </div>
             {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -189,6 +203,33 @@ const MessagesInbox = () => {
           </TabsContent>
 
           <TabsContent value="club" className="space-y-4">
+            {/* Officer Section */}
+            {isClubOfficer && (
+              <Card className="border-orange-500/50 bg-orange-50/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-orange-500" />
+                    Officer Communications
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Send announcements and manage club communications
+                  </p>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Draft Announcement
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Users className="w-4 h-4 mr-2" />
+                      Member Directory
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
             {/* Officer Notes Section */}
             <OfficerNotesSection clubId="alabama-bass-nation-12" />
             

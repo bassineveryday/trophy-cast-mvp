@@ -53,6 +53,7 @@ import ClubFeed from "@/features/clubs/ClubFeed";
 // Enhanced Club Features
 import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
 import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub.tsx";
+import ClubDirectory from "@/features/clubs/ClubDirectory";
 
 // Club Organization Hub
 import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
@@ -106,7 +107,8 @@ const App = () => (
             <Route path="/" element={<MainLayout />}>
             {/* Home & Dashboard */}
             <Route index element={<ProtectedRoute><StreamlinedHomepage /></ProtectedRoute>} />
-            <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="dashboard" element={<ProtectedRoute><StreamlinedHomepage /></ProtectedRoute>} />
+            <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
             <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
