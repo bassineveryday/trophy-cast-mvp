@@ -1,8 +1,9 @@
 // ============================================================================
-// TROPHYCAST - COMPLETE APPLICATION ROUTER
+// TROPHYCAST - COMPLETE APPLICATION ROUTER 
 // ============================================================================
 // Eight-phase development structure for organized feature development
 // All routes are protected and use consistent layouts and authentication
+// Updated to fix caching issues
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
