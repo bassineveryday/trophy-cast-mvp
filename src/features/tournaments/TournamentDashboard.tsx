@@ -29,11 +29,10 @@ import { Calendar } from '@/components/ui/calendar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
-import { useDemoAwareRoles } from '@/hooks/useDemoRoles';
 import { useTournaments, useCreateTournament } from '@/hooks/useTournaments';
 import { useClubs } from '@/hooks/useClubs';
+import { useIsClubOfficer } from '@/hooks/useRoles';
 import type { Tournament } from '@/types/database';
-import { mockTournaments } from '@/data/mockData';
 
 const createTournamentSchema = z.object({
   name: z.string().trim().min(1, 'Tournament name is required').max(100, 'Name must be less than 100 characters'),
@@ -51,23 +50,8 @@ export default function TournamentDashboard() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const { data: tournaments = [], isLoading } = useTournaments();
   const { data: clubs = [] } = useClubs();
-  const { isClubOfficer, isDemoMode } = useDemoAwareRoles();
+  const isClubOfficer = useIsClubOfficer();
   const createTournamentMutation = useCreateTournament();
-
-  // Use mock data in demo mode, real data otherwise
-  const displayTournaments = isDemoMode ? mockTournaments.map((t, index) => ({
-    id: t.id,
-    name: t.name,
-    date: t.date,
-    location: t.name, // Use name as location for mock data
-    entry_fee: parseInt(t.fee.replace('$', '')),
-    status: 'upcoming' as const,
-    club: { name: t.club },
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: null,
-    club_id: index === 0 ? 'demo-alabama-bass-chapter-12' : 'other-club'
-  })) : tournaments;
 
   const form = useForm<CreateTournamentFormData>({
     resolver: zodResolver(createTournamentSchema),
@@ -82,13 +66,13 @@ export default function TournamentDashboard() {
 
   // Separate tournaments by status and date
   const now = new Date();
-  const upcomingTournaments = displayTournaments.filter(t => 
+  const upcomingTournaments = tournaments.filter(t => 
     t.status === 'upcoming' && new Date(t.date) >= now
   );
-  const pastTournaments = displayTournaments.filter(t => 
+  const pastTournaments = tournaments.filter(t => 
     t.status === 'completed' || new Date(t.date) < now
   );
-  const activeTournaments = displayTournaments.filter(t => t.status === 'active');
+  const activeTournaments = tournaments.filter(t => t.status === 'active');
 
   const handleCreateTournament = async (data: CreateTournamentFormData) => {
     try {
@@ -136,7 +120,7 @@ export default function TournamentDashboard() {
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-3 h-3" />
-                {isDemoMode ? tournament.date : format(new Date(tournament.date), 'MMM dd, yyyy')}
+                {format(new Date(tournament.date), 'MMM dd, yyyy')}
               </span>
               <span className="flex items-center gap-1">
                 <MapPin className="w-3 h-3" />

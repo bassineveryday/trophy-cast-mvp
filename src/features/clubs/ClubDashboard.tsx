@@ -17,20 +17,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import alabamaLogo from "@/assets/alabama-bass-logo.png";
-import { useDemoMode, DEMO_CLUB } from '@/contexts/DemoModeContext';
-import { DemoClubBanner } from '@/components/demo/DemoClubBanner';
 
 const ClubDashboard = () => {
-  const { isDemoMode, currentDemoUser, getDemoClub } = useDemoMode();
-  
-  // Use demo club data if in demo mode
-  const clubData = isDemoMode 
-    ? { ...getDemoClub(), memberCount: 28 }
-    : {
-        name: "Alabama Bass Nation",
-        memberCount: 2847,
-        description: "Official State Chapter"
-      };
   const upcomingTournaments = [
     {
       name: "Lake Guntersville Championship",
@@ -85,11 +73,6 @@ const ClubDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Add top padding if demo mode is active */}
-      {isDemoMode && <div className="h-12" />}
-      
-      {/* Demo Club Banner */}
-      {isDemoMode && <div className="p-4"><DemoClubBanner showOfficerTools={false} /></div>}
       {/* Header */}
       <div className="bg-gradient-to-r from-water-blue-dark to-fishing-green-dark text-white p-4">
         <div className="flex items-center mb-4">
@@ -104,13 +87,11 @@ const ClubDashboard = () => {
         <div className="flex items-center space-x-4">
           <img src={alabamaLogo} alt="Alabama Bass Nation" className="w-16 h-16 rounded-full" />
           <div>
-            <h2 className="text-xl font-bold">{clubData.name}</h2>
-            <p className="text-sm opacity-90">{clubData.description}</p>
+            <h2 className="text-xl font-bold">Alabama Bass Nation</h2>
+            <p className="text-sm opacity-90">Official State Chapter</p>
             <div className="flex items-center mt-1">
               <Users className="w-4 h-4 mr-1" />
-              <span className="text-sm">
-                {clubData.memberCount} active members{isDemoMode ? " (Demo)" : ""}
-              </span>
+              <span className="text-sm">2,847 active members</span>
             </div>
           </div>
         </div>
@@ -127,16 +108,9 @@ const ClubDashboard = () => {
           <TabsContent value="tournaments" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Calendar className="w-5 h-5 mr-2 text-water-blue" />
-                    Upcoming Tournaments
-                  </div>
-                  {isDemoMode && (
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                      Demo Data
-                    </Badge>
-                  )}
+                <CardTitle className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2 text-water-blue" />
+                  Upcoming Tournaments
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -209,16 +183,9 @@ const ClubDashboard = () => {
           <TabsContent value="standings" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Trophy className="w-5 h-5 mr-2 text-trophy-gold" />
-                    AOY Leaderboard
-                  </div>
-                  {isDemoMode && (
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                      Demo Standings
-                    </Badge>
-                  )}
+                <CardTitle className="flex items-center">
+                  <Trophy className="w-5 h-5 mr-2 text-trophy-gold" />
+                  AOY Leaderboard
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -288,16 +255,9 @@ const ClubDashboard = () => {
           <TabsContent value="members" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Users className="w-5 h-5 mr-2 text-water-blue" />
-                    Member Roster Preview
-                  </div>
-                  {isDemoMode && (
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200 text-xs">
-                      Demo Members
-                    </Badge>
-                  )}
+                <CardTitle className="flex items-center">
+                  <Users className="w-5 h-5 mr-2 text-water-blue" />
+                  Member Roster Preview
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">

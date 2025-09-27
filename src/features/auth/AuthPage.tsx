@@ -7,12 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Fish, Trophy, Target } from 'lucide-react';
 import { SignatureTechniques } from '@/components/SignatureTechniques';
 import { useAuth } from '@/contexts/AuthContext';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 const signInSchema = z.object({
@@ -26,8 +24,6 @@ const signUpSchema = z.object({
   confirmPassword: z.string(),
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
   club: z.string().trim().max(100, 'Club name must be less than 100 characters').optional(),
-  home_state: z.string().min(1, 'Home state is required'),
-  city: z.string().trim().max(100, 'City must be less than 100 characters').optional(),
   signatureTechniques: z.array(z.string()).min(1, 'Please select at least 1 signature technique').max(3, 'Maximum 3 techniques allowed')
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -37,22 +33,10 @@ const signUpSchema = z.object({
 type SignInFormData = z.infer<typeof signInSchema>;
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
-// US States for dropdown
-const US_STATES = [
-  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
-  'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
-  'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
-  'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
-  'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-];
-
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
-  const [lastSignInEmail, setLastSignInEmail] = useState('');
-  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
-  const { signIn, signUp, resendConfirmation, user, loading } = useAuth();
+  const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -74,8 +58,6 @@ export default function AuthPage() {
       confirmPassword: '',
       name: '',
       club: '',
-      home_state: '',
-      city: '',
       signatureTechniques: []
     }
   });
@@ -89,27 +71,13 @@ export default function AuthPage() {
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
-    setEmailNotConfirmed(false);
-    setLastSignInEmail(data.email.trim());
     try {
-      const { error } = await signIn(data.email.trim(), data.password);
+      const { error } = await signIn(data.email, data.password);
       if (!error) {
         navigate(from, { replace: true });
-      } else if ((error.message || '').toLowerCase().includes('email not confirmed')) {
-        setEmailNotConfirmed(true);
       }
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleResendConfirmation = async () => {
-    if (!lastSignInEmail) return;
-    setResendLoading(true);
-    try {
-      await resendConfirmation(lastSignInEmail);
-    } finally {
-      setResendLoading(false);
     }
   };
 
@@ -120,9 +88,7 @@ export default function AuthPage() {
         name: data.name,
         club: data.club || '',
         avatar_url: '',
-        signature_techniques: data.signatureTechniques,
-        home_state: data.home_state,
-        city: data.city || ''
+        signature_techniques: data.signatureTechniques
       });
       
       if (!error) {
@@ -180,16 +146,6 @@ export default function AuthPage() {
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4">
-                {emailNotConfirmed && (
-                  <Alert>
-                    <AlertDescription>
-                      Please confirm your email to sign in. Didn't get it?
-                      <Button variant="outline" size="sm" className="ml-2" onClick={handleResendConfirmation} disabled={resendLoading}>
-                        {resendLoading ? 'Resending...' : 'Resend confirmation email'}
-                      </Button>
-                    </AlertDescription>
-                  </Alert>
-                )}
                 <Form {...signInForm}>
                   <form onSubmit={signInForm.handleSubmit(handleSignIn)} className="space-y-4">
                     <FormField
@@ -268,47 +224,6 @@ export default function AuthPage() {
                           <FormControl>
                             <Input 
                               placeholder="Enter your fishing club"
-                              disabled={isLoading}
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={signUpForm.control}
-                      name="home_state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Home State</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select your home state" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {US_STATES.map((state) => (
-                                <SelectItem key={state} value={state}>
-                                  {state}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={signUpForm.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Home Town/City (Optional)</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your city"
                               disabled={isLoading}
                               {...field} 
                             />

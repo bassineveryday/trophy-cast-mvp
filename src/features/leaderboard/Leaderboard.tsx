@@ -16,9 +16,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
-import { useDemoAwareRoles } from '@/hooks/useDemoRoles';
 import UniversalAvatar from "@/components/UniversalAvatar";
-import { mockUser, mockCareerStats } from "@/data/mockData";
 
 /* ------------ Types ------------ */
 type ChangeDir = "up" | "down" | "flat";
@@ -81,20 +79,8 @@ const formatWeight = (n: number) => n.toFixed(2);
 
 /* ------------ Component ------------ */
 const Leaderboard = () => {
-  const { isDemoMode, currentDemoUser } = useDemoAwareRoles();
   const eventTitle = "Smith Lake Championship";
   const lastUpdated = "Updated 2 min ago";
-
-  // Adjust leaderboard based on demo user
-  const getUserPosition = () => {
-    if (isDemoMode && currentDemoUser) {
-      return currentDemoUser.name === 'Jake Patterson' ? 2 : 
-             currentDemoUser.name === 'Mike Rodriguez' ? 12 : 20;
-    }
-    return 12; // Default position
-  };
-
-  const userPosition = getUserPosition();
 
   // Sort defensively in case data updates live
   const liveData = useMemo(
@@ -155,9 +141,7 @@ const Leaderboard = () => {
 
               <CardContent className="space-y-3">
                 {liveData.map((angler) => {
-                  const isUser = isDemoMode ? 
-                    angler.name === currentDemoUser?.name : 
-                    angler.name === "Mike Johnson";
+                  const isUser = angler.name === "Mike Johnson";
                   const isHot = angler.name === "Jake Patterson";
 
                   return (
@@ -295,83 +279,77 @@ const Leaderboard = () => {
               </CardHeader>
 
               <CardContent className="space-y-3">
-               {AOY_STANDINGS.map((angler) => {
-                  const isUser = isDemoMode ?
-                    angler.name === currentDemoUser?.name :
-                    angler.isUser;
-                  
-                  return (
-                   <div
-                     key={angler.id}
-                     className={[
-                       "rounded-lg border p-4 transition-colors",
-                       isUser ? "border-primary bg-accent" : "hover:bg-muted/50",
-                     ].join(" ")}
-                   >
-                     <div className="flex items-center justify-between">
-                       <div className="flex items-center space-x-3">
-                         <div className="flex h-8 w-8 items-center justify-center">
-                           <RankIcon rank={angler.rank} />
-                         </div>
+                {AOY_STANDINGS.map((angler) => (
+                  <div
+                    key={angler.id}
+                    className={[
+                      "rounded-lg border p-4 transition-colors",
+                      angler.isUser ? "border-primary bg-accent" : "hover:bg-muted/50",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex h-8 w-8 items-center justify-center">
+                          <RankIcon rank={angler.rank} />
+                        </div>
 
-                         <UniversalAvatar
-                           name={angler.name}
-                           photoUrl="/placeholder.svg"
-                           club={{
-                             id: angler.anglerId.includes("patterson") ? "alabama-bass-nation" :
-                                 angler.anglerId.includes("santos") ? "river-valley" :
-                                 angler.anglerId.includes("tommy") ? "trophy-cast" : "alabama-bass-nation",
-                             abbreviation: angler.anglerId.includes("patterson") ? "ABN-12" :
-                                          angler.anglerId.includes("santos") ? "RVIBC" :
-                                          angler.anglerId.includes("tommy") ? "TCES" : "ABN-12"
-                           }}
-                           role={angler.rank === 1 ? "AOY Champion" : "Tournament Angler"}
-                           city={angler.anglerId.includes("patterson") ? "Huntsville, AL" :
-                                angler.anglerId.includes("santos") ? "Nashville, TN" :
-                                angler.anglerId.includes("tommy") ? "Birmingham, AL" : "Alabama"}
-                           anglerId={angler.anglerId}
-                           size="card"
-                           isAOYChampion={angler.rank === 1}
-                           className={isUser ? "border-primary" : ""}
-                         />
+                        <UniversalAvatar
+                          name={angler.name}
+                          photoUrl="/placeholder.svg"
+                          club={{
+                            id: angler.anglerId.includes("patterson") ? "alabama-bass-nation" :
+                                angler.anglerId.includes("santos") ? "river-valley" :
+                                angler.anglerId.includes("tommy") ? "trophy-cast" : "alabama-bass-nation",
+                            abbreviation: angler.anglerId.includes("patterson") ? "ABN-12" :
+                                         angler.anglerId.includes("santos") ? "RVIBC" :
+                                         angler.anglerId.includes("tommy") ? "TCES" : "ABN-12"
+                          }}
+                          role={angler.rank === 1 ? "AOY Champion" : "Tournament Angler"}
+                          city={angler.anglerId.includes("patterson") ? "Huntsville, AL" :
+                               angler.anglerId.includes("santos") ? "Nashville, TN" :
+                               angler.anglerId.includes("tommy") ? "Birmingham, AL" : "Alabama"}
+                          anglerId={angler.anglerId}
+                          size="card"
+                          isAOYChampion={angler.rank === 1}
+                          className={angler.isUser ? "border-primary" : ""}
+                        />
 
-                         <div>
-                           <p 
-                             className="font-semibold cursor-pointer hover:text-primary transition-colors"
-                             onClick={() => window.location.href = `/anglers/${angler.anglerId}`}
-                           >
-                             {angler.name}
-                             {isUser && <span className="ml-1 text-xs text-primary">(You)</span>}
-                           </p>
-                           <p className="text-sm text-muted-foreground">Earnings: {angler.earnings}</p>
-                         </div>
-                       </div>
+                        <div>
+                          <p 
+                            className="font-semibold cursor-pointer hover:text-primary transition-colors"
+                            onClick={() => window.location.href = `/anglers/${angler.anglerId}`}
+                          >
+                            {angler.name}
+                            {angler.isUser && <span className="ml-1 text-xs text-primary">(You)</span>}
+                          </p>
+                          <p className="text-sm text-muted-foreground">Earnings: {angler.earnings}</p>
+                        </div>
+                      </div>
 
-                       <div className="flex items-center space-x-2 text-right">
-                         <div>
-                           <div className="text-lg font-bold">{angler.points}</div>
-                           <div className="text-xs text-muted-foreground">points</div>
-                         </div>
-                         
-                         {!isUser && (
-                           <Button
-                             variant="ghost"
-                             size="icon"
-                             className="w-8 h-8 text-muted-foreground hover:text-primary"
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               window.location.href = `/messages/new?to=${angler.anglerId}`;
-                             }}
-                             aria-label={`Message ${angler.name}`}
-                           >
-                             <MessageSquare className="w-4 h-4" />
-                           </Button>
-                         )}
-                       </div>
-                     </div>
+                      <div className="flex items-center space-x-2 text-right">
+                        <div>
+                          <div className="text-lg font-bold">{angler.points}</div>
+                          <div className="text-xs text-muted-foreground">points</div>
+                        </div>
+                        
+                        {!angler.isUser && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="w-8 h-8 text-muted-foreground hover:text-primary"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `/messages/new?to=${angler.anglerId}`;
+                            }}
+                            aria-label={`Message ${angler.name}`}
+                          >
+                            <MessageSquare className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
 
                 <div className="py-2 text-center">
                   <div className="text-sm text-muted-foreground" aria-hidden>

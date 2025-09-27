@@ -12,8 +12,7 @@ import {
   Trophy,
   Calendar,
   Search,
-  Filter,
-  Settings
+  Filter
 } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,10 +30,8 @@ import { useClubs, useCreateClub } from '@/hooks/useClubs';
 import { useUserClubs, useJoinClub, useLeaveClub, useIsClubMember, useClubMembers } from '@/hooks/useClubMembership';
 import { useTournamentsByClub } from '@/hooks/useTournaments';
 import { useAuth } from '@/contexts/AuthContext';
-import { useIsClubOfficer } from '@/hooks/useRoles';
 import { supabase } from '@/integrations/supabase/client';
 import type { Club } from '@/types/database';
-import { useNavigate } from 'react-router-dom';
 
 const createClubSchema = z.object({
   name: z.string().trim().min(1, 'Club name is required').max(100, 'Name must be less than 100 characters'),
@@ -51,7 +48,6 @@ export default function ClubDashboardNew() {
   const [filterType, setFilterType] = useState<'all' | 'member' | 'not-member'>('all');
 
   const { user } = useAuth();
-  const navigate = useNavigate();
   const { data: allClubs = [], isLoading } = useClubs();
   const { data: userClubs = [] } = useUserClubs();
   const createClubMutation = useCreateClub();
@@ -167,7 +163,6 @@ export default function ClubDashboardNew() {
     const { data: isMember = false } = useIsClubMember(club.id);
     const { data: members = [] } = useClubMembers(club.id);
     const { data: tournaments = [] } = useTournamentsByClub(club.id);
-    const isOfficer = useIsClubOfficer(club.id);
     const joinClubMutation = useJoinClub();
     const leaveClubMutation = useLeaveClub();
 
@@ -203,15 +198,6 @@ export default function ClubDashboardNew() {
 
             {/* Membership Actions */}
             <div className="flex gap-2">
-              {isOfficer && (
-                <Button 
-                  onClick={() => navigate(`/clubs/${club.id}/manage`)}
-                  className="flex items-center gap-2"
-                >
-                  <Settings className="w-4 h-4" />
-                  Manage Club
-                </Button>
-              )}
               {isMember ? (
                 <Button 
                   variant="outline" 
