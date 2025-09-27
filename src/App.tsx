@@ -1,3 +1,9 @@
+// ============================================================================
+// TROPHYCAST - COMPLETE APPLICATION ROUTER
+// ============================================================================
+// Organized by development phases for maintainability and feature tracking
+// All routes are protected and use consistent layouts and authentication
+
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -7,65 +13,101 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-// Auth Feature
+// ============================================================================
+// AUTHENTICATION & CORE SYSTEM
+// ============================================================================
 import AuthPage from "@/features/auth/AuthPage";
 
-// Home & Dashboard Features
+// ============================================================================
+// PHASE 1: DEMO SYSTEM & ROLE SWITCHER
+// ============================================================================
+// Demo mode functionality for showcase and testing
+
+// ============================================================================  
+// PHASE 2: HOME & DASHBOARD FEATURES
+// ============================================================================
+import HomeDashboard from "@/features/home/HomeDashboard";
 import Homepage from "@/features/home/Homepage";
 import StreamlinedHomepage from "@/features/home/StreamlinedHomepage";
-import HomeDashboard from "@/features/home/HomeDashboard";
-import PlatformDashboard from "@/features/admin/PlatformDashboard";
-import UserImpersonationPanel from "@/features/admin/UserImpersonationPanel";
-import SystemHealthDashboard from "@/features/admin/SystemHealthDashboard";
 import Dashboard from "@/features/home/Dashboard";
 
-// AI Coach Feature (grouped under AICoachLayout)
+// ============================================================================
+// PHASE 3: MOBILE-FIRST USER PROFILES
+// ============================================================================
+import Profile from "@/features/profile/Profile";
+import PublicProfile from "@/features/profile/PublicProfile";
+import BadgeCollection from "@/features/profile/BadgeCollection";
+
+// ============================================================================
+// PHASE 4: SMART GEAR & BOAT TRACKING  
+// ============================================================================
+import GearDashboard from "@/features/gear/GearDashboard";
+
+// ============================================================================
+// PHASE 5: AI-POWERED NEWSLETTER
+// ============================================================================
+// Newsletter generation and distribution features
+
+// ============================================================================
+// PHASE 6: ENVIRONMENTAL DATA & AI COACHING
+// ============================================================================
 import AICoach from "@/features/ai-coach/AICoach";
 import AICoachPreTrip from "@/features/ai-coach/AICoachPreTrip";
 import AICoachAtLake from "@/features/ai-coach/AICoachAtLake";
 import AICoachAdjustedPlan from "@/features/ai-coach/AICoachAdjustedPlan";
 import TournamentPlanReport from "@/features/ai-coach/TournamentPlanReport";
 
-// Tournament Features
+// ============================================================================
+// PHASE 7: ENHANCED NAVIGATION & UX
+// ============================================================================
+// Universal header, bottom nav, breadcrumbs, and navigation improvements
+
+// ============================================================================
+// PHASE 8: FOUNDER & PLATFORM ADMIN TOOLS
+// ============================================================================
+import PlatformDashboard from "@/features/admin/PlatformDashboard";
+import UserImpersonationPanel from "@/features/admin/UserImpersonationPanel";
+import SystemHealthDashboard from "@/features/admin/SystemHealthDashboard";
+import DatabaseExample from "@/features/admin/DatabaseExample";
+
+// ============================================================================
+// CORE TOURNAMENT MANAGEMENT
+// ============================================================================
+import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
 import TournamentDetail from "@/features/tournaments/TournamentDetail";
 import TournamentAlerts from "@/features/tournaments/TournamentAlerts";
 
-// Catch Management Features
+// ============================================================================
+// CATCH LOGGING & MANAGEMENT
+// ============================================================================
 import CatchLogging from "@/features/catches/CatchLogging";
 import CatchDetail from "@/features/catches/CatchDetail";
 import MyCatches from "@/features/catches/MyCatches";
 import CatchesThisMonth from "@/features/catches/CatchesThisMonth";
 
-// Profile Features
-import Profile from "@/features/profile/Profile";
-import PublicProfile from "@/features/profile/PublicProfile";
-import BadgeCollection from "@/features/profile/BadgeCollection";
+// ============================================================================
+// CLUB MANAGEMENT & SOCIAL FEATURES
+// ============================================================================
+import ClubDashboard from "@/features/clubs/ClubDashboard";
+import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
+import ClubFeed from "@/features/clubs/ClubFeed";
+import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub.tsx";
+import ClubDirectory from "@/features/clubs/ClubDirectory";
+import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
+import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
+import MemberImportPage from "@/features/clubs/MemberImportPage";
 
-// Messages Features  
+// ============================================================================
+// MESSAGING & COMMUNICATION
+// ============================================================================
 import MessagesInbox from "@/features/messages/MessagesInbox";
 import MessageThread from "@/features/messages/MessageThread";
 import MessageNew from "@/features/messages/MessageNew";
 import ClubInboxDetail from "@/features/messages/ClubInboxDetail";
 
-// Club Features
-import ClubDashboard from "@/features/clubs/ClubDashboard";
-import ClubFeed from "@/features/clubs/ClubFeed";
-
-// Enhanced Club Features
-import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
-import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub.tsx";
-import ClubDirectory from "@/features/clubs/ClubDirectory";
-
-// Club Organization Hub
-import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
-
-// Club Management Dashboard
-import ClubManagementDashboard from "@/features/clubs/ClubManagementDashboard";
-
-// Member Import Wizard
-import MemberImportPage from "@/features/clubs/MemberImportPage";
-
-// Leaderboard & Performance Features
+// ============================================================================
+// PERFORMANCE TRACKING & LEADERBOARDS
+// ============================================================================
 import Leaderboard from "@/features/leaderboard/Leaderboard";
 import FirstPlaceFinishes from "@/features/leaderboard/FirstPlaceFinishes";
 import SecondPlaceFinishes from "@/features/leaderboard/SecondPlaceFinishes";
@@ -73,128 +115,171 @@ import ThirdPlaceFinishes from "@/features/leaderboard/ThirdPlaceFinishes";
 import Top10Finishes from "@/features/leaderboard/Top10Finishes";
 import Top20Finishes from "@/features/leaderboard/Top20Finishes";
 
-// Plans Feature
+// ============================================================================
+// PLANNING & STRATEGY
+// ============================================================================
 import MyPlans from "@/features/plans/Plans";
 
-// Sponsor Features
+// ============================================================================
+// PARTNERSHIPS & MONETIZATION
+// ============================================================================
 import SponsorDeals from "@/features/sponsors/SponsorDeals";
 
-// Shared Utility Pages
+// ============================================================================
+// HYBRID DEMO & DEVELOPMENT FEATURES
+// ============================================================================
+import HybridDashboard from "@/features/hybrid/HybridDashboard";
+
+// ============================================================================
+// SHARED UTILITIES & PAGES
+// ============================================================================
 import Calendar from "@/shared/pages/Calendar";
 import NotFound from "@/shared/pages/NotFound";
 
-// Database Example
-import DatabaseExample from "@/features/admin/DatabaseExample";
-
-import GearDashboard from "@/features/gear/GearDashboard";
-import HybridDashboard from "@/features/hybrid/HybridDashboard";
-
-// Tournament Features - Enhanced
-import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
-
+// ============================================================================
+// QUERY CLIENT & APP CONFIGURATION
+// ============================================================================
 const queryClient = new QueryClient();
 
+// ============================================================================
+// MAIN APPLICATION COMPONENT
+// ============================================================================
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
         <DemoModeProvider>
           <BrowserRouter>
-          <Routes>
-            {/* Auth Route - standalone, no layout */}
-            <Route path="/auth" element={<AuthPage />} />
+            <Routes>
+              {/* ================================================================ */}
+              {/* AUTHENTICATION - Standalone Routes */}
+              {/* ================================================================ */}
+              <Route path="/auth" element={<AuthPage />} />
 
-            {/* Main Application Routes - wrapped with MainLayout and protected */}
-            <Route path="/" element={<MainLayout />}>
-            {/* Home & Dashboard */}
-            <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
-            <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
-            <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              {/* ================================================================ */}
+              {/* MAIN APPLICATION - MainLayout Wrapper */}
+              {/* ================================================================ */}
+              <Route path="/" element={<MainLayout />}>
+                
+                {/* ========================================================== */}
+                {/* PHASE 2: HOME & DASHBOARD CORE */}
+                {/* ========================================================== */}
+                <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+                <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+                <Route path="legacy-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
-            {/* Leaderboard & Performance Tracking */}
-            <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-            <Route path="tournament-finishes/first-place" element={<ProtectedRoute><FirstPlaceFinishes /></ProtectedRoute>} />
-            <Route path="tournament-finishes/second-place" element={<ProtectedRoute><SecondPlaceFinishes /></ProtectedRoute>} />
-            <Route path="tournament-finishes/third-place" element={<ProtectedRoute><ThirdPlaceFinishes /></ProtectedRoute>} />
-            <Route path="tournament-finishes/top-10" element={<ProtectedRoute><Top10Finishes /></ProtectedRoute>} />
-            <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PERFORMANCE TRACKING & LEADERBOARDS */}
+                {/* ========================================================== */}
+                <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+                <Route path="tournament-finishes/first-place" element={<ProtectedRoute><FirstPlaceFinishes /></ProtectedRoute>} />
+                <Route path="tournament-finishes/second-place" element={<ProtectedRoute><SecondPlaceFinishes /></ProtectedRoute>} />
+                <Route path="tournament-finishes/third-place" element={<ProtectedRoute><ThirdPlaceFinishes /></ProtectedRoute>} />
+                <Route path="tournament-finishes/top-10" element={<ProtectedRoute><Top10Finishes /></ProtectedRoute>} />
+                <Route path="tournament-finishes/top-20" element={<ProtectedRoute><Top20Finishes /></ProtectedRoute>} />
 
-            {/* Tournament Management */}
-            <Route path="tournaments" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
-            <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
-            <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* TOURNAMENT MANAGEMENT & COMPETITION */}
+                {/* ========================================================== */}
+                <Route path="tournaments" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
+                <Route path="tournament/:tournamentId" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
+                <Route path="tournament-alerts" element={<ProtectedRoute><TournamentAlerts /></ProtectedRoute>} />
 
-            {/* Catch Management */}
-            <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
-            <Route path="tournament/:tournamentId/catch/:catchId" element={<ProtectedRoute><CatchDetail /></ProtectedRoute>} />
-            <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
-            <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* CATCH LOGGING & TRACKING */}
+                {/* ========================================================== */}
+                <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
+                <Route path="tournament/:tournamentId/catch/:catchId" element={<ProtectedRoute><CatchDetail /></ProtectedRoute>} />
+                <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
+                <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
+                <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
-            {/* Profile & Achievement */}
-            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
-            <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PHASE 3: USER PROFILES & ACHIEVEMENTS */}
+                {/* ========================================================== */}
+                <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+                <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
 
-            {/* Messages */}
-            <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
-            <Route path="messages/new" element={<ProtectedRoute><MessageNew /></ProtectedRoute>} />
-            <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
-            <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* MESSAGING & COMMUNICATION */}
+                {/* ========================================================== */}
+                <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
+                <Route path="messages/new" element={<ProtectedRoute><MessageNew /></ProtectedRoute>} />
+                <Route path="messages/:threadId" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
+                <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
-            {/* Club Features */}
-            <Route path="clubs" element={<ProtectedRoute><StreamlinedClubHub /></ProtectedRoute>} />
-            <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
-            <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
-            <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
-            <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
-            <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* CLUB MANAGEMENT & SOCIAL FEATURES */}
+                {/* ========================================================== */}
+                <Route path="clubs" element={<ProtectedRoute><StreamlinedClubHub /></ProtectedRoute>} />
+                <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+                <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
+                <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
+                <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+                <Route path="club-organization" element={<ProtectedRoute><ClubOrganizationHub /></ProtectedRoute>} />
 
-            {/* Demo Club Routes - using demo club ID */}
-            <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
+                {/* Demo Club Routes - Development & Testing */}
+                <Route path="clubs/demo-alabama-bass-chapter-12/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
 
-            {/* Admin Routes */}
-            <Route path="admin/dashboard" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-            <Route path="admin/impersonation" element={<ProtectedRoute><UserImpersonationPanel /></ProtectedRoute>} />
-            <Route path="admin/system" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
-            <Route path="admin/users" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-            <Route path="admin/clubs" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
-            <Route path="admin/debug" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
-            <Route path="admin/features" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PHASE 4: GEAR & EQUIPMENT TRACKING */}
+                {/* ========================================================== */}
+                <Route path="gear" element={<ProtectedRoute><GearDashboard /></ProtectedRoute>} />
 
-            {/* Hybrid Demo Dashboard */}
-            <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PLANNING & STRATEGY TOOLS */}
+                {/* ========================================================== */}
+                <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
+                <Route path="my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
 
-            {/* Gear Management */}
-            <Route path="gear" element={<ProtectedRoute><GearDashboard /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PARTNERSHIPS & MONETIZATION */}
+                {/* ========================================================== */}
+                <Route path="sponsor-deals" element={<ProtectedRoute><SponsorDeals /></ProtectedRoute>} />
 
-            {/* Plans Management */}
-            <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
-            <Route path="my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* PHASE 8: PLATFORM ADMINISTRATION */}
+                {/* ========================================================== */}
+                <Route path="admin/dashboard" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+                <Route path="admin/impersonation" element={<ProtectedRoute><UserImpersonationPanel /></ProtectedRoute>} />
+                <Route path="admin/system" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+                <Route path="admin/users" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+                <Route path="admin/clubs" element={<ProtectedRoute><PlatformDashboard /></ProtectedRoute>} />
+                <Route path="admin/debug" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
+                <Route path="admin/features" element={<ProtectedRoute><SystemHealthDashboard /></ProtectedRoute>} />
 
-            {/* Sponsor Features */}
-            <Route path="sponsor-deals" element={<ProtectedRoute><SponsorDeals /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* HYBRID DEMO & DEVELOPMENT FEATURES */}
+                {/* ========================================================== */}
+                <Route path="hybrid" element={<ProtectedRoute><HybridDashboard /></ProtectedRoute>} />
 
-            {/* Shared Utility Pages */}
-            <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
-            <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
+                {/* ========================================================== */}
+                {/* SHARED UTILITIES & TOOLS */}
+                {/* ========================================================== */}
+                <Route path="calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+                <Route path="database-example" element={<ProtectedRoute><DatabaseExample /></ProtectedRoute>} />
 
-            {/* Legacy/Placeholder Routes */}
-            <Route path="catches" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          </Route>
+              </Route>
 
-          {/* AI Coach Feature Routes - specialized layout with shared context and UI */}
-          <Route path="/ai-coach" element={<AICoachLayout />}>
-            <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
-            <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
-            <Route path="tournament-plan" element={<ProtectedRoute><TournamentPlanReport /></ProtectedRoute>} />
-            <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
-            <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
-          </Route>
+              {/* ================================================================ */}
+              {/* PHASE 6: AI COACH - Specialized Layout */}
+              {/* ================================================================ */}
+              <Route path="/ai-coach" element={<AICoachLayout />}>
+                <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
+                <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
+                <Route path="tournament-plan" element={<ProtectedRoute><TournamentPlanReport /></ProtectedRoute>} />
+                <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
+                <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
+              </Route>
 
-          {/* Standalone Pages - no shared layout needed */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        </BrowserRouter>
+              {/* ================================================================ */}
+              {/* FALLBACK & ERROR HANDLING */}
+              {/* ================================================================ */}
+              <Route path="*" element={<NotFound />} />
+
+            </Routes>
+          </BrowserRouter>
         </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
