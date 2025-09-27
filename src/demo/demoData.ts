@@ -15,6 +15,43 @@ export const demoUsers = {
   },
 } as const;
 
+// MIKE'S DEMO PROFILE DATA
+export const mikeProfile = {
+  "id": "demo-mike",
+  "username": "mike_prez",
+  "displayName": "Mike Johnson",
+  "titleLine": "President, ABC-12",
+  "role": "president",
+  "avatarUrl": "/images/avatars/mike.png",
+  "badges": [
+    { "id": "aoy-2024", "label": "Angler of the Year 2024" },
+    { "id": "top10-50", "label": "50 Top-10 Finishes" },
+    { "id": "biggest-catch", "label": "Biggest Catch: 12.3 lb Bass" }
+  ],
+  "careerStats": {
+    "wins": 8,
+    "aoyTitles": 2,
+    "biggestCatchLb": 12.3,
+    "top10s": 50,
+    "top20s": 120,
+    "placeCounts": { "1st": 8, "2nd": 15, "3rd": 12 }
+  },
+  "clubMemberships": [
+    {
+      "clubId": "alabama-bass-chapter-12",
+      "clubName": "Alabama Bass Chapter 12",
+      "role": "President"
+    }
+  ],
+  "upcomingTournaments": [
+    { "id": "tourn-20250930", "name": "Fall Bass Classic", "date": "2025-09-30" }
+  ],
+  "quickActions": [
+    { "id": "bod-dashboard", "label": "Board of Directors", "to": "/admin/board-of-directors", "icon": "📊" },
+    { "id": "manage-club",    "label": "Manage Club",      "to": "/clubs/alabama-bass-chapter-12/manage", "icon": "⚙️" }
+  ]
+};
+
 export const demoClub = {
   id: "demo-club-alabama",
   name: "Demo: Alabama Bass Chapter",

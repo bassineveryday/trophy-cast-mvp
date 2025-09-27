@@ -73,8 +73,10 @@ import DatabaseExample from "@/features/admin/DatabaseExample";
 // Tournament Features - Enhanced
 import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
 
-// Prototype Features
+// PHASE 1: DEMO SYSTEM & ROLE SWITCHER
 import PrototypeRoutes from "@/features/prototype/PrototypeRoutes";
+import AnglerDashboard from "@/features/prototype/stubs/AnglerDashboard";
+import PresidentDashboard from "@/features/prototype/stubs/PresidentDashboard";
 import ClubMembersScreen from "@/features/prototype/stubs/ClubMembersScreen";
 import ClubEventsScreen from "@/features/prototype/stubs/ClubEventsScreen";
 
@@ -92,9 +94,13 @@ const App = () => (
 
               {/* Main Application Routes - wrapped with MainLayout and protected */}
               <Route path="/" element={<MainLayout />}>
-                {/* Home & Dashboard */}
+                {/* PHASE 1: DEMO SYSTEM & ROLE SWITCHER */}
+                <Route path="demo/jake" element={<ProtectedRoute><AnglerDashboard /></ProtectedRoute>} />
+                <Route path="demo/mike" element={<ProtectedRoute><PresidentDashboard /></ProtectedRoute>} />
+
+                {/* PHASE 2: PERSONALIZED HOME DASHBOARD */}
                 <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-                <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="dashboard" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
 
               {/* Leaderboard & Performance Tracking */}
               <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
