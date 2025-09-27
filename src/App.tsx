@@ -52,7 +52,7 @@ import ClubFeed from "@/features/clubs/ClubFeed";
 
 // Enhanced Club Features
 import ClubDashboardNew from "@/features/clubs/ClubDashboardNew";
-import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub";
+import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub.tsx";
 
 // Club Organization Hub
 import ClubOrganizationHub from "@/features/clubs/organization/ClubOrganizationHub";
