@@ -176,6 +176,16 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
       return;
     }
 
+    // Allow guest access to certain routes
+    const guestAllowedRoutes = ['/profile', '/demo', '/', '/dashboard'];
+    const isGuestAllowedRoute = guestAllowedRoutes.includes(location.pathname);
+    
+    // If no user and no demo mode, but on allowed route, let them continue
+    if (!user && !isDemoMode && isGuestAllowedRoute) {
+      console.log('👤 Guest access allowed to:', location.pathname);
+      return;
+    }
+
     if (user || isDemoMode) {
       const intendedRoute = getIntendedRoute();
       const targetRoute = safeGetPersonalizedRoute(intendedRoute);
@@ -230,8 +240,15 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
   const shouldShowLoading = () => {
     if (forceFallback) return false;
     if (redirecting) return true;
-    if (isLoadingData) return true;
+    if (isLoadingData && (user || isDemoMode)) return true;
     if ((user || isDemoMode) && !isReady) return true;
+    
+    // Don't show loading for guest users on allowed routes
+    const guestAllowedRoutes = ['/profile', '/demo', '/', '/dashboard'];
+    if (!user && !isDemoMode && guestAllowedRoutes.includes(location.pathname)) {
+      return false;
+    }
+    
     return false;
   };
 
