@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
+import DemoSwitcher from "@/components/DemoSwitcher";
 
 /**
  * MainLayout - Wrapper for all main application pages
@@ -24,6 +25,7 @@ export const MainLayout = () => {
         {/* Main content area */}
         <main className="min-h-screen">
           <Outlet />
+          <DemoSwitcher />
         </main>
       </VoiceProvider>
     </ContextAwareAIProvider>

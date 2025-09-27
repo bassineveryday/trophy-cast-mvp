@@ -76,6 +76,8 @@ import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
 
 // Prototype Features
 import PrototypeRoutes from "@/features/prototype/PrototypeRoutes";
+import ClubMembersScreen from "@/features/prototype/stubs/ClubMembersScreen";
+import ClubEventsScreen from "@/features/prototype/stubs/ClubEventsScreen";
 
 const queryClient = new QueryClient();
 
@@ -126,9 +128,14 @@ const App = () => (
               <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
               {/* Club Features */}
-              <Route path="clubs" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
+              <Route path="clubs/:clubId" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
+              <Route path="clubs/:clubId/members" element={<ProtectedRoute><ClubMembersScreen /></ProtectedRoute>} />
+              <Route path="clubs/:clubId/events" element={<ProtectedRoute><ClubEventsScreen /></ProtectedRoute>} />
               <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
               <Route path="club-feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+
+              {/* Prototype Routes - investor demo system */}
+              <Route path="prototype/*" element={<ProtectedRoute><PrototypeRoutes /></ProtectedRoute>} />
 
               {/* Plans Management */}
               <Route path="plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} />
@@ -154,18 +161,10 @@ const App = () => (
               <Route path="adjusted-plan" element={<ProtectedRoute><AICoachAdjustedPlan /></ProtectedRoute>} />
             </Route>
 
-            {/* Prototype Routes - investor demo system */}
-            <Route path="/prototype/*" element={
-              <ProtectedRoute>
-                <PrototypeRoutes />
-              </ProtectedRoute>
-            } />
-
             {/* Standalone Pages - no shared layout needed */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-        <DemoSwitcher />
         </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
