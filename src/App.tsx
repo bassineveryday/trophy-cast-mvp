@@ -6,6 +6,7 @@ import { AICoachLayout } from "@/layouts/AICoachLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { PersonalizedAuthRedirect } from "@/components/auth/PersonalizedAuthRedirect";
 
 // Auth Feature
 import AuthPage from "@/features/auth/AuthPage";
@@ -13,6 +14,7 @@ import AuthPage from "@/features/auth/AuthPage";
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
 import Dashboard from "@/features/home/Dashboard";
+import PersonalizedDashboard from "@/features/home/PersonalizedDashboard";
 
 // AI Coach Feature (grouped under AICoachLayout)
 import AICoach from "@/features/ai-coach/AICoach";
@@ -92,7 +94,8 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <DemoModeProvider>
-          <BrowserRouter>
+          <PersonalizedAuthRedirect>
+            <BrowserRouter>
           <Routes>
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
@@ -101,7 +104,8 @@ const App = () => (
             <Route path="/" element={<MainLayout />}>
               {/* Home & Dashboard */}
               <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-              <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><PersonalizedDashboard /></ProtectedRoute>} />
+              <Route path="dashboard-legacy" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
             <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
@@ -178,6 +182,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         </BrowserRouter>
+        </PersonalizedAuthRedirect>
         </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>

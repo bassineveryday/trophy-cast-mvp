@@ -90,6 +90,7 @@ export function DemoUserSwitcher() {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button
+            data-demo-switcher-trigger
             className={cn(
               "fixed bottom-6 right-6 z-40 rounded-full shadow-lg hover:shadow-xl transition-all duration-300",
               isDemoMode 
