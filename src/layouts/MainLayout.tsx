@@ -5,6 +5,7 @@ import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
 import DemoSwitcher from "@/components/DemoSwitcher";
+import BackButton from "@/components/BackButton";
 
 
 /**
@@ -22,6 +23,7 @@ export const MainLayout = () => {
         
         {/* Navigation */}
         <Navigation />
+        <BackButton />
         
         {/* Main content area */}
         <main className="min-h-screen">
