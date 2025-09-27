@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
 
 interface Profile {
   id: string;
@@ -21,7 +20,7 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   signUp: (email: string, password: string, userData: { name: string; club: string; avatar_url?: string; signature_techniques?: string[]; home_state?: string; city?: string }) => Promise<{ error: any }>;
-  signIn: (email: string, password: string, intendedRoute?: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
   resendConfirmation: (email: string) => Promise<{ error: any } | void>;
   signOut: () => Promise<void>;
 }
@@ -128,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signIn = async (email: string, password: string, intendedRoute?: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -140,16 +139,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           variant: "destructive",
           title: "Sign In Error",
           description: error.message
-        });
-      } else {
-        // Store intended route for post-login navigation
-        if (intendedRoute) {
-          sessionStorage.setItem('trophycast_intended_route', intendedRoute);
-        }
-        
-        toast({
-          title: "Welcome back!",
-          description: "Redirecting to your personalized dashboard..."
         });
       }
 

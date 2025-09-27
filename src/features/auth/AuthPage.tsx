@@ -14,7 +14,6 @@ import { SignatureTechniques } from '@/components/SignatureTechniques';
 import { useAuth } from '@/contexts/AuthContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { PersonalizedAuthRedirect } from '@/components/auth/PersonalizedAuthRedirect';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email address').max(255, 'Email must be less than 255 characters'),
@@ -81,9 +80,11 @@ export default function AuthPage() {
     }
   });
 
-  // Redirect if already authenticated - use PersonalizedAuthRedirect
+  // Redirect if already authenticated
   useEffect(() => {
-    // Don't redirect here - let PersonalizedAuthRedirect handle it
+    if (!loading && user) {
+      navigate(from, { replace: true });
+    }
   }, [user, loading, navigate, from]);
 
   const handleSignIn = async (data: SignInFormData) => {
@@ -91,9 +92,9 @@ export default function AuthPage() {
     setEmailNotConfirmed(false);
     setLastSignInEmail(data.email.trim());
     try {
-      const { error } = await signIn(data.email.trim(), data.password, from);
+      const { error } = await signIn(data.email.trim(), data.password);
       if (!error) {
-        // Don't navigate here - PersonalizedAuthRedirect will handle it
+        navigate(from, { replace: true });
       } else if ((error.message || '').toLowerCase().includes('email not confirmed')) {
         setEmailNotConfirmed(true);
       }
@@ -138,13 +139,7 @@ export default function AuthPage() {
   }
 
   if (user) {
-    return (
-      <PersonalizedAuthRedirect>
-        <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
-          <LoadingSpinner message="Redirecting to your personalized dashboard..." />
-        </div>
-      </PersonalizedAuthRedirect>
-    );
+    return null; // Will redirect in useEffect
   }
 
   return (

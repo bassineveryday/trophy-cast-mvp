@@ -18,7 +18,6 @@ import MemberExportTools from '@/components/member-import/MemberExportTools';
 import { useDemoMode, DEMO_CLUB } from '@/contexts/DemoModeContext';
 import { DemoClubBanner } from '@/components/demo/DemoClubBanner';
 import { DemoOfficerQuickActions } from '@/components/demo/DemoOfficerQuickActions';
-import { DemoQuickSwitcher } from '@/components/demo/DemoQuickSwitcher';
 
 const roleIcons = {
   'admin': Crown,
@@ -198,12 +197,7 @@ export default function ClubManagementDashboard({ clubId }: ClubManagementDashbo
       {isDemoMode && <div className="h-12" />}
       
       {/* Demo Club Banner */}
-      {isDemoMode && (
-        <div className="space-y-4">
-          <DemoClubBanner />
-          <DemoQuickSwitcher />
-        </div>
-      )}
+      {isDemoMode && <DemoClubBanner />}
       
       <div className="flex items-center justify-between">
         <div>

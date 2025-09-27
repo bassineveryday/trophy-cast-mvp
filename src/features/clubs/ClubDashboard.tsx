@@ -19,8 +19,6 @@ import { Link } from "react-router-dom";
 import alabamaLogo from "@/assets/alabama-bass-logo.png";
 import { useDemoMode, DEMO_CLUB } from '@/contexts/DemoModeContext';
 import { DemoClubBanner } from '@/components/demo/DemoClubBanner';
-import { PersonalizedWelcome } from '@/components/dashboard/PersonalizedWelcome';
-import { DemoQuickSwitcher } from '@/components/demo/DemoQuickSwitcher';
 
 const ClubDashboard = () => {
   const { isDemoMode, currentDemoUser, getDemoClub } = useDemoMode();
@@ -119,17 +117,7 @@ const ClubDashboard = () => {
       </div>
 
       <div className="p-4">
-        {/* Demo Mode Quick Switcher */}
-        {isDemoMode && (
-          <div className="mb-4">
-            <DemoQuickSwitcher />
-          </div>
-        )}
-        
-        {/* Personalized Welcome */}
-        <PersonalizedWelcome />
-        
-        <Tabs defaultValue="tournaments" className="w-full mt-6">
+        <Tabs defaultValue="tournaments" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="tournaments">Tournaments</TabsTrigger>
             <TabsTrigger value="standings">AOY Leaderboard</TabsTrigger>
