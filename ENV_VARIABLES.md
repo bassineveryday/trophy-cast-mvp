@@ -18,10 +18,13 @@ NODE_ENV=development
 # Used in DemoUserSwitcher to detect lovableproject.com
 ```
 
-## Supabase Configuration
-- Supabase client uses hardcoded values in `src/integrations/supabase/client.ts`
-- VITE_* environment variables are not supported by Lovable
-- Current project uses direct configuration instead of environment variables
+## Supabase Configuration (Frontend)
+- `SUPABASE_URL` – Project URL from Supabase settings
+- `SUPABASE_ANON_KEY` – Public anon key (safe for frontend)
+
+## Supabase Configuration (Backend / Server-only)
+- `SUPABASE_SERVICE_ROLE_KEY` – Service role key (⚠️ **Do not expose to client code**)
+- Used by server jobs for verification, scoring, and admin tasks
 
 ## Environment Variables NOT Found in Router/Auth Code
 - No API keys or secrets referenced directly in router/auth components  
@@ -37,10 +40,15 @@ NODE_ENV=development
 # Note: Vite automatically provides import.meta.env.DEV
 # No additional environment variables needed for routing/auth functionality
 
-# Supabase configuration (currently hardcoded in client.ts)
-# Note: VITE_* variables are not supported by Lovable
-# VITE_SUPABASE_URL=...    # your project URL  
-# VITE_SUPABASE_ANON_KEY=... # your anon key
+# Supabase Configuration (Frontend)
+# ⚠️ Note: Lovable does not support VITE_* variables
+# Reference process.env.SUPABASE_URL and process.env.SUPABASE_ANON_KEY directly
+SUPABASE_URL=...    # Project URL from Supabase settings
+SUPABASE_ANON_KEY=... # Public anon key (safe for frontend)
+
+# Supabase Configuration (Backend / Server-only)
+# ⚠️ Do not expose to client code
+SUPABASE_SERVICE_ROLE_KEY=... # Service role key for server operations
 ```
 
 ## Usage Context
