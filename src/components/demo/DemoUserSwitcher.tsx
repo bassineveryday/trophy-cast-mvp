@@ -109,12 +109,97 @@ export function DemoUserSwitcher() {
               TrophyCast Demo Experience
             </DialogTitle>
             <p className="text-muted-foreground text-center">
-              Experience different club officer perspectives in <strong>Alabama Bass Nation - Chapter 12</strong>
+              Experience different perspectives in <strong>Alabama Bass Nation - Chapter 12</strong>
             </p>
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+              <p className="text-sm text-center text-primary">
+                <strong>Featured Comparison:</strong> See the difference between a regular member view and full club president access
+              </p>
+            </div>
           </DialogHeader>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            {DEMO_USERS.map((user) => {
+            {/* Featured Users First */}
+            {DEMO_USERS.filter(user => user.id === 'demo-jake-patterson' || user.id === 'demo-mike-rodriguez').map((user) => {
+              const IconComponent = roleIcons[user.club_role as keyof typeof roleIcons];
+              const isCurrentUser = currentDemoUser?.id === user.id;
+              
+              return (
+                <div
+                  key={user.id}
+                  className={cn(
+                    "relative p-4 rounded-lg border-2 transition-all duration-300 hover:shadow-lg",
+                    isCurrentUser 
+                      ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
+                      : "border-primary/40 bg-gradient-to-br from-primary/5 to-primary/10 hover:border-primary/60"
+                  )}
+                >
+                  {isCurrentUser && (
+                    <Badge className="absolute -top-2 -right-2 bg-primary">
+                      Current
+                    </Badge>
+                  )}
+                  {!isCurrentUser && (
+                    <Badge className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+                      ⭐ Featured
+                    </Badge>
+                  )}
+                  
+                  <div className="flex items-start gap-4">
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage src={user.avatar_url} alt={user.name} />
+                      <AvatarFallback className={roleColors[user.club_role as keyof typeof roleColors]}>
+                        {user.name.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-lg truncate">
+                          {user.name}
+                          {user.nickname && (
+                            <span className="text-muted-foreground text-sm ml-1">
+                              "{user.nickname}"
+                            </span>
+                          )}
+                        </h3>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 mb-2">
+                        <IconComponent className="w-4 h-4 text-muted-foreground" />
+                        <Badge variant="outline" className={cn(
+                          "text-xs",
+                          user.club_role === 'president' ? "border-orange-500/50 text-orange-700 bg-orange-50" : "border-blue-500/50 text-blue-700 bg-blue-50"
+                        )}>
+                          {user.club_role === 'president' ? '👑 Club President' : '🎣 Tournament Angler'}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-3 leading-relaxed">
+                        {user.description}
+                      </p>
+                      
+                      <Button
+                        onClick={() => handleUserSwitch(user)}
+                        disabled={isCurrentUser}
+                        className={cn(
+                          "w-full",
+                          user.club_role === 'president' 
+                            ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600" 
+                            : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                        )}
+                        variant={isCurrentUser ? "outline" : "default"}
+                      >
+                        {isCurrentUser ? 'Current View' : `Experience as ${user.name.split(' ')[0]}`}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            
+            {/* Other Demo Users */}
+            {DEMO_USERS.filter(user => user.id !== 'demo-jake-patterson' && user.id !== 'demo-mike-rodriguez').map((user) => {
               const IconComponent = roleIcons[user.club_role as keyof typeof roleIcons];
               const isCurrentUser = currentDemoUser?.id === user.id;
               

@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useDemoAwareRoles } from "@/hooks/useDemoRoles";
+import { mockTournaments } from "@/data/mockData";
 
 const CatchLogging = () => {
   const [weight, setWeight] = useState("");
@@ -28,6 +30,10 @@ const CatchLogging = () => {
   const [notes, setNotes] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const { toast } = useToast();
+  const { isDemoMode, currentDemoUser } = useDemoAwareRoles();
+
+  // Get current tournament context
+  const currentTournament = isDemoMode ? mockTournaments[0] : null;
 
   const handlePhotoUpload = () => {
     // Simulate photo upload
@@ -55,7 +61,7 @@ const CatchLogging = () => {
 
     toast({
       title: "Catch Logged Successfully!",
-      description: `Your ${weight} lb bass has been recorded in the tournament.`,
+      description: `Your ${weight} lb bass has been recorded${currentTournament ? ` for ${currentTournament.name}` : ''}.`,
     });
 
     // Reset form
@@ -81,7 +87,9 @@ const CatchLogging = () => {
         
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Smith Lake Championship</h2>
+            <h2 className="text-lg font-semibold">
+              {currentTournament?.name || 'Smith Lake Championship'}
+            </h2>
             <p className="text-sm opacity-90">Tournament in Progress</p>
           </div>
           <Badge className="bg-white text-success font-semibold">

@@ -1411,6 +1411,10 @@ export type Database = {
         Args: { _club_id?: string; _user_id: string }
         Returns: boolean
       }
+      is_platform_admin: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
       is_valid_email: {
         Args: { email: string }
         Returns: boolean
