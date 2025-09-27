@@ -13,6 +13,7 @@ import AuthPage from "@/features/auth/AuthPage";
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
 import Dashboard from "@/features/home/Dashboard";
+import HomeDashboard from "@/features/home/HomeDashboard";
 
 // AI Coach Feature (grouped under AICoachLayout)
 import AICoach from "@/features/ai-coach/AICoach";
@@ -99,8 +100,8 @@ const App = () => (
                 <Route path="demo/mike" element={<ProtectedRoute><PresidentDashboard /></ProtectedRoute>} />
 
                 {/* PHASE 2: PERSONALIZED HOME DASHBOARD */}
-                <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-                <Route path="dashboard" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+                <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+                <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
 
               {/* Leaderboard & Performance Tracking */}
               <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
