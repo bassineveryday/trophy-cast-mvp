@@ -12,6 +12,8 @@ import AuthPage from "@/features/auth/AuthPage";
 
 // Home & Dashboard Features
 import Homepage from "@/features/home/Homepage";
+import StreamlinedHomepage from "@/features/home/StreamlinedHomepage";
+import StreamlinedClubHub from "@/features/clubs/StreamlinedClubHub";
 import Dashboard from "@/features/home/Dashboard";
 
 // AI Coach Feature (grouped under AICoachLayout)
@@ -99,9 +101,9 @@ const App = () => (
 
             {/* Main Application Routes - wrapped with MainLayout and protected */}
             <Route path="/" element={<MainLayout />}>
-              {/* Home & Dashboard */}
-              <Route index element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-              <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            {/* Home & Dashboard */}
+            <Route index element={<ProtectedRoute><StreamlinedHomepage /></ProtectedRoute>} />
+            <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             {/* Leaderboard & Performance Tracking */}
             <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
@@ -134,7 +136,7 @@ const App = () => (
             <Route path="messages/club/:itemId" element={<ProtectedRoute><ClubInboxDetail /></ProtectedRoute>} />
 
             {/* Club Features */}
-            <Route path="clubs" element={<ProtectedRoute><ClubDashboardNew /></ProtectedRoute>} />
+            <Route path="clubs" element={<ProtectedRoute><StreamlinedClubHub /></ProtectedRoute>} />
             <Route path="clubs/:id/manage" element={<ProtectedRoute><ClubManagementDashboard /></ProtectedRoute>} />
             <Route path="clubs/:id/import" element={<ProtectedRoute><MemberImportPage /></ProtectedRoute>} />
             <Route path="club-dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />

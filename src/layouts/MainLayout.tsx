@@ -5,6 +5,7 @@ import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { Navigation } from "@/components/Navigation";
 import { UniversalHeader } from "@/components/UniversalHeader";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import { DemoUserSwitcher } from "@/components/demo/DemoUserSwitcher";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 
@@ -28,13 +29,16 @@ export const MainLayout = () => {
           {/* Universal Header */}
           <UniversalHeader />
           
-          {/* Navigation */}
+          {/* Navigation - now reduced in prominence */}
           <Navigation />
           
-          {/* Main content area */}
-          <main className="min-h-screen">
+          {/* Main content area with bottom padding for navigation */}
+          <main className="min-h-screen pb-20">
             <Outlet />
           </main>
+          
+          {/* Bottom Navigation */}
+          <BottomNavigation />
         </div>
         
         {/* Demo User Switcher - floats over content */}

@@ -3,6 +3,7 @@ import { ArrowLeft, Home } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsClubOfficer } from '@/hooks/useRoles';
+import { EnhancedBreadcrumb } from '@/components/EnhancedBreadcrumb';
 
 interface UniversalHeaderProps {
   title?: string;
@@ -91,7 +92,7 @@ export function UniversalHeader({
 
         {/* Center - Title and breadcrumb */}
         <div className="flex-1 min-w-0 mx-4">
-          {showBreadcrumb && breadcrumbItems.length > 0 ? (
+          {showBreadcrumb && breadcrumbItems && breadcrumbItems.length > 0 ? (
             <nav className="flex items-center text-sm text-muted-foreground">
               {breadcrumbItems.map((item, index) => (
                 <div key={index} className="flex items-center">
@@ -111,6 +112,8 @@ export function UniversalHeader({
                 </div>
               ))}
             </nav>
+          ) : showBreadcrumb ? (
+            <EnhancedBreadcrumb className="text-center" />
           ) : (
             <h1 className="text-lg font-semibold text-foreground truncate text-center">
               {getPageTitle()}
