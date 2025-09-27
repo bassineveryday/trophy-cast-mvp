@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useDemoMode } from "@/contexts/DemoModeContext";
 
 // Components
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -32,6 +33,183 @@ import trophyCastLogo from "@/assets/trophy-cast-logo.png";
 // Demo Components
 import { DemoFeatureBanner, DemoNotification } from "@/components/demo/DemoFeatureBanner";
 const Homepage = () => {
+  const { enabled, role, demoUser, demoCatches, demoTournament, demoClub } = useDemoMode();
+  
+  // Helper function for weight conversion
+  const ozToLbOz = (oz: number) => {
+    const lb = Math.floor(oz / 16);
+    const rem = oz % 16;
+    return lb > 0 ? `${lb} lb ${rem} oz` : `${oz} oz`;
+  };
+
+  // If demo mode is enabled, show simplified demo-specific home screens
+  if (enabled) {
+    if (role === "jake") {
+      // Jake's Angler Home Screen
+      const totalCatches = demoCatches ? demoCatches.length : 0;
+      const best = demoCatches && demoCatches.length > 0
+        ? demoCatches.reduce((a, b) => (a.weight_oz > b.weight_oz ? a : b))
+        : null;
+
+      return (
+        <div className="min-h-screen bg-background p-4">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold">Welcome back, Jake!</h1>
+            <p className="text-muted-foreground">Ready for your next tournament?</p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <Fish className="w-5 h-5 text-fishing-green" />
+                  <div>
+                    <p className="text-2xl font-bold">{totalCatches}</p>
+                    <p className="text-sm text-muted-foreground">Demo Catches</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2">
+                  <Trophy className="w-5 h-5 text-trophy-gold" />
+                  <div>
+                    <p className="text-lg font-bold">{best ? ozToLbOz(best.weight_oz) : "—"}</p>
+                    <p className="text-sm text-muted-foreground">Personal Best</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Next Tournament */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                Next Tournament
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <h3 className="font-semibold">{demoTournament?.name || "No tournament scheduled"}</h3>
+              {demoTournament?.lake && <p className="text-sm text-muted-foreground">@ {demoTournament.lake}</p>}
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 gap-4">
+            <Link to="/my-catches">
+              <Button className="w-full">
+                <Fish className="w-4 h-4 mr-2" />
+                My Catches
+              </Button>
+            </Link>
+            <Link to="/tournaments">
+              <Button className="w-full" variant="outline">
+                <Trophy className="w-4 h-4 mr-2" />
+                Tournaments
+              </Button>
+            </Link>
+            <Link to="/ai-coach">
+              <Button className="w-full" variant="outline">
+                <Brain className="w-4 h-4 mr-2" />
+                AI Coach
+              </Button>
+            </Link>
+            <Link to="/leaderboard">
+              <Button className="w-full" variant="outline">
+                <Award className="w-4 h-4 mr-2" />
+                Leaderboard
+              </Button>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
+    if (role === "president") {
+      // President's Club Management Home Screen
+      return (
+        <div className="min-h-screen bg-background p-4">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold">Club President Dashboard</h1>
+            <p className="text-muted-foreground">Manage your club and tournaments</p>
+          </div>
+
+          {/* Club Overview */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Building2 className="w-5 h-5 mr-2" />
+                {demoClub?.name || "Your Club"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-2xl font-bold">24</p>
+                  <p className="text-sm text-muted-foreground">Members</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold">3</p>
+                  <p className="text-sm text-muted-foreground">Upcoming Events</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Next Event */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                Next Event
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <h3 className="font-semibold">{demoTournament?.name || "No tournament scheduled"}</h3>
+              {demoTournament?.lake && <p className="text-sm text-muted-foreground">@ {demoTournament.lake}</p>}
+            </CardContent>
+          </Card>
+
+          {/* Management Actions */}
+          <div className="grid grid-cols-2 gap-4">
+            <Link to="/clubs">
+              <Button className="w-full">
+                <Users className="w-4 h-4 mr-2" />
+                Manage Club
+              </Button>
+            </Link>
+            <Link to="/tournaments">
+              <Button className="w-full" variant="outline">
+                <Trophy className="w-4 h-4 mr-2" />
+                Tournaments
+              </Button>
+            </Link>
+            <Link to="/messages">
+              <Button className="w-full" variant="outline">
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Club Messages
+              </Button>
+            </Link>
+            <Link to="/leaderboard">
+              <Button className="w-full" variant="outline">
+                <Award className="w-4 h-4 mr-2" />
+                Leaderboard
+              </Button>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  // Original complex homepage for regular users
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedClub, setSelectedClub] = useState("alabama-bass-nation");
   const [tournamentsExpanded, setTournamentsExpanded] = useState(false);
