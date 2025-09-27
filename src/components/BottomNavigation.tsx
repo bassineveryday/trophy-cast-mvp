@@ -6,13 +6,6 @@ import { useIsClubOfficer } from '@/hooks/useRoles';
 
 const navigationItems = [
   {
-    id: 'home',
-    label: 'Home',
-    icon: Home,
-    path: '/',
-    description: 'Dashboard'
-  },
-  {
     id: 'tournaments',
     label: 'Tournaments',
     icon: Trophy,
@@ -32,6 +25,13 @@ const navigationItems = [
     icon: User,
     path: '/profile',
     description: 'Stats & Settings'
+  },
+  {
+    id: 'home',
+    label: 'Home',
+    icon: Home,
+    path: '/',
+    description: 'Dashboard'
   }
 ];
 
