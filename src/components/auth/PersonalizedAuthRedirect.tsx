@@ -26,20 +26,25 @@ interface PersonalizedAuthRedirectProps {
 export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectProps) {
   const { user, profile, loading } = useAuth();
   const { isDemoMode, currentDemoUser } = useDemoMode();
-  const { getPersonalizedRoute, getNavigationReason, isReady } = usePersonalizedNavigation();
+  const { getPersonalizedRoute, getNavigationReason, isReady, isLoadingData } = usePersonalizedNavigation();
   const navigate = useNavigate();
   const location = useLocation();
   const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    if (!loading && (user || isDemoMode)) {
+    // Don't attempt navigation if still loading auth or critical data
+    if (loading || isLoadingData) {
+      return;
+    }
+
+    if (user || isDemoMode) {
       // Get stored intended route or current location
       const intendedRoute = sessionStorage.getItem('trophycast_intended_route') || 
                            (location.state as any)?.from;
       
       const targetRoute = getPersonalizedRoute(intendedRoute);
       
-      // Only redirect if we're not already on the target route and we have a valid target
+      // Only redirect if we're not already on the target route and we have a valid target and are ready
       if (location.pathname !== targetRoute && targetRoute && isReady) {
         setRedirecting(true);
         
@@ -52,10 +57,10 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
         }, 1500);
       }
     }
-  }, [user, profile, isDemoMode, currentDemoUser, loading, isReady, location.pathname, navigate, getPersonalizedRoute]);
+  }, [user, profile, isDemoMode, currentDemoUser, loading, isLoadingData, isReady, location.pathname, navigate, getPersonalizedRoute]);
 
-  // Show personalized loading screen during redirect
-  if (redirecting || ((user || isDemoMode) && !isReady)) {
+  // Show personalized loading screen during redirect or while loading
+  if (redirecting || isLoadingData || ((user || isDemoMode) && !isReady)) {
     const displayUser = currentDemoUser || profile;
     const userName = displayUser?.name || user?.email?.split('@')[0] || 'User';
     const userRole = currentDemoUser?.club_role || 'member';
