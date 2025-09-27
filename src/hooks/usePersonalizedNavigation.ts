@@ -38,8 +38,8 @@ export function usePersonalizedNavigation() {
         });
       } else {
         setPersonalizedDestination({
-          route: '/dashboard',
-          reason: 'Demo member dashboard'
+          route: '/profile',
+          reason: 'Demo member profile'
         });
       }
       return;
@@ -59,13 +59,13 @@ export function usePersonalizedNavigation() {
         });
       } else if (primaryClub) {
         setPersonalizedDestination({
-          route: '/dashboard',
-          reason: `Member dashboard with ${primaryClub.name} context`
+          route: '/profile',
+          reason: `Member profile with ${primaryClub.name} context`
         });
       } else {
         setPersonalizedDestination({
-          route: '/dashboard',
-          reason: 'Personal fishing dashboard'
+          route: '/profile',
+          reason: 'Personal angler profile'
         });
       }
     }
@@ -78,7 +78,7 @@ export function usePersonalizedNavigation() {
     }
 
     // Otherwise, return personalized destination
-    return personalizedDestination?.route || '/dashboard';
+    return personalizedDestination?.route || '/profile';
   };
 
   const getNavigationReason = (intendedRoute?: string): string => {

@@ -50,7 +50,7 @@ const roleQuickActions = {
     { icon: Settings, label: 'Habitat Tracking', action: 'habitat_tracking', description: 'Monitor habitat improvements' }
   ],
   member: [
-    { icon: User, label: 'My Profile', action: 'profile', description: 'Update personal information' },
+    { icon: User, label: 'My Profile', action: 'profile', description: 'View and edit personal profile' },
     { icon: Trophy, label: 'Log Catch', action: 'log_catch', description: 'Record fishing catches' },
     { icon: Calendar, label: 'Join Tournament', action: 'join_tournament', description: 'Register for tournaments' },
     { icon: MessageSquare, label: 'Club Feed', action: 'club_feed', description: 'View club activity feed' }

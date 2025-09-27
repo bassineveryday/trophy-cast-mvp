@@ -33,10 +33,8 @@ import CatchDetail from "@/features/catches/CatchDetail";
 import MyCatches from "@/features/catches/MyCatches";
 import CatchesThisMonth from "@/features/catches/CatchesThisMonth";
 
-// Profile Features
-import Profile from "@/features/profile/Profile";
-import PublicProfile from "@/features/profile/PublicProfile";
-import BadgeCollection from "@/features/profile/BadgeCollection";
+// Unified Profile System
+import UnifiedProfile from "@/features/profile/UnifiedProfile";
 
 // Messages Features  
 import MessagesInbox from "@/features/messages/MessagesInbox";
@@ -126,10 +124,12 @@ const App = () => (
             <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
             <Route path="catches-this-month" element={<ProtectedRoute><CatchesThisMonth /></ProtectedRoute>} />
 
-            {/* Profile & Achievement */}
-            <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="anglers/:anglerId" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
-            <Route path="badges" element={<ProtectedRoute><BadgeCollection /></ProtectedRoute>} />
+            {/* Unified Profile System */}
+            <Route path="profile" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+            <Route path="anglers/:anglerId" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
+            
+            {/* Legacy profile routes - redirect to unified profile */}
+            <Route path="badges" element={<ProtectedRoute><UnifiedProfile /></ProtectedRoute>} />
 
             {/* Messages */}
             <Route path="messages" element={<ProtectedRoute><MessagesInbox /></ProtectedRoute>} />
