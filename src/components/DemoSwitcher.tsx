@@ -17,15 +17,18 @@ export default function DemoSwitcher() {
   const navigate = useNavigate();
 
   const setOff = useCallback(() => {
+    setQueryParam("demo", null);
     navigate("/");
   }, [navigate]);
   
   const setJake = useCallback(() => {
-    navigate("/?demo=jake");
+    setQueryParam("demo", "jake"); 
+    navigate("/");
   }, [navigate]);
   
   const setPres = useCallback(() => {
-    navigate("/?demo=president");
+    setQueryParam("demo", "president");
+    navigate("/");
   }, [navigate]);
 
   // Keep the switcher subtle; only show a small pill in bottom-right
