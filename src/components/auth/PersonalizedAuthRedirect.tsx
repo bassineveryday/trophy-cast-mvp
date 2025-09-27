@@ -7,7 +7,8 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { PersonalizedLoadingSpinner } from '@/components/ui/PersonalizedLoadingSpinner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Shield, Calendar, FileText, DollarSign, Leaf, User, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Crown, Shield, Calendar, FileText, DollarSign, Leaf, User, ArrowRight, SkipForward } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const roleIcons = {
@@ -32,6 +33,23 @@ const isValidRoute = (route: string): boolean => {
   return route.startsWith('/') && route !== '/auth' && !route.includes('undefined');
 };
 
+// Get specific loading message based on state
+const getLoadingMessage = (isDemoMode: boolean, currentDemoUser: any, isLoadingData: boolean): string => {
+  if (isDemoMode && currentDemoUser) {
+    const role = formatRoleName(currentDemoUser.club_role || 'member');
+    if (['President', 'Tournament Director', 'Secretary', 'Treasurer'].includes(role)) {
+      return `Checking ${role.toLowerCase()} permissions...`;
+    }
+    return 'Validating demo user...';
+  }
+  
+  if (isLoadingData) {
+    return 'Checking club permissions...';
+  }
+  
+  return 'Personalizing your experience...';
+};
+
 interface PersonalizedAuthRedirectProps {
   children: React.ReactNode;
 }
@@ -47,6 +65,7 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
   const [redirecting, setRedirecting] = useState(false);
   const [forceFallback, setForceFallback] = useState(false);
   const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
+  const [showSkipButton, setShowSkipButton] = useState(false);
 
   // Safe getters with fallbacks
   const safeGetNavigationReason = useCallback(() => {
@@ -94,6 +113,19 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
     }
   }, [location.state]);
 
+  // Show skip button after 1.5 seconds
+  useEffect(() => {
+    if ((user || isDemoMode) && !isReady && !forceFallback && !redirecting) {
+      const skipButtonTimer = setTimeout(() => {
+        setShowSkipButton(true);
+      }, 1500);
+
+      return () => clearTimeout(skipButtonTimer);
+    } else {
+      setShowSkipButton(false);
+    }
+  }, [user, isDemoMode, isReady, forceFallback, redirecting]);
+
   // Force fallback after timeout
   useEffect(() => {
     if ((user || isDemoMode) && !isReady && !forceFallback) {
@@ -120,6 +152,20 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
     }
   }, [user, isDemoMode, isReady, forceFallback, loadingStartTime, navigate, toast]);
 
+  // Handle skip to profile
+  const handleSkipToProfile = useCallback(() => {
+    console.log('User requested skip to profile');
+    setForceFallback(true);
+    
+    toast({
+      title: "Skipped to Profile",
+      description: "You can access club features from the navigation menu",
+      variant: "default"
+    });
+    
+    navigate('/profile', { replace: true });
+  }, [navigate, toast]);
+
   // Main navigation logic
   useEffect(() => {
     // Skip if we've already forced a fallback
@@ -145,6 +191,13 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
       if (location.pathname !== targetRoute && isReady) {
         setRedirecting(true);
         
+        // Enhanced logging for successful redirects
+        const userInfo = currentDemoUser 
+          ? `${formatRoleName(currentDemoUser.club_role)} (${currentDemoUser.name})`
+          : profile?.name || user?.email?.split('@')[0] || 'User';
+        
+        console.log(`🎯 PersonalizedAuthRedirect: Redirecting ${userInfo} to ${targetRoute}`);
+        
         // Clear stored route
         try {
           sessionStorage.removeItem('trophycast_intended_route');
@@ -155,7 +208,7 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
         // Reduced delay for better UX
         setTimeout(() => {
           navigate(targetRoute, { replace: true });
-        }, 800); // Reduced from 1500ms
+        }, 800);
       }
     }
   }, [
@@ -182,7 +235,14 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
     return false;
   };
 
-  // Show personalized loading screen
+  // Calculate progress percentage (0-100) for exactly 2 seconds
+  const getProgressPercentage = () => {
+    if (!loadingStartTime) return 0;
+    const elapsed = Date.now() - loadingStartTime;
+    return Math.min(100, (elapsed / 2000) * 100);
+  };
+
+  // Show personalized loading screen with animations
   if (shouldShowLoading()) {
     const displayUser = currentDemoUser || profile;
     const userName = displayUser?.name || user?.email?.split('@')[0] || 'User';
@@ -192,12 +252,13 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
     // Safe demo user display with null checks
     const demoRoleDisplay = currentDemoUser?.club_role ? formatRoleName(currentDemoUser.club_role) : 'Member';
     const demoClubDisplay = currentDemoUser?.club || 'TrophyCast Club';
+    const loadingMessage = getLoadingMessage(isDemoMode, currentDemoUser, isLoadingData);
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-card/95 backdrop-blur border-primary/20">
+        <Card className="w-full max-w-md bg-card/95 backdrop-blur border-primary/20 animate-fade-in">
           <CardHeader className="text-center pb-4">
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center mb-4 animate-scale-in">
               <div className="p-3 rounded-full bg-primary/10">
                 <RoleIcon className="w-8 h-8 text-primary" />
               </div>
@@ -215,7 +276,7 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
               <PersonalizedLoadingSpinner size="sm" message="" />
               <div className="flex-1">
-                <p className="text-sm font-medium">Personalizing your experience...</p>
+                <p className="text-sm font-medium">{loadingMessage}</p>
                 <p className="text-xs text-muted-foreground">
                   {safeGetNavigationReason()}
                 </p>
@@ -224,26 +285,43 @@ export function PersonalizedAuthRedirect({ children }: PersonalizedAuthRedirectP
             </div>
             
             {isDemoMode && currentDemoUser && (
-              <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
+              <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg animate-fade-in">
                 <p className="text-xs text-orange-800 text-center">
                   Loading <strong>{demoRoleDisplay}</strong> experience for <strong>{demoClubDisplay}</strong>
                 </p>
               </div>
             )}
             
-            <p className="text-xs text-center text-muted-foreground">
-              Setting up your profile with club context and role permissions...
-            </p>
+            {/* Progress Bar - reaches exactly 100% at 2 seconds */}
+            {loadingStartTime && (
+              <div className="space-y-2">
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-100 ease-linear"
+                    style={{ width: `${getProgressPercentage()}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-center text-muted-foreground">
+                  Setting up your profile with club context and role permissions...
+                </p>
+              </div>
+            )}
             
-            {/* Progress indicator for long loads */}
-            {loadingStartTime && Date.now() - loadingStartTime > 1000 && (
-              <div className="w-full bg-muted rounded-full h-1.5">
-                <div 
-                  className="bg-primary h-1.5 rounded-full transition-all duration-1000 ease-linear"
-                  style={{ 
-                    width: `${Math.min(100, ((Date.now() - loadingStartTime) / 2000) * 100)}%` 
-                  }}
-                ></div>
+            {/* Skip Button after 1.5 seconds */}
+            {showSkipButton && !redirecting && (
+              <div className="animate-fade-in">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSkipToProfile}
+                  className="w-full text-xs hover-scale"
+                >
+                  <SkipForward className="w-3 h-3 mr-2" />
+                  Skip to Profile
+                </Button>
+                <p className="text-xs text-center text-muted-foreground mt-1">
+                  Access club features from the navigation menu
+                </p>
               </div>
             )}
           </CardContent>
