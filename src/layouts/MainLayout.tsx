@@ -25,8 +25,8 @@ export const MainLayout = () => {
         {/* Main content area */}
         <main className="min-h-screen">
           <Outlet />
-          <DemoSwitcher />
         </main>
+        <DemoSwitcher />
       </VoiceProvider>
     </ContextAwareAIProvider>
   );
