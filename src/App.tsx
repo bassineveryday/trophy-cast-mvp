@@ -94,8 +94,8 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <DemoModeProvider>
-          <PersonalizedAuthRedirect>
-            <BrowserRouter>
+          <BrowserRouter>
+            <PersonalizedAuthRedirect>
           <Routes>
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
@@ -181,8 +181,8 @@ const App = () => (
           {/* Standalone Pages - no shared layout needed */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </BrowserRouter>
-        </PersonalizedAuthRedirect>
+            </PersonalizedAuthRedirect>
+          </BrowserRouter>
         </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
