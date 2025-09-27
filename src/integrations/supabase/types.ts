@@ -1415,6 +1415,15 @@ export type Database = {
         Args: { email: string }
         Returns: boolean
       }
+      log_sensitive_import_access: {
+        Args: {
+          _import_log_id: string
+          _operation: string
+          _table_name: string
+          _user_id?: string
+        }
+        Returns: undefined
+      }
       user_has_permission: {
         Args: { _club_id?: string; _permission_name: string; _user_id: string }
         Returns: boolean
