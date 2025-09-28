@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Camera, 
   ChevronLeft, 
-  MapPin, 
   Clock,
   Fish,
   Ruler,
@@ -142,6 +141,8 @@ const CatchLogging = () => {
           <Button
             onClick={handleVoiceCapture}
             disabled={isListening}
+            aria-pressed={isListening}
+            aria-label={isListening ? "Listening for catch details" : "Start voice logging"}
             className={`w-20 h-20 rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 ${
               isListening ? 'animate-pulse scale-110' : 'hover:scale-105'
             }`}
@@ -160,6 +161,16 @@ const CatchLogging = () => {
               </p>
             )}
           </div>
+          
+          {!isListening && !voiceInput && (
+            <div className="text-center max-w-md">
+              <p className="text-xs text-muted-foreground mb-2">Try saying:</p>
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground italic">"3.5 pounds largemouth, 17 inches"</p>
+                <p className="text-xs text-muted-foreground italic">"2.2 smallmouth, 16 inches"</p>
+              </div>
+            </div>
+          )}
           
           {voiceInput && (
             <Card className="w-full max-w-md">
@@ -270,7 +281,7 @@ const CatchLogging = () => {
                   value={length}
                   onChange={(e) => setLength(e.target.value)}
                   type="number"
-                  step="0.1"
+                  step="1"
                   className="text-lg"
                 />
                 <Ruler className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
