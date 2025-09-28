@@ -372,15 +372,15 @@ const Homepage = () => {
           <div className="grid grid-cols-2 gap-3 relative">
             {/* Catches This Week Card */}
             <div className="relative">
-              <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('catches')}>
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('catches')}>
+                <CardContent className="p-4 h-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
                       <Fish className="w-4 h-4 text-emerald-600" />
                     </div>
                     <ChevronDown className={`w-4 h-4 text-emerald-600 transition-transform ${openDropdown === 'catches' ? 'rotate-180' : ''}`} />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-2xl font-bold text-emerald-700 mb-1">{demoStats.catchesThisMonth}</p>
                     <p className="text-sm text-gray-600 mb-2">Catches This Week</p>
                     <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">
@@ -391,24 +391,30 @@ const Homepage = () => {
               </Card>
               {openDropdown === 'catches' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
-                    <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">5.2 lb Largemouth - Lake Fork</div>
-                    <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">3.1 lb Smallmouth - St. Clair</div>
-                    <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">4.5 lb Largemouth - Guntersville</div>
+                    <Link to="/catches" className="block">
+                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">5.2 lb Largemouth - Lake Fork</div>
+                    </Link>
+                    <Link to="/catches" className="block">
+                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">3.1 lb Smallmouth - St. Clair</div>
+                    </Link>
+                    <Link to="/catches" className="block">
+                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">4.5 lb Largemouth - Guntersville</div>
+                    </Link>
                   </div>
                 </div>}
             </div>
 
             {/* Active Plans Card */}
             <div className="relative">
-              <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('plans')}>
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('plans')}>
+                <CardContent className="p-4 h-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center">
                       <Target className="w-4 h-4 text-amber-600" />
                     </div>
                     <ChevronDown className={`w-4 h-4 text-amber-600 transition-transform ${openDropdown === 'plans' ? 'rotate-180' : ''}`} />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-2xl font-bold text-amber-700 mb-1">3</p>
                     <p className="text-sm text-gray-600 mb-2">Active Plans</p>
                     <p className="text-xs text-gray-500">Next: Lake Guntersville — Sept 28</p>
@@ -417,24 +423,30 @@ const Homepage = () => {
               </Card>
               {openDropdown === 'plans' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
-                    <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Scouting - Lake Sam Rayburn</div>
-                    <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Practice Day - Toledo Bend</div>
-                    <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Weekend Trip - Lake Conroe</div>
+                    <Link to="/plans" className="block">
+                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Scouting - Lake Sam Rayburn</div>
+                    </Link>
+                    <Link to="/plans" className="block">
+                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Practice Day - Toledo Bend</div>
+                    </Link>
+                    <Link to="/plans" className="block">
+                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Weekend Trip - Lake Conroe</div>
+                    </Link>
                   </div>
                 </div>}
             </div>
 
             {/* Upcoming Tournaments Card */}
             <div className="relative">
-              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('tournaments')}>
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('tournaments')}>
+                <CardContent className="p-4 h-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
                       <Trophy className="w-4 h-4 text-blue-600" />
                     </div>
                     <ChevronDown className={`w-4 h-4 text-blue-600 transition-transform ${openDropdown === 'tournaments' ? 'rotate-180' : ''}`} />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-2xl font-bold text-blue-700 mb-1">{demoStats.upcomingTournaments}</p>
                     <p className="text-sm text-gray-600 mb-2">Upcoming Tournaments</p>
                     <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">
@@ -445,24 +457,30 @@ const Homepage = () => {
               </Card>
               {openDropdown === 'tournaments' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
-                    <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Bass Champs - Oct 5</div>
-                    <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Club Event - Oct 19</div>
-                    <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Toyota Series - Nov 2</div>
+                    <Link to="/tournaments" className="block">
+                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Bass Champs - Oct 5</div>
+                    </Link>
+                    <Link to="/tournaments" className="block">
+                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Club Event - Oct 19</div>
+                    </Link>
+                    <Link to="/tournaments" className="block">
+                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Toyota Series - Nov 2</div>
+                    </Link>
                   </div>
                 </div>}
             </div>
 
             {/* Notifications Card */}
             <div className="relative">
-              <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('notifications')}>
-                <CardContent className="p-4">
+              <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('notifications')}>
+                <CardContent className="p-4 h-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center">
                       <Bell className="w-4 h-4 text-teal-600" />
                     </div>
                     <ChevronDown className={`w-4 h-4 text-teal-600 transition-transform ${openDropdown === 'notifications' ? 'rotate-180' : ''}`} />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-2xl font-bold text-teal-700 mb-1">5</p>
                     <p className="text-sm text-gray-600 mb-2">Notifications</p>
                     <p className="text-xs text-gray-500">3 new messages</p>
@@ -471,9 +489,15 @@ const Homepage = () => {
               </Card>
               {openDropdown === 'notifications' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
-                    <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">New message from John</div>
-                    <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Gear sale at local shop</div>
-                    <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Tournament check-in is open</div>
+                    <Link to="/messages" className="block">
+                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">New message from John</div>
+                    </Link>
+                    <Link to="/messages" className="block">
+                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Gear sale at local shop</div>
+                    </Link>
+                    <Link to="/messages" className="block">
+                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Tournament check-in is open</div>
+                    </Link>
                   </div>
                 </div>}
             </div>
