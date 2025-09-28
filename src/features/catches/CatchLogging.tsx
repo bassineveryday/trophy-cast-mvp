@@ -27,6 +27,8 @@ const CatchLogging = () => {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceInput, setVoiceInput] = useState("");
   const { toast } = useToast();
 
   const handlePhotoUpload = () => {
@@ -41,6 +43,35 @@ const CatchLogging = () => {
 
   const handleRemovePhoto = (index: number) => {
     setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  const handleVoiceCapture = () => {
+    if (isListening) return;
+    
+    setIsListening(true);
+    setVoiceInput("");
+    
+    toast({
+      title: "Listening...",
+      description: "Speak your catch details now",
+    });
+
+    // Simulate voice recognition with setTimeout
+    setTimeout(() => {
+      const mockVoiceInput = "3.5 lb largemouth, 17 inches";
+      setVoiceInput(mockVoiceInput);
+      setIsListening(false);
+      
+      // Parse and populate form fields
+      setWeight("3.5");
+      setLength("17");
+      setNotes("Largemouth bass caught using voice logging");
+      
+      toast({
+        title: "Voice Captured!",
+        description: "Your catch details have been captured and filled in.",
+      });
+    }, 3000);
   };
 
   const handleSubmit = () => {
@@ -64,6 +95,8 @@ const CatchLogging = () => {
     setLocation("");
     setNotes("");
     setPhotos([]);
+    setVoiceInput("");
+    setIsListening(false);
   };
 
   return (
@@ -91,6 +124,45 @@ const CatchLogging = () => {
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Voice Capture Interface */}
+        <div className="flex flex-col items-center space-y-4">
+          <Button
+            onClick={handleVoiceCapture}
+            disabled={isListening}
+            className={`w-20 h-20 rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 ${
+              isListening ? 'animate-pulse scale-110' : 'hover:scale-105'
+            }`}
+          >
+            <Mic className="w-8 h-8 text-white" />
+          </Button>
+          
+          <div className="text-center">
+            {isListening ? (
+              <p className="text-sm font-medium text-primary animate-pulse">
+                Listening... Speak your catch details
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Tap to log catch by voice
+              </p>
+            )}
+          </div>
+          
+          {voiceInput && (
+            <Card className="w-full max-w-md">
+              <CardContent className="p-3">
+                <div className="flex items-center space-x-2">
+                  <Mic className="w-4 h-4 text-success" />
+                  <span className="text-sm font-medium">Voice Input:</span>
+                </div>
+                <p className="mt-1 text-sm bg-muted p-2 rounded">
+                  "{voiceInput}"
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
         {/* Current Status */}
         <Card>
           <CardContent className="p-4">
