@@ -239,49 +239,40 @@ const Homepage = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-4 right-4 w-24 h-24 rounded-full bg-white/20"></div>
-          <div className="absolute bottom-8 left-8 w-16 h-16 rounded-full bg-white/10"></div>
-          <div className="absolute top-1/2 right-1/3 w-8 h-8 rounded-full bg-white/15"></div>
-        </div>
 
         <div className="relative z-10">
           {/* User greeting */}
-          <div className="flex items-center space-x-3 mb-4">
-            <div>
-              <UniversalAvatar name={avatarName} photoUrl="/placeholder.svg" club={{
-              id: "alabama-bass-nation",
-              abbreviation: "ABN-12"
-            }} role="2019 AOY Champion" city="Huntsville, AL" anglerId="jake-patterson" size="hero" isAOYChampion={true} className="border-2 border-white/30" />
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-white"></div>
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
+              <h2 className="text-xl font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
                 Welcome back, {greetName}!
               </h2>
-              <p className="text-sm opacity-90 mb-1">{mockUser.title}</p>
+              <p className="text-sm opacity-90 mb-2">2019 AOY Champion</p>
               
-              {/* Compact Achievements Strip */}
-              <div className="flex items-center space-x-1 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
-                <Badge className="text-xs px-1.5 py-0.5 bg-white/20 text-white border-white/30 text-[10px]">
+              {/* Stats Pills */}
+              <div className="flex items-center space-x-2">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   🏆 {mockCareerStats.wins}
                 </Badge>
-                <Badge className="text-xs px-1.5 py-0.5 bg-white/20 text-white border-white/30 text-[10px]">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   ⭐ {mockCareerStats.top10}
                 </Badge>
-                <Badge className="text-xs px-1.5 py-0.5 bg-white/20 text-white border-white/30 text-[10px]">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   🥇 {mockCareerStats.aoyTitles}
                 </Badge>
-                <Badge className="text-xs px-1.5 py-0.5 bg-white/20 text-white border-white/30 text-[10px]">
-                  🎣 {mockCareerStats.personalBest}
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
+                  🎣 7.1
                 </Badge>
               </div>
             </div>
           </div>
 
           {/* Main tagline */}
-          <div className="text-center mb-6">
-            <motion.h1 className="text-3xl md:text-4xl font-bold mb-2" initial={{
+          <div className="text-center">
+            <motion.h1 className="text-3xl font-bold mb-2" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -292,7 +283,7 @@ const Homepage = () => {
           }}>
               Where Every Cast Counts
             </motion.h1>
-            <motion.p className="text-lg opacity-90 mb-6" initial={{
+            <motion.p className="text-base opacity-90" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -304,43 +295,21 @@ const Homepage = () => {
           }}>
               AI-powered tournament fishing companion
             </motion.p>
-            
-          {/* Main CTA */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.4
-        }}>
-             <Link to="/ai-coach">
-               <Button size="lg" className="bg-water-blue hover:bg-water-blue-dark text-white font-bold px-8 py-3 shadow-trophy">
-                 <Brain className="w-5 h-5 mr-2" />
-                 Start AI Coaching Session
-                 <ArrowRight className="w-5 h-5 ml-2" />
-               </Button>
-             </Link>
-          </motion.div>
           </div>
         </div>
       </div>
 
-        {/* Performance Dashboard */}
+        {/* Dashboard Section */}
         <div className="px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold flex items-center">
-              <TrendingUp className="w-5 h-5 mr-2 text-primary" />
-              Your Dashboard
-            </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold">Your Dashboard</h3>
             <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className="w-auto border-0 bg-transparent p-0 h-auto">
                 <SelectValue>
                   <div className="flex items-center gap-2">
                     <img src={currentClub.logo} alt={currentClub.name} className="w-5 h-5 rounded-full object-cover" />
                     <span className="font-bold text-sm">{currentClub.abbreviation}</span>
+                    <ChevronDown className="w-4 h-4" />
                   </div>
                 </SelectValue>
               </SelectTrigger>
@@ -358,44 +327,50 @@ const Homepage = () => {
             </Select>
           </div>
         
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="grid grid-cols-2 gap-3">
             <Link to="/catches-this-month" aria-label="Open Catches This Month">
-              <Card className="bg-gradient-to-br from-fishing-green/10 to-fishing-green/20 border-fishing-green/30 cursor-pointer hover:shadow-lg transition-shadow">
-                <CardContent className="p-3">
+              <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <Fish className="w-5 h-5 text-fishing-green" />
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <Fish className="w-4 h-4 text-emerald-600" />
+                    </div>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-fishing-green mb-1">{demoStats.catchesThisMonth}</p>
-                    <p className="text-sm text-muted-foreground mb-2">Catches This Month</p>
-                    <Badge variant="secondary" className="text-xs text-fishing-green bg-fishing-green/10 border-fishing-green/20">
+                    <p className="text-2xl font-bold text-emerald-700 mb-1">{demoStats.catchesThisMonth}</p>
+                    <p className="text-sm text-gray-600 mb-2">Catches This Month</p>
+                    <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">
                       +5 from last month
-                    </Badge>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </Link>
 
             <Link to="/plans" aria-label="Open Plans">
-              <Card className="bg-gradient-to-br from-trophy-gold/10 to-trophy-gold/20 border-trophy-gold/30 cursor-pointer hover:shadow-lg transition-shadow">
-                <CardContent className="p-3">
+              <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <Target className="w-5 h-5 text-trophy-gold" />
+                    <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center">
+                      <Target className="w-4 h-4 text-amber-600" />
+                    </div>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-trophy-gold mb-1">3</p>
-                    <p className="text-sm text-muted-foreground mb-2">Active Plans</p>
-                    <p className="text-xs text-muted-foreground">Next: Lake Guntersville — Sept 28</p>
+                    <p className="text-2xl font-bold text-amber-700 mb-1">3</p>
+                    <p className="text-sm text-gray-600 mb-2">Active Plans</p>
+                    <p className="text-xs text-gray-500">Next: Lake Guntersville — Sept 28</p>
                   </div>
                 </CardContent>
               </Card>
             </Link>
 
             <Link to="/tournaments" aria-label="Open Tournaments">
-              <Card className="bg-gradient-to-br from-water-blue/10 to-water-blue/20 border-water-blue/30 cursor-pointer hover:shadow-lg transition-shadow">
-                <CardContent className="p-3">
+              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <Trophy className="w-5 h-5 text-water-blue" />
+                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <Trophy className="w-4 h-4 text-blue-600" />
+                    </div>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-water-blue mb-1">{demoStats.upcomingTournaments}</p>
@@ -408,18 +383,37 @@ const Homepage = () => {
               </Card>
             </Link>
 
-            <Link to="/ai-coach" aria-label="Open AI Coach">
-              <Card className="bg-gradient-to-br from-water-blue/10 to-water-blue/20 border-water-blue/30 cursor-pointer hover:shadow-lg transition-shadow">
-                <CardContent className="p-3">
+            <Link to="/tournaments" aria-label="Open Tournaments">
+              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <Zap className="w-5 h-5 text-water-blue" />
+                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <Trophy className="w-4 h-4 text-blue-600" />
+                    </div>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-water-blue mb-1">Synced</p>
-                    <p className="text-sm text-muted-foreground mb-2">AI Readiness</p>
-                    <Badge variant="secondary" className="text-xs text-water-blue bg-water-blue/10 border-water-blue/20 mb-1">
-                      Weather • Moon • Pressure
-                    </Badge>
+                    <p className="text-2xl font-bold text-blue-700 mb-1">{demoStats.upcomingTournaments}</p>
+                    <p className="text-sm text-gray-600 mb-2">Tournaments</p>
+                    <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">
+                      3 Upcoming
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/ai-coach" aria-label="Open AI Coach">
+              <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-teal-600" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold text-teal-700 mb-1">Synced</p>
+                    <p className="text-sm text-gray-600 mb-2">AI Readiness</p>
+                    <p className="text-xs text-gray-500">Weather • Moon • Pressure</p>
                   </div>
                 </CardContent>
               </Card>
