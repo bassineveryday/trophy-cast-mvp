@@ -148,8 +148,16 @@ const Homepage = () => {
   };
   return (
     <div className="min-h-screen bg-background">
-      {/* AI Coach Hero Section - Moved to Top */}
-      <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
+      {/* Pull to refresh indicator */}
+      <AnimatePresence>
+        {isRefreshing && <LoadingSpinner message="Refreshing..." />}
+      </AnimatePresence>
+
+      {/* AI Status Bar */}
+      <AIStatusBar />
+
+      {/* Hero Section */}
+      <div className="relative bg-gradient-hero text-white px-4 py-8 overflow-hidden">
         {/* Notification Bell - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <DropdownMenu>
@@ -231,7 +239,6 @@ const Homepage = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-4 right-4 w-24 h-24 rounded-full bg-white/20"></div>
@@ -240,13 +247,13 @@ const Homepage = () => {
         </div>
 
         <div className="relative z-10">
-          {/* User greeting with avatar next to welcome text */}
+          {/* User greeting */}
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/30">
+            <div>
               <UniversalAvatar name={avatarName} photoUrl="/placeholder.svg" club={{
               id: "alabama-bass-nation",
               abbreviation: "ABN-12"
-            }} role="2019 AOY Champion" city="Huntsville, AL" anglerId="jake-patterson" size="card" isAOYChampion={true} className="" />
+            }} role="2019 AOY Champion" city="Huntsville, AL" anglerId="jake-patterson" size="hero" isAOYChampion={true} className="border-2 border-white/30" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
@@ -320,14 +327,6 @@ const Homepage = () => {
           </div>
         </div>
       </div>
-
-      {/* Pull to refresh indicator */}
-      <AnimatePresence>
-        {isRefreshing && <LoadingSpinner message="Refreshing..." />}
-      </AnimatePresence>
-
-      {/* AI Status Bar */}
-      <AIStatusBar />
 
         {/* Performance Dashboard */}
         <div className="px-4 py-4">
