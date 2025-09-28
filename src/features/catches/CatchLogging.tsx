@@ -28,6 +28,7 @@ const CatchLogging = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [isListening, setIsListening] = useState(false);
   const [voiceInput, setVoiceInput] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handlePhotoUpload = () => {
@@ -86,7 +87,7 @@ const CatchLogging = () => {
     }, 3000);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!weight || !length) {
       toast({
         title: "Missing Information",
@@ -96,19 +97,54 @@ const CatchLogging = () => {
       return;
     }
 
-    toast({
-      title: "Catch Logged Successfully!",
-      description: `Your ${weight} lb, ${length}" bass has been recorded in the tournament.`,
-    });
+    setSubmitting(true);
 
-    // Reset form
-    setWeight("");
-    setLength("");
-    setLocation("");
-    setNotes("");
-    setPhotos([]);
-    setVoiceInput("");
-    setIsListening(false);
+    try {
+      const res = await fetch("/api/catches", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          weight,
+          length,
+          location,
+          notes,
+          photos,
+        }),
+      });
+
+      if (!res.ok) {
+        toast({
+          title: "Failed to log catch",
+          description: "Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Catch Logged Successfully!",
+        description: `Your ${weight} lb, ${length}" bass has been recorded in the tournament.`,
+      });
+
+      // Reset form
+      setWeight("");
+      setLength("");
+      setLocation("");
+      setNotes("");
+      setPhotos([]);
+      setVoiceInput("");
+      setIsListening(false);
+    } catch (error) {
+      toast({
+        title: "Failed to log catch",
+        description: "Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -347,9 +383,10 @@ const CatchLogging = () => {
           <Button 
             className="w-full h-12 bg-success hover:bg-success/90 text-lg font-semibold"
             onClick={handleSubmit}
+            disabled={submitting}
           >
             <CheckCircle className="w-5 h-5 mr-2" />
-            Log This Catch
+            {submitting ? "Logging..." : "Log This Catch"}
           </Button>
           
           <p className="text-xs text-center text-muted-foreground">
