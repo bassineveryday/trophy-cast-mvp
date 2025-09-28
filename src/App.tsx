@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
-import { DevHealthButton } from "@/components/DevHealthButton";
+import DevHealthButton from "@/components/DevHealthButton";
 
 // Auth Feature
 import AuthPage from "@/features/auth/AuthPage";

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getHealth } from "@/lib/api";
 import { Activity } from "lucide-react";
 
-export function DevHealthButton() {
+export default function DevHealthButton() {
   const [healthData, setHealthData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
