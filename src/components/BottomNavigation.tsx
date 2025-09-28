@@ -37,79 +37,81 @@ export const BottomNavigation = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border">
-      <div className="flex items-center justify-between px-8 py-3 max-w-md mx-auto">
-        
-        {/* Home - Left */}
-        <Link
-          to="/"
-          className={cn(
-            "flex flex-col items-center justify-center transition-all duration-200",
-            location.pathname === "/" 
-              ? "text-primary" 
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <div className={cn(
-            "p-2 rounded-xl transition-all duration-200",
-            location.pathname === "/" 
-              ? "bg-primary/10 text-primary" 
-              : "hover:bg-accent"
-          )}>
-            <Home className="w-5 h-5" />
-          </div>
-          <span className="text-xs font-medium mt-1">Home</span>
-        </Link>
-
-        {/* AI Voice Command - Center */}
-        <div className="flex flex-col items-center">
-          <Button
-            onClick={handleAITap}
-            onMouseDown={handleVoicePress}
-            onMouseUp={handleVoiceRelease}
-            onMouseLeave={handleVoiceRelease}
-            onTouchStart={handleVoicePress}
-            onTouchEnd={handleVoiceRelease}
+    <nav className="fixed bottom-4 left-4 right-4 z-50">
+      <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-2xl shadow-lg mx-auto max-w-sm">
+        <div className="flex items-center justify-between px-6 py-3">
+          
+          {/* Home - Left */}
+          <Link
+            to="/"
             className={cn(
-              "w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200 transform",
-              isVoiceActive ? "scale-110 bg-blue-500" : "hover:scale-105"
+              "flex flex-col items-center justify-center transition-all duration-200",
+              location.pathname === "/" 
+                ? "text-primary" 
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            {isVoiceActive ? (
-              <Waves className="w-6 h-6 text-white animate-pulse" />
-            ) : (
-              <div className="flex items-center justify-center">
-                <Brain className="w-4 h-4 text-white mr-0.5" />
-                <Mic className="w-4 h-4 text-white ml-0.5" />
-              </div>
-            )}
-          </Button>
-          <span className="text-xs font-medium mt-1 text-center">
-            {isVoiceActive ? "Listening..." : "AI Voice"}
-          </span>
-        </div>
+            <div className={cn(
+              "p-2 rounded-xl transition-all duration-200",
+              location.pathname === "/" 
+                ? "bg-primary/10 text-primary" 
+                : "hover:bg-accent"
+            )}>
+              <Home className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-medium mt-1">Home</span>
+          </Link>
 
-        {/* Trophy Room - Right */}
-        <Link
-          to="/profile"
-          className={cn(
-            "flex flex-col items-center justify-center transition-all duration-200",
-            (location.pathname === "/profile" || location.pathname.includes("/tournaments")) 
-              ? "text-primary" 
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <div className={cn(
-            "p-2 rounded-xl transition-all duration-200",
-            (location.pathname === "/profile" || location.pathname.includes("/tournaments")) 
-              ? "bg-primary/10 text-primary" 
-              : "hover:bg-accent"
-          )}>
-            <Trophy className="w-5 h-5" />
+          {/* AI Voice Command - Center */}
+          <div className="flex flex-col items-center">
+            <Button
+              onClick={handleAITap}
+              onMouseDown={handleVoicePress}
+              onMouseUp={handleVoiceRelease}
+              onMouseLeave={handleVoiceRelease}
+              onTouchStart={handleVoicePress}
+              onTouchEnd={handleVoiceRelease}
+              className={cn(
+                "w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg transition-all duration-200 transform",
+                isVoiceActive ? "scale-110 shadow-xl bg-blue-500" : "hover:scale-105"
+              )}
+            >
+              {isVoiceActive ? (
+                <Waves className="w-6 h-6 text-white animate-pulse" />
+              ) : (
+                <div className="flex items-center justify-center">
+                  <Brain className="w-4 h-4 text-white mr-0.5" />
+                  <Mic className="w-4 h-4 text-white ml-0.5" />
+                </div>
+              )}
+            </Button>
+            <span className="text-xs font-medium mt-1 text-center">
+              {isVoiceActive ? "Listening..." : "AI Voice"}
+            </span>
           </div>
-          <span className="text-xs font-medium mt-1">Trophy Room</span>
-        </Link>
 
+          {/* Trophy Room - Right */}
+          <Link
+            to="/profile"
+            className={cn(
+              "flex flex-col items-center justify-center transition-all duration-200",
+              (location.pathname === "/profile" || location.pathname.includes("/tournaments")) 
+                ? "text-primary" 
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <div className={cn(
+              "p-2 rounded-xl transition-all duration-200",
+              (location.pathname === "/profile" || location.pathname.includes("/tournaments")) 
+                ? "bg-primary/10 text-primary" 
+                : "hover:bg-accent"
+            )}>
+              <Trophy className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-medium mt-1">Trophy Room</span>
+          </Link>
+
+        </div>
       </div>
     </nav>
   );
