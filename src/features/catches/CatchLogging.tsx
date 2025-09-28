@@ -45,6 +45,18 @@ const CatchLogging = () => {
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
+  const parseVoice = (input: string) => {
+    // Extract weight in pounds (e.g., "3.5 lb", "2.25 pounds")
+    const weightMatch = input.match(/(\d+\.?\d*)\s*(?:lb|lbs|pound|pounds)/i);
+    const weight = weightMatch ? weightMatch[1] : "";
+    
+    // Extract length in inches (e.g., "17 inches", "14 in")
+    const lengthMatch = input.match(/(\d+\.?\d*)\s*(?:in|inch|inches)/i);
+    const length = lengthMatch ? lengthMatch[1] : "";
+    
+    return { weight, length };
+  };
+
   const handleVoiceCapture = () => {
     if (isListening) return;
     
@@ -62,9 +74,10 @@ const CatchLogging = () => {
       setVoiceInput(mockVoiceInput);
       setIsListening(false);
       
-      // Parse and populate form fields
-      setWeight("3.5");
-      setLength("17");
+      // Parse and populate form fields using helper
+      const { weight: parsedWeight, length: parsedLength } = parseVoice(mockVoiceInput);
+      setWeight(parsedWeight);
+      setLength(parsedLength);
       setNotes("Largemouth bass caught using voice logging");
       
       toast({
@@ -75,10 +88,10 @@ const CatchLogging = () => {
   };
 
   const handleSubmit = () => {
-    if (!weight) {
+    if (!weight || !length) {
       toast({
         title: "Missing Information",
-        description: "Please enter the weight for your catch.",
+        description: "Please enter both weight and length.",
         variant: "destructive",
       });
       return;
@@ -86,7 +99,7 @@ const CatchLogging = () => {
 
     toast({
       title: "Catch Logged Successfully!",
-      description: `Your ${weight} lb bass has been recorded in the tournament.`,
+      description: `Your ${weight} lb, ${length}" bass has been recorded in the tournament.`,
     });
 
     // Reset form
@@ -245,6 +258,22 @@ const CatchLogging = () => {
                   className="text-lg"
                 />
                 <Scale className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="length">Length (inches)</Label>
+              <div className="relative">
+                <Input
+                  id="length"
+                  placeholder="0.0"
+                  value={length}
+                  onChange={(e) => setLength(e.target.value)}
+                  type="number"
+                  step="0.1"
+                  className="text-lg"
+                />
+                <Ruler className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
               </div>
             </div>
 
