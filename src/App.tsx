@@ -6,6 +6,8 @@ import { AICoachLayout } from "@/layouts/AICoachLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { Toaster } from "@/components/ui/sonner";
+import { DevHealthButton } from "@/components/DevHealthButton";
 
 // Auth Feature
 import AuthPage from "@/features/auth/AuthPage";
@@ -169,9 +171,11 @@ const App = () => (
 
             {/* Standalone Pages - no shared layout needed */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        </DemoModeProvider>
+        </Routes>
+      </BrowserRouter>
+      <Toaster />
+      <DevHealthButton />
+      </DemoModeProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
