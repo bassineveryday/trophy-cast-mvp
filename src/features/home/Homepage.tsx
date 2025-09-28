@@ -37,8 +37,15 @@ import trophyCastLogo from "@/assets/trophy-cast-logo.png";
 // Demo Components
 import { DemoFeatureBanner, DemoNotification } from "@/components/demo/DemoFeatureBanner";
 const Homepage = () => {
-  const { enabled, role, demoUser, demoCatches, demoTournament, demoClub } = useDemoMode();
-  
+  const {
+    enabled,
+    role,
+    demoUser,
+    demoCatches,
+    demoTournament,
+    demoClub
+  } = useDemoMode();
+
   // Helper function for weight conversion
   const ozToLbOz = (oz: number) => {
     const lb = Math.floor(oz / 16);
@@ -94,7 +101,8 @@ const Homepage = () => {
   // Sample statistics adjusted for demo mode
   const currentClub = userClubs.find(club => club.id === selectedClub) || userClubs[0];
   const demoStats = {
-    catchesThisMonth: !enabled ? 0 : (role === "jake" ? 23 : 5), // Ty=0, Jake=23, Mike=5
+    catchesThisMonth: !enabled ? 0 : role === "jake" ? 23 : 5,
+    // Ty=0, Jake=23, Mike=5
     topClubLeader: currentClub.leader,
     clubPoints: currentClub.points,
     recentAiTip: "Try spinnerbaits on windy north shores",
@@ -150,12 +158,10 @@ const Homepage = () => {
       description: "View Profile • Message • Unfollow"
     });
   };
-
   const toggleDropdown = (cardId: string) => {
     setOpenDropdown(openDropdown === cardId ? null : cardId);
   };
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Pull to refresh indicator */}
       <AnimatePresence>
         {isRefreshing && <LoadingSpinner message="Refreshing..." />}
@@ -263,7 +269,7 @@ const Homepage = () => {
         <div className="relative z-10">
           {/* User greeting */}
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-16 h-16 rounded-full bg-trophy-gold/20 flex items-center justify-center border-2 border-trophy-gold/30">
+            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
               <div className="w-14 h-14 rounded-full bg-white"></div>
             </div>
             <div className="flex-1">
@@ -274,13 +280,13 @@ const Homepage = () => {
               
               {/* Stats Pills */}
               <div className="flex items-center space-x-2">
-                <Badge className="text-xs px-2 py-1 bg-trophy-gold/20 text-trophy-gold border-trophy-gold/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   🏆 {mockCareerStats.wins}
                 </Badge>
-                <Badge className="text-xs px-2 py-1 bg-fishing-green/20 text-fishing-green border-fishing-green/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   ⭐ {mockCareerStats.top10}
                 </Badge>
-                <Badge className="text-xs px-2 py-1 bg-water-blue/20 text-water-blue border-water-blue/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
                   🥇 {mockCareerStats.aoyTitles}
                 </Badge>
                 <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
@@ -328,11 +334,7 @@ const Homepage = () => {
             delay: 0.4
           }}>
               <Link to="/ai-coach">
-                <Button className="bg-trophy-gold hover:bg-trophy-gold-dark text-foreground px-6 py-3 rounded-lg font-semibold text-base shadow-lg border border-trophy-gold/30">
-                  <Brain className="w-5 h-5 mr-2" />
-                  Start AI Coaching Session
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+                
               </Link>
             </motion.div>
           </div>
@@ -342,10 +344,7 @@ const Homepage = () => {
         {/* Dashboard Section */}
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
-              <img src={bassTrophyLogo} alt="TrophyCast" className="w-6 h-6 object-contain" />
-              <h3 className="text-lg font-bold">Your Dashboard</h3>
-            </div>
+            <h3 className="text-lg font-bold">Your Dashboard</h3>
             <Select value={selectedClub} onValueChange={setSelectedClub}>
               <SelectTrigger className="w-auto border-0 bg-transparent p-0 h-auto">
                 <SelectValue>
@@ -373,10 +372,7 @@ const Homepage = () => {
           <div className="grid grid-cols-2 gap-3 relative">
             {/* Catches This Week Card */}
             <div className="relative">
-              <Card 
-                className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => toggleDropdown('catches')}
-              >
+              <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('catches')}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
@@ -393,23 +389,18 @@ const Homepage = () => {
                   </div>
                 </CardContent>
               </Card>
-              {openDropdown === 'catches' && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+              {openDropdown === 'catches' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
                     <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">5.2 lb Largemouth - Lake Fork</div>
                     <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">3.1 lb Smallmouth - St. Clair</div>
                     <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">4.5 lb Largemouth - Guntersville</div>
                   </div>
-                </div>
-              )}
+                </div>}
             </div>
 
             {/* Active Plans Card */}
             <div className="relative">
-              <Card 
-                className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => toggleDropdown('plans')}
-              >
+              <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('plans')}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center">
@@ -424,23 +415,18 @@ const Homepage = () => {
                   </div>
                 </CardContent>
               </Card>
-              {openDropdown === 'plans' && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+              {openDropdown === 'plans' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
                     <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Scouting - Lake Sam Rayburn</div>
                     <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Practice Day - Toledo Bend</div>
                     <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Weekend Trip - Lake Conroe</div>
                   </div>
-                </div>
-              )}
+                </div>}
             </div>
 
             {/* Upcoming Tournaments Card */}
             <div className="relative">
-              <Card 
-                className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => toggleDropdown('tournaments')}
-              >
+              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('tournaments')}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
@@ -457,23 +443,18 @@ const Homepage = () => {
                   </div>
                 </CardContent>
               </Card>
-              {openDropdown === 'tournaments' && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+              {openDropdown === 'tournaments' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
                     <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Bass Champs - Oct 5</div>
                     <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Club Event - Oct 19</div>
                     <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Toyota Series - Nov 2</div>
                   </div>
-                </div>
-              )}
+                </div>}
             </div>
 
             {/* Notifications Card */}
             <div className="relative">
-              <Card 
-                className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => toggleDropdown('notifications')}
-              >
+              <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleDropdown('notifications')}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center">
@@ -488,15 +469,13 @@ const Homepage = () => {
                   </div>
                 </CardContent>
               </Card>
-              {openDropdown === 'notifications' && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+              {openDropdown === 'notifications' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                   <div className="p-2">
                     <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">New message from John</div>
                     <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Gear sale at local shop</div>
                     <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Tournament check-in is open</div>
                   </div>
-                </div>
-              )}
+                </div>}
             </div>
           </div>
 
@@ -521,10 +500,10 @@ const Homepage = () => {
           <CardContent className="space-y-3">
             {/* Top Unresolved Officer Note as Alert */}
             {mockOfficerNotes.filter(note => note.status === 'UNRESOLVED').slice(0, 1).map(note => <motion.div key={`alert-${note.id}`} whileHover={{
-              scale: 1.02
-            }} whileTap={{
-              scale: 0.98
-            }} className="cursor-pointer" onClick={() => window.location.href = '/messages?tab=club'}>
+            scale: 1.02
+          }} whileTap={{
+            scale: 0.98
+          }} className="cursor-pointer" onClick={() => window.location.href = '/messages?tab=club'}>
                 <div className="flex items-start space-x-3 p-3 bg-orange-50/50 border border-orange-200 rounded-lg">
                   <div className="w-8 h-8 bg-orange-500/10 rounded-full flex items-center justify-center">
                     <AlertTriangle className="w-4 h-4 text-orange-600" />
@@ -548,9 +527,9 @@ const Homepage = () => {
             {/* Newsletter Item */}
             <div className="flex items-start space-x-3 p-2 bg-accent rounded-lg cursor-pointer hover:shadow-md transition-shadow" onClick={() => window.location.href = '/messages/club/club-1'}>
               <UniversalAvatar name="ABN-12 Officers" photoUrl={alabamaBassLogo} club={{
-                id: "alabama-bass-nation",
-                abbreviation: "ABN-12"
-              }} role="Monthly Newsletter" size="row" clickable={false} showMicroCopy={false} />
+              id: "alabama-bass-nation",
+              abbreviation: "ABN-12"
+            }} role="Monthly Newsletter" size="row" clickable={false} showMicroCopy={false} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
                   <h4 className="font-medium text-sm">📩 Club Newsletter</h4>
@@ -566,15 +545,15 @@ const Homepage = () => {
 
             {enhancedClubFeed.slice(0, 2).map(post => <div key={post.id} className="flex items-start space-x-3 p-2 bg-accent rounded-lg">
                 <UniversalAvatar name={post.angler} photoUrl={post.photo} club={{
-                id: post.clubId || "alabama-bass-nation",
-                abbreviation: post.clubId === "river-valley" ? "RVIBC" : post.clubId === "trophy-cast" ? "TCES" : "ABN-12"
-              }} role="Angler" city={post.location || "Huntsville, AL"} anglerId={post.anglerId} size="row" />
+              id: post.clubId || "alabama-bass-nation",
+              abbreviation: post.clubId === "river-valley" ? "RVIBC" : post.clubId === "trophy-cast" ? "TCES" : "ABN-12"
+            }} role="Angler" city={post.location || "Huntsville, AL"} anglerId={post.anglerId} size="row" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
                     <h4 className="font-medium text-sm cursor-pointer hover:text-primary transition-colors" onClick={() => {
-                    const targetRoute = post.anglerId ? `/anglers/${post.anglerId}` : '/profile';
-                    window.location.href = targetRoute;
-                  }}>
+                  const targetRoute = post.anglerId ? `/anglers/${post.anglerId}` : '/profile';
+                  window.location.href = targetRoute;
+                }}>
                       {post.angler}
                     </h4>
                     <Badge className="bg-trophy-gold/10 text-trophy-gold text-xs px-1 py-0">
@@ -586,9 +565,9 @@ const Homepage = () => {
                   </p>
                 </div>
                 {post.anglerId && <Button variant="ghost" size="icon" className="w-6 h-6 text-muted-foreground hover:text-primary" onClick={e => {
-                e.stopPropagation();
-                window.location.href = `/messages/new?to=${post.anglerId}`;
-              }} aria-label={`Message ${post.angler}`}>
+              e.stopPropagation();
+              window.location.href = `/messages/new?to=${post.anglerId}`;
+            }} aria-label={`Message ${post.angler}`}>
                     <MessageSquare className="w-3 h-3" />
                   </Button>}
               </div>)}
@@ -712,7 +691,6 @@ const Homepage = () => {
 
       {/* Always-visible Floating Mic Button */}
       <FloatingMicButton />
-    </div>
-  );
+    </div>;
 };
 export default Homepage;
