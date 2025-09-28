@@ -18,6 +18,9 @@ import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
 import { BottomNavigation } from "@/components/BottomNavigation";
 
+// Assets
+import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
+
 // Data
 import { mockUser, mockCareerStats } from "@/data/mockData";
 import { enhancedMockTournaments, mockNotifications, enhancedClubFeed } from "@/data/enhancedMockData";
@@ -163,6 +166,18 @@ const Homepage = () => {
 
       {/* Hero Section */}
       <div className="relative bg-gradient-hero text-white px-4 py-8 overflow-hidden">
+        {/* Logo - Top Left */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="flex items-center space-x-2">
+            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-12 h-12 object-contain" />
+            <div className="text-trophy-gold font-bold text-lg tracking-wide">TrophyCast</div>
+          </div>
+        </div>
+
+        {/* Decorative Logo Background */}
+        <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4">
+          <img src={bassTrophyLogo} alt="" className="w-32 h-32 object-contain transform rotate-12" />
+        </div>
         {/* Notification Bell - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <DropdownMenu>
@@ -248,7 +263,7 @@ const Homepage = () => {
         <div className="relative z-10">
           {/* User greeting */}
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-trophy-gold/20 flex items-center justify-center border-2 border-trophy-gold/30">
               <div className="w-14 h-14 rounded-full bg-white"></div>
             </div>
             <div className="flex-1">
@@ -259,13 +274,13 @@ const Homepage = () => {
               
               {/* Stats Pills */}
               <div className="flex items-center space-x-2">
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-trophy-gold/20 text-trophy-gold border-trophy-gold/30 rounded-full">
                   🏆 {mockCareerStats.wins}
                 </Badge>
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-fishing-green/20 text-fishing-green border-fishing-green/30 rounded-full">
                   ⭐ {mockCareerStats.top10}
                 </Badge>
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
+                <Badge className="text-xs px-2 py-1 bg-water-blue/20 text-water-blue border-water-blue/30 rounded-full">
                   🥇 {mockCareerStats.aoyTitles}
                 </Badge>
                 <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
@@ -313,7 +328,7 @@ const Homepage = () => {
             delay: 0.4
           }}>
               <Link to="/ai-coach">
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-base shadow-lg">
+                <Button className="bg-trophy-gold hover:bg-trophy-gold-dark text-foreground px-6 py-3 rounded-lg font-semibold text-base shadow-lg border border-trophy-gold/30">
                   <Brain className="w-5 h-5 mr-2" />
                   Start AI Coaching Session
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -327,7 +342,10 @@ const Homepage = () => {
         {/* Dashboard Section */}
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold">Your Dashboard</h3>
+            <div className="flex items-center space-x-2">
+              <img src={bassTrophyLogo} alt="TrophyCast" className="w-6 h-6 object-contain" />
+              <h3 className="text-lg font-bold">Your Dashboard</h3>
+            </div>
             <Select value={selectedClub} onValueChange={setSelectedClub}>
               <SelectTrigger className="w-auto border-0 bg-transparent p-0 h-auto">
                 <SelectValue>
