@@ -283,7 +283,7 @@ const Homepage = () => {
           }}>
               Where Every Cast Counts
             </motion.h1>
-            <motion.p className="text-base opacity-90" initial={{
+            <motion.p className="text-base opacity-90 mb-6" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -295,6 +295,26 @@ const Homepage = () => {
           }}>
               AI-powered tournament fishing companion
             </motion.p>
+            
+            {/* Start AI Coaching Session Button */}
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.6,
+            delay: 0.4
+          }}>
+              <Link to="/ai-coach">
+                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-base shadow-lg">
+                  <Brain className="w-5 h-5 mr-2" />
+                  Start AI Coaching Session
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
