@@ -77,6 +77,7 @@ const HomeDashboard = () => {
           <Settings className="w-4 h-4" />
         </Button>
       )}
+      feat(home): add Quick Actions (voice log, leaderboard, fish room)
     </div>
   );
 };
