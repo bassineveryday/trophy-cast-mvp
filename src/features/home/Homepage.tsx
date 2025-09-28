@@ -16,6 +16,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import AIStatusBar from "@/components/AIStatusBar";
 import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
+import { TabNavigation } from "@/components/TabNavigation";
 
 // Data
 import { mockUser, mockCareerStats } from "@/data/mockData";
@@ -428,70 +429,7 @@ const Homepage = () => {
           {/* Quick Actions Toolbar */}
           <Card className="bg-gradient-to-r from-accent/20 to-accent/10 border-accent/30">
             <CardContent className="p-3">
-              <div className="flex items-center justify-between space-x-2">
-                <Button 
-                  className={`flex-1 h-12 flex items-center justify-center space-x-2 bg-fishing-green hover:bg-fishing-green-dark text-white transition-all rounded-full ${isVoiceListening ? 'animate-pulse shadow-lg' : ''}`} 
-                  aria-label="Log Catch with Voice" 
-                  onMouseDown={() => {
-                    setIsVoiceListening(true);
-                    toast({
-                      title: "🎤 Listening...",
-                      description: "Hold to speak, release when done"
-                    });
-                  }} 
-                  onMouseUp={() => {
-                    setIsVoiceListening(false);
-                    toast({
-                      title: "Catch logged (demo)",
-                      description: "Voice logging successful"
-                    });
-                    setTimeout(() => {
-                      window.location.href = '/catch-logging';
-                    }, 1500);
-                  }} 
-                  onTouchStart={() => {
-                    setIsVoiceListening(true);
-                    toast({
-                      title: "🎤 Listening...",
-                      description: "Hold to speak, release when done"
-                    });
-                  }} 
-                  onTouchEnd={() => {
-                    setIsVoiceListening(false);
-                    toast({
-                      title: "Catch logged (demo)",
-                      description: "Voice logging successful"
-                    });
-                    setTimeout(() => {
-                      window.location.href = '/catch-logging';
-                    }, 1500);
-                  }}
-                >
-                  <Mic className="w-4 h-4" />
-                  <span className="text-sm font-medium">Log Catch</span>
-                </Button>
-                
-                <div className="w-px h-8 bg-border"></div>
-                
-                <Link to="/leaderboard" className="flex-1">
-                  <Button className="w-full h-12 flex items-center justify-center space-x-2 bg-trophy-gold hover:bg-trophy-gold-dark text-white rounded-full" aria-label="View Leaderboard">
-                    <Trophy className="w-4 h-4" />
-                    <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium">Leaderboard</span>
-                      <span className="text-xs opacity-75">Guntersville</span>
-                    </div>
-                  </Button>
-                </Link>
-                
-                <div className="w-px h-8 bg-border"></div>
-                
-                <Link to="/ai-coach" className="flex-1">
-                  <Button className="w-full h-12 flex items-center justify-center space-x-2 bg-water-blue hover:bg-water-blue-dark text-white rounded-full" aria-label="Start AI Coach">
-                    <Brain className="w-4 h-4" />
-                    <span className="text-sm font-medium">AI Coach</span>
-                  </Button>
-                </Link>
-              </div>
+              <TabNavigation />
             </CardContent>
           </Card>
         </div>
