@@ -31,8 +31,6 @@ export const MainLayout = () => {
           <Outlet />
         </main>
         
-        {/* Bottom Navigation */}
-        <BottomNavigation />
         
         <DemoSwitcher />
       </VoiceProvider>

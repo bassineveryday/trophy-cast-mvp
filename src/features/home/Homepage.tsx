@@ -16,7 +16,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import AIStatusBar from "@/components/AIStatusBar";
 import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
-import { TabNavigation } from "@/components/TabNavigation";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 // Data
 import { mockUser, mockCareerStats } from "@/data/mockData";
@@ -440,12 +440,8 @@ const Homepage = () => {
             </Link>
           </div>
 
-          {/* Quick Actions Toolbar */}
-          <Card className="bg-gradient-to-r from-accent/20 to-accent/10 border-accent/30">
-            <CardContent className="p-3">
-              <TabNavigation />
-            </CardContent>
-          </Card>
+          {/* Navigation */}
+          <BottomNavigation />
         </div>
 
         {/* Recent Activity */}
