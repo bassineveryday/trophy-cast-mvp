@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Bell,
   CalendarDays,
-  Fish,
+  ChartLine,
   ClipboardList,
   Trophy,
 } from "lucide-react";
@@ -36,12 +36,8 @@ export default function HomeDashboard() {
           </div>
 
           <div className="mt-5">
-            <h1 className="text-2xl font-extrabold tracking-tight">
-              Where Every Cast Counts
-            </h1>
-            <p className="text-sm/6 opacity-90">
-              AI-powered tournament fishing companion
-            </p>
+            <h1 className="text-2xl font-extrabold tracking-tight">Where Every Cast Counts</h1>
+            <p className="text-sm/6 opacity-90">AI-powered tournament fishing companion</p>
           </div>
         </div>
       </div>
@@ -53,17 +49,18 @@ export default function HomeDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base font-semibold">
-                <Fish className="h-5 w-5 text-sky-600" />
+                <ChartLine className="h-5 w-5 text-sky-600" />
                 Catches This Week
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="text-center py-4">
-                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              <div className="h-24 rounded-md bg-muted grid place-items-center text-xs text-muted-foreground">
+                (graph placeholder)
               </div>
-              <Button asChild size="sm">
-                <Link to="/catch-logging">Log Catch by Voice</Link>
-              </Button>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium">0</span> logged so far — add your first catch below.
+              </p>
+              <Button asChild size="sm"><Link to="/catch-logging">Log Catch by Voice</Link></Button>
             </CardContent>
           </Card>
 
@@ -76,12 +73,11 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="text-center py-4">
-                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              <EmptyRow text="No active plans yet." />
+              <div className="flex gap-2">
+                <Button asChild size="sm"><Link to="/plans">Create Plan</Link></Button>
+                <Button asChild size="sm" variant="secondary"><Link to="/ai-coach">Open AI Coach</Link></Button>
               </div>
-              <Button asChild size="sm">
-                <Link to="/plans">Open A Plan</Link>
-              </Button>
             </CardContent>
           </Card>
 
@@ -94,12 +90,11 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="text-center py-4">
-                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              <EmptyRow text="No tournaments scheduled." />
+              <div className="flex gap-2">
+                <Button asChild size="sm"><Link to="/tournaments">Manage Events</Link></Button>
+                <Button asChild size="sm" variant="secondary"><Link to="/tournaments">Add Tournament</Link></Button>
               </div>
-              <Button asChild size="sm">
-                <Link to="/tournaments">Add Tournament</Link>
-              </Button>
             </CardContent>
           </Card>
 
@@ -112,12 +107,11 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="text-center py-4">
-                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              <EmptyRow text="No notifications yet." />
+              <div className="flex gap-2">
+                <Button asChild size="sm" variant="secondary"><Link to="/messages">Open Messages</Link></Button>
+                <Button asChild size="sm"><Link to="/profile">Notification Settings</Link></Button>
               </div>
-              <Button asChild size="sm">
-                <Link to="/messages">View Messages</Link>
-              </Button>
             </CardContent>
           </Card>
         </div>
@@ -130,18 +124,10 @@ export default function HomeDashboard() {
           <CardContent className="space-y-3">
             <EmptyRow text="No recent activity yet." />
             <div className="flex flex-wrap gap-2">
-              <Button asChild size="sm" variant="secondary">
-                <Link to="/my-catches">View My Catches</Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link to="/catch-logging">Log a Catch</Link>
-              </Button>
+              <Button asChild size="sm" variant="secondary"><Link to="/my-catches">View My Catches</Link></Button>
+              <Button asChild size="sm"><Link to="/catch-logging">Log a Catch</Link></Button>
               <Button asChild size="sm" variant="outline">
-                <Link to="/leaderboard">
-                  <div className="flex items-center gap-2">
-                    <Trophy className="h-4 w-4" /> Leaderboard
-                  </div>
-                </Link>
+                <Link to="/leaderboard"><div className="flex items-center gap-2"><Trophy className="h-4 w-4" /> Leaderboard</div></Link>
               </Button>
             </div>
           </CardContent>
@@ -151,7 +137,6 @@ export default function HomeDashboard() {
   );
 }
 
-/* helpers */
 function EmptyRow({ text }: { text: string }) {
   return (
     <div className="rounded-md border border-dashed p-6 text-sm text-muted-foreground grid place-items-center">
