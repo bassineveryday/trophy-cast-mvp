@@ -1,82 +1,65 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Settings } from "lucide-react";
-
-// Import existing components
-import Homepage from "./Homepage";
-import Dashboard from "./Dashboard";
+import { Button } from "@/components/ui/button";
+import { Fish, Trophy, Archive } from "lucide-react";
 
 const HomeDashboard = () => {
-  // Feature flags for different views
-  const [useClassicDashboard, setUseClassicDashboard] = useState(false);
-  const [showFeatureToggle, setShowFeatureToggle] = useState(false);
+  const quickActions = [
+    {
+      to: "/catch-logging",
+      icon: Fish,
+      label: "Log Catch by Voice",
+      description: "Use voice commands to quickly log your catches"
+    },
+    {
+      to: "/leaderboard", 
+      icon: Trophy,
+      label: "Live Leaderboard",
+      description: "Check current tournament standings"
+    },
+    {
+      to: "/my-catches",
+      icon: Archive, 
+      label: "My Fish Room",
+      description: "View all your logged catches"
+    }
+  ];
 
-  // Feature-flagged rendering
-  if (useClassicDashboard) {
-    return (
-      <div className="relative">
-        {/* Feature Toggle - Development/Admin Only */}
-        {showFeatureToggle && (
-          <div className="fixed top-4 right-4 z-50 bg-background border rounded-lg p-3 shadow-lg">
-            <div className="flex items-center space-x-2 mb-2">
-              <Settings className="w-4 h-4" />
-              <span className="text-sm font-medium">Dashboard Mode</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xs">Rich</span>
-              <Switch 
-                checked={useClassicDashboard} 
-                onCheckedChange={setUseClassicDashboard}
-              />
-              <span className="text-xs">Classic</span>
-            </div>
-          </div>
-        )}
-        
-        {/* Classic Dashboard View */}
-        <Dashboard />
-      </div>
-    );
-  }
-
-  // Default: Rich Homepage Experience
   return (
-    <div className="relative">
-      {/* Feature Toggle - Development/Admin Only */}
-      {showFeatureToggle && (
-        <div className="fixed top-4 right-4 z-50 bg-background border rounded-lg p-3 shadow-lg">
-          <div className="flex items-center space-x-2 mb-2">
-            <Settings className="w-4 h-4" />
-            <span className="text-sm font-medium">Dashboard Mode</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-xs">Rich</span>
-            <Switch 
-              checked={useClassicDashboard} 
-              onCheckedChange={setUseClassicDashboard}
-            />
-            <span className="text-xs">Classic</span>
-          </div>
-        </div>
-      )}
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* Welcome Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Welcome to TrophyCast
+        </h1>
+        <p className="text-muted-foreground">
+          Your bass fishing tournament companion
+        </p>
+      </div>
 
-      {/* Rich Homepage Experience */}
-      <Homepage />
-      
-      {/* Optional: Show toggle in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <Button
-          variant="ghost" 
-          size="sm"
-          className="fixed bottom-4 left-4 z-40 opacity-30 hover:opacity-100"
-          onClick={() => setShowFeatureToggle(!showFeatureToggle)}
-        >
-          <Settings className="w-4 h-4" />
-        </Button>
-      )}
+      {/* Quick Actions */}
+      <div className="grid gap-4 md:grid-cols-3">
+        {quickActions.map(({ to, icon: Icon, label, description }) => (
+          <Card key={to} className="hover:shadow-lg transition-shadow">
+            <CardHeader className="text-center">
+              <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit">
+                <Icon className="w-8 h-8 text-primary" />
+              </div>
+              <CardTitle className="text-lg">{label}</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <p className="text-sm text-muted-foreground mb-4">
+                {description}
+              </p>
+              <Button asChild className="w-full">
+                <Link to={to}>
+                  {label}
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
