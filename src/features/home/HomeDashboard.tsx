@@ -58,13 +58,9 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {/* simple sparkline placeholder */}
-              <div className="h-24 rounded-md bg-muted grid place-items-center text-xs text-muted-foreground">
-                (graph placeholder)
+              <div className="text-center py-4">
+                <div className="text-3xl font-bold text-muted-foreground">0</div>
               </div>
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium">0</span> logged so far — add your first catch below.
-              </p>
               <Button asChild size="sm">
                 <Link to="/catch-logging">Log Catch by Voice</Link>
               </Button>
@@ -80,9 +76,9 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium">0</span> active plans
-              </p>
+              <div className="text-center py-4">
+                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              </div>
               <Button asChild size="sm">
                 <Link to="/plans">Open A Plan</Link>
               </Button>
@@ -98,7 +94,9 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <EmptyRow text="No tournaments scheduled yet" />
+              <div className="text-center py-4">
+                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              </div>
               <Button asChild size="sm">
                 <Link to="/tournaments">Add Tournament</Link>
               </Button>
@@ -114,7 +112,9 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <EmptyRow text="No new notifications" />
+              <div className="text-center py-4">
+                <div className="text-3xl font-bold text-muted-foreground">0</div>
+              </div>
               <Button asChild size="sm">
                 <Link to="/messages">View Messages</Link>
               </Button>
