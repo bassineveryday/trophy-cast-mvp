@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Bell,
   CalendarDays,
-  ChartLine,
+  Fish,
   ClipboardList,
   Trophy,
 } from "lucide-react";
@@ -53,7 +53,7 @@ export default function HomeDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base font-semibold">
-                <ChartLine className="h-5 w-5 text-sky-600" />
+                <Fish className="h-5 w-5 text-sky-600" />
                 Catches This Week
               </CardTitle>
             </CardHeader>
@@ -80,15 +80,12 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <EmptyRow text="No active plans yet." />
-              <div className="flex gap-2">
-                <Button asChild size="sm">
-                  <Link to="/plans">Create Plan</Link>
-                </Button>
-                <Button asChild size="sm" variant="secondary">
-                  <Link to="/ai-coach">Open AI Coach</Link>
-                </Button>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium">0</span> active plans
+              </p>
+              <Button asChild size="sm">
+                <Link to="/plans">Open A Plan</Link>
+              </Button>
             </CardContent>
           </Card>
 
@@ -101,15 +98,10 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <EmptyRow text="No tournaments scheduled." />
-              <div className="flex gap-2">
-                <Button asChild size="sm">
-                  <Link to="/tournaments">Manage Events</Link>
-                </Button>
-                <Button asChild size="sm" variant="secondary">
-                  <Link to="/tournaments">Add Tournament</Link>
-                </Button>
-              </div>
+              <EmptyRow text="No tournaments scheduled yet" />
+              <Button asChild size="sm">
+                <Link to="/tournaments">Add Tournament</Link>
+              </Button>
             </CardContent>
           </Card>
 
@@ -122,15 +114,10 @@ export default function HomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <EmptyRow text="No notifications yet." />
-              <div className="flex gap-2">
-                <Button asChild size="sm" variant="secondary">
-                  <Link to="/messages">Open Messages</Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link to="/profile">Notification Settings</Link>
-                </Button>
-              </div>
+              <EmptyRow text="No new notifications" />
+              <Button asChild size="sm">
+                <Link to="/messages">View Messages</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>
