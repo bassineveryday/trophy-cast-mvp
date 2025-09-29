@@ -38,6 +38,7 @@ const App = () => (
             {/* Main Application Routes - wrapped with MainLayout and protected */}
             <Route path="/" element={<MainLayout />}>
               <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+              <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
               <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
               <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
               <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
