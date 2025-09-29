@@ -1,85 +1,162 @@
-# Welcome to your Lovable project
+# Trophy Cast MVP - Where Every Cast Counts
 
-## 🚀 Bare-Bones Mode
+A focused MVP bass fishing tournament app built with React, Supabase, and modern web technologies.
 
-This app is currently running in **bare-bones MVP mode** with minimal routes for core functionality:
+## 🎣 Features
 
-- **Home** (`/`) - Welcome screen with quick actions
-- **Log Catch** (`/catch-logging`) - Voice-enabled catch logging
-- **Leaderboard** (`/leaderboard`) - Tournament standings
-- **My Catches** (`/my-catches`) - Personal catch history  
-- **Profile** (`/profile`) - User profile management
+### 1. Authentication
+- **Email/password sign-up and sign-in** via Supabase Auth
+- Protected routes requiring authentication
+- User profile management
 
-To restore full functionality, re-add the removed routes and components from the git history.
+### 2. Tournament Management
+- **Create tournaments** (`/host/new-tournament`)
+  - Tournament name, date, location, entry fee
+  - Auto-generated tournament ID
+- **List my tournaments** (`/host/my-tournaments`)
+  - View all tournaments you've created
+  - Quick access to leaderboards
 
-## Project info
+### 3. Catch Logging (Voice-Enabled)
+- **Log catches** (`/catch/log`)
+  - Select tournament (optional)
+  - Species, weight, length, notes
+  - **Voice input** using Web Speech API for notes field
+  - **Offline queue** - catches stored locally when offline, auto-sync when online
+  - Real-time online/offline indicator
 
-**URL**: https://lovable.dev/projects/9d7cee6c-3c40-4703-a3f9-ef23dbe7f5ac
+### 4. Real-Time Leaderboard
+- **Live tournament leaderboard** (`/leaderboard/:tournamentId`)
+  - Supabase realtime subscriptions
+  - Fallback polling every 5 seconds
+  - Top 10 anglers by total weight
+  - Shows fish count, big fish, total weight
+  - Auto-refreshes when new catches logged
 
-## How can I edit this code?
+### 5. Angler Profile
+- **My Profile** (`/profile/me`)
+  - Basic profile information
+  - Career stats: tournaments, total fish, best weight
+  - Create profile button if none exists
 
-There are several ways of editing your application.
+### 6. CSV Import (Admin UI)
+- **CSV Import Preview** (`/admin/import-csv`)
+  - Client-side CSV parsing and validation
+  - Required columns: `tournament_id`, `angler_id`, `fish_count`, `weight_lbs`
+  - Shows validation errors per row
+  - Generates import instructions (SQL/JSON) for admin
+  - **Does not execute imports** - admin must use Supabase UI or Edge Function
 
-**Use Lovable**
+## 🎨 Branding
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9d7cee6c-3c40-4703-a3f9-ef23dbe7f5ac) and start prompting.
+**Trophy Cast Official Colors:**
+- **Trophy Gold**: `#D4AF37` - Success, trophies
+- **Bass Green**: `#2E6E3D` - Nature, fishing
+- **Lake Teal**: `#1FA38A` - Water, trust
+- **Deep Navy**: `#0C1A23` - Professional, depth
+- **Sand**: `#F5F1E6` - Warmth, beaches
 
-Changes made via Lovable will be committed automatically to this repo.
+**Fonts:**
+- **Headings**: Montserrat (via Google Fonts)
+- **Body**: Raleway (via Google Fonts)
 
-**Use your preferred IDE**
+**Tagline**: "Where Every Cast Counts"
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Testing in Lovable Preview
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Sign up** at `/auth` with email/password
+2. **Create a tournament**: Navigate to `/host/new-tournament`
+3. **Log a catch**: Go to `/catch/log` and select your tournament
+4. **View leaderboard**: Click on a tournament from `/host/my-tournaments`
+5. **Test voice input**: Click mic button in catch logging notes field
+6. **Test offline mode**: 
+   - Open DevTools → Network tab → Go offline
+   - Log a catch (it will queue)
+   - Go back online → catch will auto-sync
+7. **View profile**: Go to `/profile/me` and create profile if needed
+8. **Admin CSV**: Upload CSV at `/admin/import-csv` to see validation
 
-Follow these steps:
+## 🗂 Project Structure
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── features/
+│   ├── auth/           # AuthPage with sign-in/sign-up
+│   ├── catches/        # LogCatch (voice + offline queue)
+│   ├── tournaments/    # NewTournament, MyTournaments
+│   ├── leaderboard/    # TournamentLeaderboard (realtime)
+│   ├── profile/        # MyProfile
+│   └── admin/          # CSVImport (UI-only preview)
+├── components/         # Shared UI components
+├── contexts/           # AuthContext, VoiceContext
+├── integrations/       # Supabase client
+└── App.tsx            # Route definitions
 ```
 
-**Edit a file directly in GitHub**
+## 🔒 Security
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **No service-role keys exposed** - all operations use anon key + RLS
+- **Row-Level Security (RLS)** policies enforce access control
+- **Protected routes** - authentication required for all features
+- **Input validation** - zod schemas on forms
 
-**Use GitHub Codespaces**
+## 🛠 Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: TailwindCSS with custom Trophy Cast design tokens
+- **Backend**: Supabase (Auth, Database, Realtime)
+- **Forms**: React Hook Form + Zod validation
+- **Routing**: React Router v6
+- **Voice**: Web Speech API (browser native)
+- **Offline**: localStorage queue with auto-sync
 
-## What technologies are used for this project?
+## 📊 Database Tables Used
 
-This project is built with:
+- `tournaments` - tournament metadata
+- `catches` - catch records (weight, species, tournament_id)
+- `profiles` - user profile data
+- `clubs` - fishing clubs (future enhancement)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## ⚠️ Known Limitations
 
-## How can I deploy this project?
+1. **Voice input** requires browser support (Chrome/Edge recommended)
+2. **CSV import** is UI-only - admin must manually import via Supabase
+3. **No service-role operations** - all writes go through RLS policies
+4. **Offline queue** uses localStorage (limited to ~5MB)
+5. **Realtime** may have delays - fallback polling ensures updates
 
-Simply open [Lovable](https://lovable.dev/projects/9d7cee6c-3c40-4703-a3f9-ef23dbe7f5ac) and click on Share -> Publish.
+## 🎯 Next Steps (Post-MVP)
 
-## Can I connect a custom domain to my Lovable project?
+- Add photo uploads for catches
+- Tournament brackets and scoring rules
+- Club management and messaging
+- Weather/solunar data integration
+- AR measurement for catch length
+- Tournament registration flow
+- Payment processing for entry fees
 
-Yes, you can!
+## 📝 Notes
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- This is a **Lovable-only MVP** - all features work within the Lovable preview
+- **No external deployments** required during MVP phase
+- Uses existing Supabase project connection
+- All features are mobile-first and responsive
+- Voice and offline features demonstrate PWA capabilities
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🐛 Troubleshooting
+
+**Auth issues**: Make sure email confirmation is disabled in Supabase Auth settings for testing
+
+**Realtime not working**: Check Supabase project has realtime enabled, falls back to polling
+
+**Voice not working**: Chrome/Edge only, requires HTTPS (Lovable preview is HTTPS)
+
+**Offline queue not syncing**: Check browser console for network errors, queue stored in localStorage
+
+---
+
+## Project Info
+
+**Lovable URL**: https://lovable.dev/projects/9d7cee6c-3c40-4703-a3f9-ef23dbe7f5ac
+
+Built with ❤️ for serious anglers. **Where Every Cast Counts.**
