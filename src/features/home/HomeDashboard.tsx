@@ -34,7 +34,7 @@ export default function HomeDashboard() {
         />
       </div>
 
-      {/* Upcoming Tournaments */}
+      {/* Upcoming Tournaments (buttons only, no stats) */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Upcoming Tournaments</CardTitle>
@@ -43,17 +43,13 @@ export default function HomeDashboard() {
         <CardContent className="space-y-3">
           <EmptyLine text="No tournaments yet." />
           <div className="flex gap-2">
-            <Button asChild size="sm">
-              <Link to="/tournaments">Manage Events</Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/tournaments">Add Tournament</Link>
-            </Button>
+            <Button asChild size="sm"><Link to="/tournaments">Manage Events</Link></Button>
+            <Button asChild size="sm" variant="secondary"><Link to="/tournaments">Add Tournament</Link></Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Notifications */}
+      {/* Notifications (buttons only, no stats) */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Notifications</CardTitle>
@@ -62,30 +58,20 @@ export default function HomeDashboard() {
         <CardContent className="space-y-3">
           <EmptyLine text="No notifications yet." />
           <div className="flex gap-2">
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/messages">Open Messages</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/profile">Notification Settings</Link>
-            </Button>
+            <Button asChild size="sm" variant="secondary"><Link to="/messages">Open Messages</Link></Button>
+            <Button asChild size="sm"><Link to="/profile">Notification Settings</Link></Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
+      {/* Recent Activity (buttons only, no stats) */}
       <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Recent Activity</CardTitle></CardHeader>
         <CardContent className="space-y-3">
           <EmptyLine text="No recent activity yet." />
           <div className="flex flex-wrap gap-2">
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/my-catches">View My Catches</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/catch-logging">Log a Catch</Link>
-            </Button>
+            <Button asChild size="sm" variant="secondary"><Link to="/my-catches">View My Catches</Link></Button>
+            <Button asChild size="sm"><Link to="/catch-logging">Log a Catch</Link></Button>
           </div>
         </CardContent>
       </Card>
@@ -93,13 +79,9 @@ export default function HomeDashboard() {
   );
 }
 
-/* ------- small helpers ------- */
-
+/* helpers */
 function ActionCard({
-  to,
-  icon: Icon,
-  title,
-  desc,
+  to, icon: Icon, title, desc,
 }: {
   to: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -116,9 +98,7 @@ function ActionCard({
       </CardHeader>
       <CardContent className="text-center">
         <p className="text-sm text-muted-foreground mb-4">{desc}</p>
-        <Button asChild className="w-full h-12">
-          <Link to={to}>{title}</Link>
-        </Button>
+        <Button asChild className="w-full h-12"><Link to={to}>{title}</Link></Button>
       </CardContent>
     </Card>
   );
