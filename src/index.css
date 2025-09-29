@@ -21,29 +21,29 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    /* Trophy Cast Brand Colors */
-    --trophy-gold: 45 95% 58%;
-    --trophy-gold-light: 45 100% 75%;
-    --trophy-gold-dark: 45 85% 45%;
+    /* Trophy Cast Brand Colors - Official Palette */
+    --trophy-gold: 43 79% 52%; /* #D4AF37 */
+    --bass-green: 146 42% 30%; /* #2E6E3D */
+    --lake-teal: 172 69% 40%; /* #1FA38A */
+    --deep-navy: 200 47% 9%; /* #0C1A23 */
+    --sand: 45 67% 94%; /* #F5F1E6 */
     
-    --fishing-green: 142 69% 45%;
-    --fishing-green-light: 142 69% 65%;
-    --fishing-green-dark: 142 69% 35%;
-    
-    --water-blue: 205 87% 55%;
-    --water-blue-light: 205 87% 75%;
-    --water-blue-dark: 205 87% 35%;
+    /* Derived shades */
+    --trophy-gold-light: 43 79% 65%;
+    --trophy-gold-dark: 43 79% 40%;
+    --bass-green-light: 146 42% 45%;
+    --bass-green-dark: 146 42% 20%;
 
     /* Primary system using trophy gold */
-    --primary: 45 95% 58%;
-    --primary-foreground: 215 25% 15%;
+    --primary: 43 79% 52%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary using water blue */
-    --secondary: 205 87% 55%;
+    /* Secondary using lake teal */
+    --secondary: 172 69% 40%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Success using fishing green */
-    --success: 142 69% 45%;
+    /* Success using bass green */
+    --success: 146 42% 30%;
     --success-foreground: 0 0% 100%;
 
     /* Muted system */
