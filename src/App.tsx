@@ -1,4 +1,5 @@
-import HomeDashboard from "@/features/home/HomeDashboard";
+import Homepage from "@/features/home/Homepage";
+import Dashboard from "@/features/home/Dashboard";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -35,10 +36,10 @@ const App = () => (
             {/* Auth Route - standalone, no layout */}
             <Route path="/auth" element={<AuthPage />} />
 
-            {/* Main Application Routes - wrapped with MainLayout and protected */}
+            {/* Main Application Routes - wrapped with MainLayout */}
             <Route path="/" element={<MainLayout />}>
-              <Route index element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
-              <Route path="dashboard" element={<ProtectedRoute><HomeDashboard /></ProtectedRoute>} />
+              <Route index element={<Homepage />} />
+              <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
               <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
               <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />

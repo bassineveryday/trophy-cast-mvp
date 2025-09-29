@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Components
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -37,6 +38,7 @@ import trophyCastLogo from "@/assets/trophy-cast-logo.png";
 // Demo Components
 import { DemoFeatureBanner, DemoNotification } from "@/components/demo/DemoFeatureBanner";
 const Homepage = () => {
+  const { user, loading } = useAuth();
   const {
     enabled,
     role,
@@ -161,6 +163,112 @@ const Homepage = () => {
   const toggleDropdown = (cardId: string) => {
     setOpenDropdown(openDropdown === cardId ? null : cardId);
   };
+
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <LoadingSpinner message="Loading..." />
+      </div>
+    );
+  }
+
+  // Show landing page for unauthenticated users
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Hero Section for Unauthenticated Users */}
+        <div className="relative bg-gradient-hero text-white px-4 py-16 overflow-hidden">
+          {/* Logo */}
+          <div className="flex items-center justify-center mb-8">
+            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-16 h-16 object-contain mr-3" />
+            <div className="text-trophy-gold font-bold text-2xl tracking-wide">TrophyCast</div>
+          </div>
+
+          <div className="text-center max-w-md mx-auto">
+            <motion.h1 
+              className="text-4xl font-bold mb-4" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Where Every Cast Counts
+            </motion.h1>
+            <motion.p 
+              className="text-lg opacity-90 mb-8" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              AI-powered tournament fishing companion for serious anglers
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Link to="/auth">
+                <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold px-8 py-3">
+                  Get Started
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Features Preview */}
+        <div className="px-4 py-12">
+          <div className="max-w-md mx-auto space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-2">Join the Competition</h2>
+              <p className="text-muted-foreground">Track catches, plan tournaments, and compete with the best</p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-4">
+              <Card className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-fishing-green/20 rounded-full flex items-center justify-center">
+                    <Fish className="w-5 h-5 text-fishing-green" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Track Your Catches</h3>
+                    <p className="text-sm text-muted-foreground">Log every bass with photos and details</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-trophy-gold/20 rounded-full flex items-center justify-center">
+                    <Trophy className="w-5 h-5 text-trophy-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Tournament Ready</h3>
+                    <p className="text-sm text-muted-foreground">AI-powered tournament planning and strategy</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-water-blue/20 rounded-full flex items-center justify-center">
+                    <Users className="w-5 h-5 text-water-blue" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Join Your Club</h3>
+                    <p className="text-sm text-muted-foreground">Connect with fellow anglers and compete</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show full dashboard for authenticated users
   return <div className="min-h-screen bg-background">
       {/* Pull to refresh indicator */}
       <AnimatePresence>
