@@ -8,64 +8,9 @@ import { useState } from "react";
 const BadgeCollection = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   
-  const earnedBadges = [
-    {
-      id: 'first-keeper',
-      name: 'First Keeper',
-      icon: Anchor,
-      color: 'bg-amber-600 text-white',
-      description: 'Your first keeper of the tournament',
-      earned: true
-    },
-    {
-      id: 'deep-water',
-      name: 'Deep Water Bite',
-      icon: Waves,
-      color: 'bg-water-blue text-white',
-      description: 'Mastered deep water fishing',
-      earned: true
-    },
-    {
-      id: 'pattern-change',
-      name: 'Pattern Change',
-      icon: TrendingUp,
-      color: 'bg-fishing-green text-white',
-      description: 'Adapted tactics to changing conditions',
-      earned: true
-    },
-    {
-      id: 'big-bass',
-      name: 'Big Bass – Tournament Leader',
-      icon: Trophy,
-      color: 'bg-trophy-gold text-white',
-      description: 'Caught the biggest bass of the tournament',
-      earned: true
-    }
-  ];
-
-  const lockedBadges = [
-    {
-      id: 'limit-out',
-      name: 'Limit Out',
-      icon: Award,
-      description: 'Catch a full 5-fish limit',
-      earned: false
-    },
-    {
-      id: 'double-digit',
-      name: 'Double Digit Day',
-      icon: Target,
-      description: 'Catch 10+ bass in one tournament',
-      earned: false
-    },
-    {
-      id: 'back-to-back',
-      name: 'Back-to-Back Winner',
-      icon: Fish,
-      description: 'Win consecutive tournaments',
-      earned: false
-    }
-  ];
+  // Empty state for badges
+  const earnedBadges: any[] = [];
+  const lockedBadges: any[] = [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,102 +25,46 @@ const BadgeCollection = () => {
           </Link>
         </div>
         <h1 className="text-xl font-bold flex items-center">
-          🏅 Jake's Badge Collection
+          🏅 Badge Collection
         </h1>
         <p className="text-sm opacity-90">Tournament achievements & milestones</p>
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Earned Badges */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Trophy className="w-5 h-5 mr-2 text-trophy-gold" />
-              Earned Badges ({earnedBadges.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              {earnedBadges.map((badge) => {
-                const IconComponent = badge.icon;
-                return (
-                  <div key={badge.id} className="bg-card rounded-lg p-4 border shadow-sm">
-                    <div className="flex flex-col items-center text-center space-y-2">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${badge.color}`}>
-                        <IconComponent className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-sm">{badge.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+        {/* Empty State for Badges */}
+        <Card className="border-2 border-dashed border-muted-foreground/20">
+          <CardContent className="p-8 text-center">
+            <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
+            <h3 className="text-lg font-medium mb-2">No badges earned yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Participate in tournaments and achieve milestones to start earning badges and building your trophy case.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Link to="/tournaments">
+                <Button variant="outline" className="w-full">
+                  <Trophy className="w-4 h-4 mr-2" />
+                  Join Tournament
+                </Button>
+              </Link>
+              <Link to="/my-catches">
+                <Button variant="outline" className="w-full">
+                  <Fish className="w-4 h-4 mr-2" />  
+                  Log Catches
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
 
-        {/* Locked Badges */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Lock className="w-5 h-5 mr-2 text-muted-foreground" />
-              Locked Badges
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              {lockedBadges.map((badge) => {
-                const IconComponent = badge.icon;
-                return (
-                  <div key={badge.id} className="bg-muted/30 rounded-lg p-4 border-2 border-dashed border-muted">
-                    <div className="flex flex-col items-center text-center space-y-2">
-                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center relative">
-                        <IconComponent className="w-6 h-6 text-muted-foreground" />
-                        <Lock className="w-3 h-3 absolute -top-1 -right-1 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-sm text-muted-foreground">{badge.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{badge.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Stats */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Badge Progress</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Tournament Badges</span>
-                <span className="text-sm text-muted-foreground">4/7 earned</span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-trophy-gold h-2 rounded-full" style={{ width: '57%' }}></div>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Keep fishing to unlock more achievements!
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Share Button */}
+        {/* Share Button - Disabled for empty state */}
         <div className="mt-6">
           <Button 
-            className="w-full bg-trophy-gold hover:bg-trophy-gold-dark text-white font-bold"
-            onClick={() => setShowShareModal(true)}
+            className="w-full"
+            variant="outline"
+            disabled
           >
             <Share2 className="w-4 h-4 mr-2" />
-            Share My Trophy Case
+            Share Trophy Case
           </Button>
         </div>
       </div>

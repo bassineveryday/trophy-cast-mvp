@@ -4,8 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MapPin, Calendar, Clock, DollarSign, Users, Cloud, Sun, CloudRain, Wind, Trophy, Brain, AlertTriangle } from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
-import { mockOfficerNotes } from "@/data/mockMessages";
-import OfficerNote from "@/components/OfficerNote";
 import { useToast } from "@/hooks/use-toast";
 
 const TournamentDetail = () => {
@@ -66,12 +64,8 @@ const TournamentDetail = () => {
 
   const tournament = tournaments[tournamentId as keyof typeof tournaments];
   
-  // Find officer notes related to this tournament
-  const relatedNotes = mockOfficerNotes.filter(note => 
-    note.eventDetails?.tournamentId === tournamentId ||
-    note.eventDetails?.lake === tournament?.name ||
-    (tournament && note.title.toLowerCase().includes(tournament.name.toLowerCase()))
-  );
+  // Empty officer notes
+  const relatedNotes: any[] = [];
 
   const handleVolunteer = (noteId: string) => {
     toast({
@@ -110,20 +104,14 @@ const TournamentDetail = () => {
       </div>
 
       <div className="p-4 space-y-4">
-        {/* Related Officer Notes */}
-        {relatedNotes.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold flex items-center">
-              <AlertTriangle className="w-5 h-5 mr-2 text-orange-600" />
-              Tournament Notices
-            </h2>
-            {relatedNotes.map(note => (
-              <OfficerNote 
-                key={note.id}
-                note={note}
-                onVolunteer={handleVolunteer}
-              />
-            ))}
+        {/* Tournament Notices */}
+        {relatedNotes.length === 0 && (
+          <div className="text-center py-4 text-muted-foreground">
+            <div className="flex items-center justify-center mb-2">
+              <AlertTriangle className="w-5 h-5 mr-2 text-muted-foreground" />
+              <span className="text-sm">No officer notes yet</span>
+            </div>
+            <p className="text-xs">Tournament notices and updates will appear here.</p>
           </div>
         )}
 

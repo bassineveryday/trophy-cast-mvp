@@ -16,7 +16,6 @@ import {
   Star
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { mockMessageThreads, mockClubInbox } from "@/data/mockMessages";
 import OfficerNotesSection from "@/components/OfficerNotesSection";
 import { useToast } from "@/hooks/use-toast";
 
@@ -26,10 +25,8 @@ const MessagesInbox = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
-  const filteredThreads = mockMessageThreads.filter(thread =>
-    thread.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    thread.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Empty threads for demo cleanup
+  const filteredThreads: any[] = [];
 
   const getCommonGroundChips = (commonGround: any) => {
     const chips = [];
@@ -112,65 +109,13 @@ const MessagesInbox = () => {
 
             {/* Threads List */}
             <div className="space-y-3">
-              {filteredThreads.map((thread) => {
-                const commonGroundChips = getCommonGroundChips(thread.commonGround);
-                
-                return (
-                  <Link key={thread.threadId} to={`/messages/${thread.threadId}`}>
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                        <CardContent className="p-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="relative">
-                              <Avatar className="w-12 h-12">
-                                <AvatarImage src={thread.avatar} />
-                                <AvatarFallback className="bg-primary text-primary-foreground font-bold">
-                                  {thread.initials}
-                                </AvatarFallback>
-                              </Avatar>
-                              {thread.unread && (
-                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"></div>
-                              )}
-                            </div>
-                            
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between mb-1">
-                                <h3 className={`font-medium truncate ${thread.unread ? 'text-foreground' : 'text-foreground'}`}>
-                                  {thread.name}
-                                </h3>
-                                <span className="text-xs text-muted-foreground">
-                                  {thread.timestamp}
-                                </span>
-                              </div>
-                              
-                              {/* Common Ground Chips */}
-                              {commonGroundChips.length > 0 && (
-                                <div className="flex gap-1 mb-2">
-                                  {commonGroundChips.map((chip, index) => (
-                                    <Badge
-                                      key={index}
-                                      className={`text-xs px-2 py-0 ${chip.color}`}
-                                    >
-                                      {chip.label}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              )}
-                              
-                              <p className={`text-sm truncate ${thread.unread ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                {thread.lastMessage}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </Link>
-                );
-              })}
+              {filteredThreads.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <p className="text-sm">No messages yet</p>
+                  <p className="text-xs mt-2">Start conversations with fellow anglers to see messages here.</p>
+                </div>
+              )}
             </div>
 
             {/* New Message FAB */}
@@ -194,47 +139,11 @@ const MessagesInbox = () => {
             
             {/* Club Inbox Items */}
             <div className="space-y-3">
-              {mockClubInbox.map((item) => (
-                <Link key={item.id} to={`/messages/club/${item.id}`}>
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <div className="flex items-start space-x-3">
-                          <div className="w-10 h-10 bg-trophy-gold/10 rounded-lg flex items-center justify-center">
-                            {getClubTypeIcon(item.type)}
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <h3 className="font-medium truncate">
-                                {item.title}
-                              </h3>
-                              <span className="text-xs text-muted-foreground">
-                                {item.date}
-                              </span>
-                            </div>
-                            
-                            <p className="text-xs text-muted-foreground mb-2">
-                              {item.club}
-                            </p>
-                            
-                            <p className="text-sm text-muted-foreground truncate">
-                              {item.preview}
-                            </p>
-                          </div>
-                          
-                          <Button variant="outline" size="sm">
-                            Open
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </Link>
-              ))}
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p className="text-sm">No club messages yet</p>
+                <p className="text-xs mt-2">Club announcements and newsletters will appear here.</p>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

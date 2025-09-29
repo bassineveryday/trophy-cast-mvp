@@ -5,9 +5,10 @@ import { ArrowLeft, Calendar as CalendarIcon, Clock, MapPin } from "lucide-react
 import { Link } from "react-router-dom";
 import { TournamentCalendar } from "@/components/TournamentCalendar";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
-import { mockTournaments } from "@/data/mockData";
-
 const Calendar = () => {
+  // Empty tournaments array for demo cleanup
+  const mockTournaments: any[] = [];
+
   return (
     <div className="min-h-screen bg-background p-4">
       {/* Header */}
@@ -25,31 +26,31 @@ const Calendar = () => {
         </div>
         <Badge variant="outline" className="text-xs">
           <CalendarIcon className="w-3 h-3 mr-1" />
-          {mockTournaments.length} Events
+          0 Events
         </Badge>
       </div>
 
-      {/* Tournament Calendar */}
-      <TournamentCalendar tournaments={mockTournaments} />
-
-      {/* Quick Stats */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-water-blue" />
-            This Month
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-trophy-gold">3</p>
-              <p className="text-xs text-muted-foreground">Registered Events</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-fishing-green">2</p>
-              <p className="text-xs text-muted-foreground">Plans Ready</p>
-            </div>
+      {/* Empty Calendar State */}
+      <Card className="border-2 border-dashed border-muted-foreground/20">
+        <CardContent className="p-8 text-center">
+          <CalendarIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
+          <h3 className="text-lg font-medium mb-2">No events yet</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Tournament events and schedules will appear here once you join clubs and register for tournaments.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <Link to="/tournaments">
+              <Button variant="outline" className="w-full">
+                <CalendarIcon className="w-4 h-4 mr-2" />
+                View Tournaments
+              </Button>
+            </Link>
+            <Link to="/club-dashboard">
+              <Button variant="outline" className="w-full">
+                <MapPin className="w-4 h-4 mr-2" />
+                Join Clubs
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

@@ -22,7 +22,6 @@ import {
   DollarSign
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { mockPublicProfiles } from "@/data/enhancedMockData";
 import { useToast } from "@/hooks/use-toast";
 import ProfileMessages from "./ProfileMessages";
 import ProfileActivity from "./ProfileActivity";
@@ -45,7 +44,8 @@ const PublicProfile = () => {
     return fullName.substring(0, 2).toUpperCase();
   };
 
-  const angler = anglerId ? mockPublicProfiles[anglerId as keyof typeof mockPublicProfiles] : null;
+  // Empty state for demo cleanup
+  const angler = null;
 
   // ✅ Redirect fix: only redirect for truly invalid IDs, add debug logging
   useEffect(() => {
@@ -67,9 +67,43 @@ const PublicProfile = () => {
     );
   }
 
-  // While the redirect effect runs, render nothing to avoid the flash
+  // Show empty state for public profiles
   if (!angler) {
-    return null;
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="bg-gradient-hero text-white px-4 py-4">
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="text-white hover:bg-white/20"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-xl font-bold">Angler Profile</h1>
+          </div>
+        </div>
+        
+        <div className="px-4 py-8">
+          <Card className="border-2 border-dashed border-muted-foreground/20">
+            <CardContent className="p-8 text-center">
+              <Avatar className="w-16 h-16 mx-auto mb-4 bg-muted">
+                <AvatarFallback className="text-muted-foreground">?</AvatarFallback>
+              </Avatar>
+              <h3 className="text-lg font-medium mb-2">Profile not found</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                This angler profile is not available or does not exist.
+              </p>
+              <Button onClick={() => navigate(-1)}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Go Back
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   // Handle following state
@@ -307,9 +341,10 @@ const PublicProfile = () => {
                 <h3 className="text-base font-semibold">2024 Season Snapshot</h3>
               </div>
               
-              {/* Club-specific cards */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {angler.clubSeasonSnapshots && Object.entries(angler.clubSeasonSnapshots).map(([clubId, clubData]) => (
+              {/* Empty club snapshots */}
+              <div className="text-center py-8 text-muted-foreground">
+                <p className="text-sm">No club season data available</p>
+              </div>
                   <Card key={clubId} className="overflow-hidden">
                     <CardHeader className="pb-2">
                       <div className="flex items-center space-x-3">
