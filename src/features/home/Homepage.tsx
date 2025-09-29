@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useDemoMode } from "@/contexts/DemoModeContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 // Components
@@ -22,31 +21,8 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 // Assets
 import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
 
-// Data
-import { mockUser, mockCareerStats } from "@/data/mockData";
-import { enhancedMockTournaments, mockNotifications, enhancedClubFeed } from "@/data/enhancedMockData";
-import { mockOfficerNotes } from "@/data/mockMessages";
-
-// Components
-import OfficerNote from "@/components/OfficerNote";
-
-// Assets
-import alabamaBassLogo from "@/assets/alabama-bass-logo.png";
-import riverValleyLogo from "@/assets/river-valley-logo.png";
-import trophyCastLogo from "@/assets/trophy-cast-logo.png";
-
-// Demo Components
-import { DemoFeatureBanner, DemoNotification } from "@/components/demo/DemoFeatureBanner";
 const Homepage = () => {
   const { user, loading } = useAuth();
-  const {
-    enabled,
-    role,
-    demoUser,
-    demoCatches,
-    demoTournament,
-    demoClub
-  } = useDemoMode();
 
   // Helper function for weight conversion
   const ozToLbOz = (oz: number) => {
@@ -55,111 +31,23 @@ const Homepage = () => {
     return lb > 0 ? `${lb} lb ${rem} oz` : `${oz} oz`;
   };
 
-  // Dynamic greeting based on demo mode
-  const greetName = !enabled ? "Ty Hunt" : role === "president" ? "Mike" : mockUser.name.split(' ')[0];
-  const avatarName = !enabled ? "Ty Hunt" : mockUser.name;
+  // Dynamic greeting based on auth
+  const greetName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || "angler";
 
-  // All modes use the same rich homepage layout - just different greetings and stats
-
-  // Jake gets the full rich homepage (current content) OR when demo is off
-  // Original complex homepage for Jake or regular users
+  // State management
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedClub, setSelectedClub] = useState("alabama-bass-nation");
-  const [tournamentsExpanded, setTournamentsExpanded] = useState(false);
-  const [isVoiceListening, setIsVoiceListening] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const {
-    toast
-  } = useToast();
+  const [isVoiceListening, setIsVoiceListening] = useState(false);
+  const { toast } = useToast();
 
-  // Mock clubs for multi-club support
-  const userClubs = [{
-    id: "alabama-bass-nation",
-    name: "Alabama Bass Nation – Chapter 12",
-    abbreviation: "ABN-12",
-    leader: "Jake Patterson",
-    leaderClubs: ["alabama-bass-nation"],
-    points: 1847,
-    logo: alabamaBassLogo
-  }, {
-    id: "river-valley",
-    name: "River Valley Independent Bass Club",
-    abbreviation: "RVIBC",
-    leader: "Maria Santos",
-    leaderClubs: ["river-valley"],
-    points: 1723,
-    logo: riverValleyLogo
-  }, {
-    id: "trophy-cast",
-    name: "Trophy Cast Elite Series",
-    abbreviation: "TCES",
-    leader: "Tommy Lee",
-    leaderClubs: ["trophy-cast", "river-valley"],
-    // Multi-club angler
-    points: 1685,
-    logo: trophyCastLogo
-  }];
-
-  // Sample statistics adjusted for demo mode
-  const currentClub = userClubs.find(club => club.id === selectedClub) || userClubs[0];
-  const demoStats = {
-    catchesThisMonth: !enabled ? 0 : role === "jake" ? 23 : 5,
-    // Ty=0, Jake=23, Mike=5
-    topClubLeader: currentClub.leader,
-    clubPoints: currentClub.points,
-    recentAiTip: "Try spinnerbaits on windy north shores",
-    upcomingTournaments: !enabled ? 0 : 3 // Ty=0, others=3
-  };
-
-  // Mock followed anglers data
-  const followedAnglers = [{
-    id: "jake-patterson",
-    name: "Jake Patterson",
-    avatar: "/placeholder.svg",
-    initials: "JP",
-    wins: 12,
-    top10: 34,
-    pbWeight: "8.2 lbs"
-  }, {
-    id: "maria-santos",
-    name: "Maria Santos",
-    avatar: "/placeholder.svg",
-    initials: "MS",
-    wins: 8,
-    top10: 28,
-    pbWeight: "7.8 lbs"
-  }, {
-    id: "tommy-lee",
-    name: "Tommy Lee",
-    avatar: "/placeholder.svg",
-    initials: "TL",
-    wins: 15,
-    top10: 42,
-    pbWeight: "9.1 lbs"
-  }, {
-    id: "sarah-johnson",
-    name: "Sarah Johnson",
-    avatar: "/placeholder.svg",
-    initials: "SJ",
-    wins: 6,
-    top10: 19,
-    pbWeight: "6.9 lbs"
-  }, {
-    id: "mike-rodriguez",
-    name: "Mike Rodriguez",
-    avatar: "/placeholder.svg",
-    initials: "MR",
-    wins: 10,
-    top10: 31,
-    pbWeight: "8.5 lbs"
-  }];
   const handleAnglerLongPress = (angler: any) => {
-    // Mock quick actions - would show bottom sheet in real app
+    // Quick actions placeholder 
     toast({
-      title: `${angler.name} Actions`,
-      description: "View Profile • Message • Unfollow"
+      title: "Coming Soon",
+      description: "Angler interactions coming soon"
     });
   };
+
   const toggleDropdown = (cardId: string) => {
     setOpenDropdown(openDropdown === cardId ? null : cardId);
   };
@@ -192,7 +80,7 @@ const Homepage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Where Every Cast Counts
+              Welcome to TrophyCast
             </motion.h1>
             <motion.p 
               className="text-lg opacity-90 mb-8" 
@@ -269,7 +157,8 @@ const Homepage = () => {
   }
 
   // Show full dashboard for authenticated users
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       {/* Pull to refresh indicator */}
       <AnimatePresence>
         {isRefreshing && <LoadingSpinner message="Refreshing..." />}
@@ -292,84 +181,21 @@ const Homepage = () => {
         <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4">
           <img src={bassTrophyLogo} alt="" className="w-32 h-32 object-contain transform rotate-12" />
         </div>
+
         {/* Notification Bell - Top Right */}
         <div className="absolute top-4 right-4 z-20">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 relative">
                 <Bell className="w-6 h-6" />
-                {mockNotifications.filter(n => !n.read).length > 0 && <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">{mockNotifications.filter(n => !n.read).length}</span>
-                  </div>}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 max-h-96 overflow-y-auto" align="end">
               <div className="p-2 font-semibold text-sm border-b">Recent Notifications</div>
-              {mockNotifications.slice(0, 5).map((notification, index) => <div key={notification.id}>
-                  <DropdownMenuItem className="flex-col items-start p-3 cursor-pointer">
-                    <div className="flex items-center justify-between w-full mb-1">
-                      <span className="font-medium text-sm">{notification.title}</span>
-                      <span className="text-xs text-muted-foreground">{notification.timestamp}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground text-left">{notification.message}</p>
-                    {notification.urgent && <Badge className="mt-1 bg-red-100 text-red-800 text-xs">Urgent</Badge>}
-                  </DropdownMenuItem>
-                  {index < mockNotifications.slice(0, 5).length - 1 && <DropdownMenuSeparator />}
-                </div>)}
-              <DropdownMenuSeparator />
-              
-              {/* Officer Notes Section */}
-              <div className="px-3 py-2">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-sm">Officer Notes</span>
-                  {mockOfficerNotes.filter(note => note.status === 'UNRESOLVED').length > 0 && <Badge variant="destructive" className="text-xs">
-                      {mockOfficerNotes.filter(note => note.status === 'UNRESOLVED').length}
-                    </Badge>}
-                </div>
-                <div className="space-y-2">
-                  {mockOfficerNotes.filter(note => note.status === 'UNRESOLVED').slice(0, 2).map(note => <div key={note.id} className="flex items-center space-x-2 cursor-pointer hover:bg-accent rounded p-1" onClick={() => window.location.href = '/messages?tab=club'}>
-                      <div className="w-6 h-6 bg-orange-500/10 rounded flex items-center justify-center">
-                        <AlertTriangle className="w-3 h-3 text-orange-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium truncate">{note.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {note.club.split(' – ')[0]} • {note.createdAt}
-                        </p>
-                      </div>
-                    </div>)}
-                  <Link to="/messages?tab=club" className="block">
-                    <div className="text-xs text-primary hover:underline">View All Officer Notes</div>
-                  </Link>
-                </div>
+              <div className="p-8 text-center text-muted-foreground">
+                <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No notifications yet</p>
               </div>
-              <DropdownMenuSeparator />
-              
-              {/* Club Inbox Section */}
-              <div className="px-3 py-2">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-sm">Club Inbox</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 bg-trophy-gold/10 rounded flex items-center justify-center">
-                      <Users className="w-3 h-3 text-trophy-gold" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">ABN-12 Monthly Newsletter</p>
-                      <p className="text-xs text-muted-foreground">Sept 25</p>
-                    </div>
-                  </div>
-                  <Link to="/messages?tab=club" className="block">
-                    <div className="text-xs text-primary hover:underline">Open Club Inbox</div>
-                  </Link>
-                </div>
-              </div>
-              <DropdownMenuSeparator />
-              
-              <DropdownMenuItem className="text-center text-sm text-primary cursor-pointer">
-                View All Notifications
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -384,239 +210,163 @@ const Homepage = () => {
               <h2 className="text-xl font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
                 Welcome back, {greetName}!
               </h2>
-              <p className="text-sm opacity-90 mb-2">2019 AOY Champion</p>
-              
-              {/* Stats Pills */}
-              <div className="flex items-center space-x-2">
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
-                  🏆 {mockCareerStats.wins}
-                </Badge>
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
-                  ⭐ {mockCareerStats.top10}
-                </Badge>
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
-                  🥇 {mockCareerStats.aoyTitles}
-                </Badge>
-                <Badge className="text-xs px-2 py-1 bg-white/20 text-white border-white/30 rounded-full">
-                  🎣 7.1
-                </Badge>
-              </div>
+              <p className="text-sm opacity-90 mb-2">Ready to fish?</p>
             </div>
           </div>
 
           {/* Main tagline */}
           <div className="text-center">
-            <motion.h1 className="text-3xl font-bold mb-2" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6
-          }}>
+            <motion.h1 
+              className="text-3xl font-bold mb-2" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               Where Every Cast Counts
             </motion.h1>
-            <motion.p className="text-base opacity-90 mb-6" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6,
-            delay: 0.2
-          }}>
+            <motion.p 
+              className="text-base opacity-90 mb-6" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               AI-powered tournament fishing companion
             </motion.p>
-            
-            {/* Start AI Coaching Session Button */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6,
-            delay: 0.4
-          }}>
-              <Link to="/ai-coach">
-                
-              </Link>
-            </motion.div>
           </div>
         </div>
       </div>
 
-        {/* Dashboard Section */}
-        <div className="px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold">Your Dashboard</h3>
-            <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger className="w-auto border-0 bg-transparent p-0 h-auto">
-                <SelectValue>
-                  <div className="flex items-center gap-2">
-                    <img src={currentClub.logo} alt={currentClub.name} className="w-5 h-5 rounded-full object-cover" />
-                    <span className="font-bold text-sm">{currentClub.abbreviation}</span>
-                    <ChevronDown className="w-4 h-4" />
+      {/* Dashboard Section */}
+      <div className="px-4 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold">Your Dashboard</h3>
+        </div>
+      
+        <div className="grid grid-cols-2 gap-3 relative">
+          {/* Catches This Week Card */}
+          <div className="relative">
+            <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('catches')}>
+              <CardContent className="p-4 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <Fish className="w-4 h-4 text-emerald-600" />
                   </div>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {userClubs.map(club => <SelectItem key={club.id} value={club.id}>
-                    <div className="flex items-center gap-2">
-                      <img src={club.logo} alt={club.name} className="w-5 h-5 rounded-full object-cover" />
-                      <div className="flex flex-col items-start">
-                        <span className="font-bold text-sm">{club.abbreviation}</span>
-                        <span className="text-xs text-muted-foreground">{club.name.split(' – ')[0]}</span>
-                      </div>
-                    </div>
-                  </SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-        
-          <div className="grid grid-cols-2 gap-3 relative">
-            {/* Catches This Week Card */}
-            <div className="relative">
-              <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('catches')}>
-                <CardContent className="p-4 h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <Fish className="w-4 h-4 text-emerald-600" />
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-emerald-600 transition-transform ${openDropdown === 'catches' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-emerald-600 transition-transform ${openDropdown === 'catches' ? 'rotate-180' : ''}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-2xl font-bold text-emerald-700 mb-1">0</p>
+                  <p className="text-sm text-gray-600 mb-2">Catches This Week</p>
+                  <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">
+                    No catches yet
                   </div>
-                  <div className="flex-1">
-                    <p className="text-2xl font-bold text-emerald-700 mb-1">{demoStats.catchesThisMonth}</p>
-                    <p className="text-sm text-gray-600 mb-2">Catches This Week</p>
-                    <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">
-                      +5 from last month
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              {openDropdown === 'catches' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
-                  <div className="p-2">
-                    <Link to="/catches" className="block">
-                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">5.2 lb Largemouth - Lake Fork</div>
-                    </Link>
-                    <Link to="/catches" className="block">
-                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">3.1 lb Smallmouth - St. Clair</div>
-                    </Link>
-                    <Link to="/catches" className="block">
-                      <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer">4.5 lb Largemouth - Guntersville</div>
-                    </Link>
-                  </div>
-                </div>}
-            </div>
-
-            {/* Active Plans Card */}
-            <div className="relative">
-              <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('plans')}>
-                <CardContent className="p-4 h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center">
-                      <Target className="w-4 h-4 text-amber-600" />
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-amber-600 transition-transform ${openDropdown === 'plans' ? 'rotate-180' : ''}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-2xl font-bold text-amber-700 mb-1">3</p>
-                    <p className="text-sm text-gray-600 mb-2">Active Plans</p>
-                    <p className="text-xs text-gray-500">Next: Lake Guntersville — Sept 28</p>
-                  </div>
-                </CardContent>
-              </Card>
-              {openDropdown === 'plans' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
-                  <div className="p-2">
-                    <Link to="/plans" className="block">
-                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Scouting - Lake Sam Rayburn</div>
-                    </Link>
-                    <Link to="/plans" className="block">
-                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Practice Day - Toledo Bend</div>
-                    </Link>
-                    <Link to="/plans" className="block">
-                      <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer">Weekend Trip - Lake Conroe</div>
-                    </Link>
-                  </div>
-                </div>}
-            </div>
-
-            {/* Upcoming Tournaments Card */}
-            <div className="relative">
-              <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('tournaments')}>
-                <CardContent className="p-4 h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
-                      <Trophy className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-blue-600 transition-transform ${openDropdown === 'tournaments' ? 'rotate-180' : ''}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-2xl font-bold text-blue-700 mb-1">{demoStats.upcomingTournaments}</p>
-                    <p className="text-sm text-gray-600 mb-2">Upcoming Tournaments</p>
-                    <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">
-                      3 Upcoming
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              {openDropdown === 'tournaments' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
-                  <div className="p-2">
-                    <Link to="/tournaments" className="block">
-                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Bass Champs - Oct 5</div>
-                    </Link>
-                    <Link to="/tournaments" className="block">
-                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Club Event - Oct 19</div>
-                    </Link>
-                    <Link to="/tournaments" className="block">
-                      <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer">Toyota Series - Nov 2</div>
-                    </Link>
-                  </div>
-                </div>}
-            </div>
-
-            {/* Notifications Card */}
-            <div className="relative">
-              <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('notifications')}>
-                <CardContent className="p-4 h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center">
-                      <Bell className="w-4 h-4 text-teal-600" />
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-teal-600 transition-transform ${openDropdown === 'notifications' ? 'rotate-180' : ''}`} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-2xl font-bold text-teal-700 mb-1">5</p>
-                    <p className="text-sm text-gray-600 mb-2">Notifications</p>
-                    <p className="text-xs text-gray-500">3 new messages</p>
-                  </div>
-                </CardContent>
-              </Card>
-              {openDropdown === 'notifications' && <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
-                  <div className="p-2">
-                    <Link to="/messages" className="block">
-                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">New message from John</div>
-                    </Link>
-                    <Link to="/messages" className="block">
-                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Gear sale at local shop</div>
-                    </Link>
-                    <Link to="/messages" className="block">
-                      <div className="text-xs text-teal-600 py-2 px-3 hover:bg-teal-50 rounded cursor-pointer">Tournament check-in is open</div>
-                    </Link>
-                  </div>
-                </div>}
-            </div>
+                </div>
+              </CardContent>
+            </Card>
+            {openDropdown === 'catches' && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="p-2">
+                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No catches logged yet</div>
+                  <Link to="/catch-logging" className="block">
+                    <div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer text-center">Log Your First Catch</div>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Navigation */}
-          <BottomNavigation />
+          {/* Active Plans Card */}
+          <div className="relative">
+            <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('plans')}>
+              <CardContent className="p-4 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center">
+                    <Target className="w-4 h-4 text-amber-600" />
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-amber-600 transition-transform ${openDropdown === 'plans' ? 'rotate-180' : ''}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-2xl font-bold text-amber-700 mb-1">0</p>
+                  <p className="text-sm text-gray-600 mb-2">Active Plans</p>
+                  <p className="text-xs text-gray-500">No active plans yet</p>
+                </div>
+              </CardContent>
+            </Card>
+            {openDropdown === 'plans' && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="p-2">
+                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No plans created yet</div>
+                  <Link to="/plans" className="block">
+                    <div className="text-xs text-amber-600 py-2 px-3 hover:bg-amber-50 rounded cursor-pointer text-center">Create Your First Plan</div>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Upcoming Tournaments Card */}
+          <div className="relative">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('tournaments')}>
+              <CardContent className="p-4 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Trophy className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-blue-600 transition-transform ${openDropdown === 'tournaments' ? 'rotate-180' : ''}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-2xl font-bold text-blue-700 mb-1">0</p>
+                  <p className="text-sm text-gray-600 mb-2">Upcoming Tournaments</p>
+                  <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">
+                    No tournaments scheduled
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            {openDropdown === 'tournaments' && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="p-2">
+                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No tournaments scheduled yet</div>
+                  <Link to="/leaderboard" className="block">
+                    <div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center">Browse Tournaments</div>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Notifications Card */}
+          <div className="relative">
+            <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('notifications')}>
+              <CardContent className="p-4 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center">
+                    <Bell className="w-4 h-4 text-teal-600" />
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-teal-600 transition-transform ${openDropdown === 'notifications' ? 'rotate-180' : ''}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-2xl font-bold text-teal-700 mb-1">0</p>
+                  <p className="text-sm text-gray-600 mb-2">Notifications</p>
+                  <p className="text-xs text-gray-500">No notifications yet</p>
+                </div>
+              </CardContent>
+            </Card>
+            {openDropdown === 'notifications' && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="p-2">
+                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No notifications yet</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="px-4 mb-6">
+        {/* Navigation */}
+        <BottomNavigation />
+      </div>
+
+      {/* Recent Activity */}
+      <div className="px-4 mb-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
@@ -630,148 +380,44 @@ const Homepage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {/* Top Unresolved Officer Note as Alert */}
-            {mockOfficerNotes.filter(note => note.status === 'UNRESOLVED').slice(0, 1).map(note => <motion.div key={`alert-${note.id}`} whileHover={{
-            scale: 1.02
-          }} whileTap={{
-            scale: 0.98
-          }} className="cursor-pointer" onClick={() => window.location.href = '/messages?tab=club'}>
-                <div className="flex items-start space-x-3 p-3 bg-orange-50/50 border border-orange-200 rounded-lg">
-                  <div className="w-8 h-8 bg-orange-500/10 rounded-full flex items-center justify-center">
-                    <AlertTriangle className="w-4 h-4 text-orange-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-sm truncate">{note.title}</h3>
-                      <Badge className="text-xs text-orange-600 border-orange-500/20 bg-slate-100">
-                        Officer Note
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{note.contextLine}</p>
-                    {note.target && <p className="text-xs text-orange-600 mt-1">
-                        {note.target.current}/{note.target.needed} {note.target.type} needed
-                      </p>}
-                  </div>
-                  
-                </div>
-              </motion.div>)}
-            
-            {/* Newsletter Item */}
-            <div className="flex items-start space-x-3 p-2 bg-accent rounded-lg cursor-pointer hover:shadow-md transition-shadow" onClick={() => window.location.href = '/messages/club/club-1'}>
-              <UniversalAvatar name="ABN-12 Officers" photoUrl={alabamaBassLogo} club={{
-              id: "alabama-bass-nation",
-              abbreviation: "ABN-12"
-            }} role="Monthly Newsletter" size="row" clickable={false} showMicroCopy={false} />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="font-medium text-sm">📩 Club Newsletter</h4>
-                  <Badge className="bg-water-blue/10 text-water-blue text-xs">
-                    New
-                  </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  ABN-12 September Update • 2 days ago
-                </p>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No recent activity yet</p>
+              <p className="text-xs mt-1">Activity from your clubs will appear here</p>
             </div>
-
-            {enhancedClubFeed.slice(0, 2).map(post => <div key={post.id} className="flex items-start space-x-3 p-2 bg-accent rounded-lg">
-                <UniversalAvatar name={post.angler} photoUrl={post.photo} club={{
-              id: post.clubId || "alabama-bass-nation",
-              abbreviation: post.clubId === "river-valley" ? "RVIBC" : post.clubId === "trophy-cast" ? "TCES" : "ABN-12"
-            }} role="Angler" city={post.location || "Huntsville, AL"} anglerId={post.anglerId} size="row" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-medium text-sm cursor-pointer hover:text-primary transition-colors" onClick={() => {
-                  const targetRoute = post.anglerId ? `/anglers/${post.anglerId}` : '/profile';
-                  window.location.href = targetRoute;
-                }}>
-                      {post.angler}
-                    </h4>
-                    <Badge className="bg-trophy-gold/10 text-trophy-gold text-xs px-1 py-0">
-                      {post.clubId === "river-valley" ? "RVIBC" : post.clubId === "trophy-cast" ? "TCES" : "ABN-12"}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {post.tournament} • {post.weight} • {post.timeAgo}
-                  </p>
-                </div>
-                {post.anglerId && <Button variant="ghost" size="icon" className="w-6 h-6 text-muted-foreground hover:text-primary" onClick={e => {
-              e.stopPropagation();
-              window.location.href = `/messages/new?to=${post.anglerId}`;
-            }} aria-label={`Message ${post.angler}`}>
-                    <MessageSquare className="w-3 h-3" />
-                  </Button>}
-              </div>)}
           </CardContent>
         </Card>
-        </div>
+      </div>
 
-        {/* Followed Anglers */}
-        <div className="px-4 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-primary" />
-                  Followed Anglers
-                </div>
-                <Button variant="outline" size="sm" onClick={() => toast({
-              title: "Demo only",
-              description: "Full angler directory coming soon"
-            })}>
-                  View All
-                </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="flex space-x-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-                {followedAnglers.map(angler => <div key={angler.id} className="flex-shrink-0 snap-start">
-                    <div className="bg-card border border-border rounded-lg p-3 w-32 cursor-pointer hover:shadow-md transition-shadow" onClick={() => window.location.href = `/anglers/${angler.id}`} onContextMenu={e => {
-                e.preventDefault();
-                handleAnglerLongPress(angler);
-              }} onTouchStart={e => {
-                const touch = e.touches[0];
-                const longPressTimer = setTimeout(() => {
-                  handleAnglerLongPress(angler);
-                }, 500);
-                const clearTimer = () => {
-                  clearTimeout(longPressTimer);
-                  document.removeEventListener('touchend', clearTimer);
-                  document.removeEventListener('touchmove', clearTimer);
-                };
-                document.addEventListener('touchend', clearTimer);
-                document.addEventListener('touchmove', clearTimer);
-              }} aria-label={`Open ${angler.name} profile`}>
-                      <div className="flex flex-col items-center space-y-2">
-                        <UniversalAvatar name={angler.name} photoUrl={angler.avatar} club={{
-                    id: "alabama-bass-nation",
-                    abbreviation: "ABN-12"
-                  }} role="Angler" city="Huntsville, AL" anglerId={angler.id} size="card" clickable={false} />
-                        <h4 className="font-semibold text-sm text-center truncate w-full">
-                          {angler.name}
-                        </h4>
-                        <div className="flex flex-wrap gap-1 justify-center">
-                          <Badge className="bg-trophy-gold/10 text-trophy-gold text-xs px-1 py-0">
-                            🏆 {angler.wins}
-                          </Badge>
-                          <Badge className="bg-fishing-green/10 text-fishing-green text-xs px-1 py-0">
-                            ⭐ {angler.top10}
-                          </Badge>
-                        </div>
-                        <Badge className="bg-water-blue/10 text-water-blue text-xs px-1 py-0">
-                          🎣 {angler.pbWeight}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>)}
+      {/* Followed Anglers */}
+      <div className="px-4 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 mr-2 text-primary" />
+                Followed Anglers
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <Button variant="outline" size="sm" onClick={() => toast({
+                title: "Coming Soon",
+                description: "Follow other anglers to see their activity"
+              })}>
+                Browse
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="p-8 text-center text-muted-foreground">
+              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No followed anglers yet</p>
+              <p className="text-xs mt-1">Follow other anglers to see their catches and updates</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-        {/* Next Tournament Preview */}
-        <div className="px-4 mb-6">
+      {/* Next Tournament Preview */}
+      <div className="px-4 mb-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -779,50 +425,23 @@ const Homepage = () => {
               Next Tournament
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {enhancedMockTournaments.slice(0, 1).map(tournament => <div key={tournament.id} className="space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg">{tournament.name}</h3>
-                    <p className="text-sm text-muted-foreground">{tournament.club}</p>
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground mt-2">
-                      <span>{tournament.date} • {tournament.time}</span>
-                      <Badge variant="outline">{tournament.fee}</Badge>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    {tournament.confidence && <Badge className="bg-fishing-green/10 text-fishing-green border-fishing-green/20">
-                        {tournament.confidence}% confidence
-                      </Badge>}
-                  </div>
-                </div>
-                
-                <div className="flex space-x-2">
-                  <Link to={`/tournament/${tournament.id}`} className="flex-1">
-                    <Button className="w-full" variant="outline">
-                      View Details
-                    </Button>
-                  </Link>
-                  {tournament.hasPlan ? <Link to="/ai-coach/tournament-plan" className="flex-1">
-                      <Button className="w-full bg-fishing-green hover:bg-fishing-green-dark text-white">
-                        <Target className="w-4 h-4 mr-2" />
-                        View Plan
-                      </Button>
-                    </Link> : <Link to="/ai-coach/pre-trip" className="flex-1">
-                      <Button className="w-full bg-water-blue hover:bg-water-blue-dark text-white">
-                        <Brain className="w-4 h-4 mr-2" />
-                        Build Plan
-                      </Button>
-                    </Link>}
-                </div>
-              </div>)}
+          <CardContent className="space-y-3">
+            <div className="p-8 text-center text-muted-foreground">
+              <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No tournaments scheduled yet</p>
+              <p className="text-xs mt-1">Tournament schedule will appear here</p>
+              <Link to="/leaderboard" className="block mt-4">
+                <Button size="sm">Browse Tournaments</Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-
       {/* Always-visible Floating Mic Button */}
       <FloatingMicButton />
-    </div>;
+    </div>
+  );
 };
+
 export default Homepage;

@@ -40,30 +40,10 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-accent rounded-lg">
-                <div className="text-2xl font-bold text-trophy-gold">47</div>
-                <div className="text-sm text-muted-foreground">Tournaments</div>
-              </div>
-              <div className="text-center p-4 bg-accent rounded-lg">
-                <div className="text-2xl font-bold text-fishing-green">12</div>
-                <div className="text-sm text-muted-foreground">Top 5 Finishes</div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-lg font-bold">3</div>
-                <div className="text-xs text-muted-foreground">Wins</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-bold">8.4 lbs</div>
-                <div className="text-xs text-muted-foreground">Biggest Bass</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-bold">24.8 lbs</div>
-                <div className="text-xs text-muted-foreground">Best Bag</div>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Trophy className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No career stats yet</p>
+              <p className="text-xs mt-1">Your tournament history will appear here</p>
             </div>
           </CardContent>
         </Card>
@@ -77,41 +57,10 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm">AOY Points Progress</span>
-              <Badge variant="outline">1,247 / 2,000 pts</Badge>
-            </div>
-            <Progress value={62} className="w-full" />
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm">Events Fished</span>
-                  <span className="font-semibold">8</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Avg Finish</span>
-                  <span className="font-semibold">15th</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Best Finish</span>
-                  <span className="font-semibold text-trophy-gold">2nd</span>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm">Total Winnings</span>
-                  <span className="font-semibold text-success">$3,450</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Fish Caught</span>
-                  <span className="font-semibold">124</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm">Weight Total</span>
-                  <span className="font-semibold">387.2 lbs</span>
-                </div>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No season data yet</p>
+              <p className="text-xs mt-1">Your 2024 season stats will appear here</p>
             </div>
           </CardContent>
         </Card>
@@ -130,40 +79,10 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="bg-accent p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-trophy-gold rounded-full flex items-center justify-center text-sm font-bold text-white">
-                    12
-                  </div>
-                  <div>
-                    <p className="font-semibold">Mike Johnson (You)</p>
-                    <p className="text-sm text-muted-foreground">Alabama Bass Nation</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold">1,247 pts</div>
-                  <div className="text-sm text-success flex items-center">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    Up 3 spots
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between items-center p-2">
-                <span>11. James Wilson</span>
-                <span className="font-semibold">1,298 pts</span>
-              </div>
-              <div className="flex justify-between items-center p-2">
-                <span>13. Robert Davis</span>
-                <span className="font-semibold">1,189 pts</span>
-              </div>
-              <div className="flex justify-between items-center p-2">
-                <span>14. Tom Anderson</span>
-                <span className="font-semibold">1,156 pts</span>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Award className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No standings data yet</p>
+              <p className="text-xs mt-1">AOY standings will appear here</p>
             </div>
           </CardContent>
         </Card>
@@ -182,22 +101,11 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-accent rounded-lg">
-                <p className="font-semibold text-sm">Saved Plans</p>
-                <p className="text-2xl font-bold text-water-blue">6</p>
-              </div>
-              <div className="p-3 bg-accent rounded-lg">
-                <p className="font-semibold text-sm">Avg Confidence</p>
-                <p className="text-2xl font-bold text-fishing-green">79%</p>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Target className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No plans created yet</p>
+              <p className="text-xs mt-1">Create tournament plans to get started</p>
             </div>
-            <Link to="/plans">
-              <Button className="w-full" variant="outline">
-                <Target className="w-4 h-4 mr-2" />
-                Manage Tournament Plans
-              </Button>
-            </Link>
           </CardContent>
         </Card>
 
@@ -210,34 +118,10 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center space-x-3 p-3 bg-accent rounded-lg">
-              <div className="w-12 h-12 bg-trophy-gold rounded-full flex items-center justify-center">
-                <Trophy className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold">Top 5 Finish</p>
-                <p className="text-sm text-muted-foreground">Smith Lake Championship - 2nd Place</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-3 p-3 bg-accent rounded-lg">
-              <div className="w-12 h-12 bg-fishing-green rounded-full flex items-center justify-center">
-                <Fish className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold">Personal Best</p>
-                <p className="text-sm text-muted-foreground">8.4 lb Largemouth - Lake Guntersville</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-3 p-3 bg-accent rounded-lg">
-              <div className="w-12 h-12 bg-water-blue rounded-full flex items-center justify-center">
-                <Target className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold">Consistency Award</p>
-                <p className="text-sm text-muted-foreground">5 consecutive top-10 finishes</p>
-              </div>
+            <div className="p-8 text-center text-muted-foreground">
+              <Star className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No achievements yet</p>
+              <p className="text-xs mt-1">Your achievements will appear here</p>
             </div>
           </CardContent>
         </Card>
