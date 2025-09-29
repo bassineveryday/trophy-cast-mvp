@@ -21,6 +21,8 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 // Assets
 import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
 
+// Force refresh to clear currentClub reference cache
+
 const Homepage = () => {
   const { user, loading } = useAuth();
 
