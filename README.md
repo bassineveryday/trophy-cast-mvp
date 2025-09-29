@@ -1,17 +1,5 @@
 # Welcome to your Lovable project
 
-## 🚀 Bare-Bones Mode
-
-This app is currently running in **bare-bones MVP mode** with minimal routes for core functionality:
-
-- **Home** (`/`) - Welcome screen with quick actions
-- **Log Catch** (`/catch-logging`) - Voice-enabled catch logging
-- **Leaderboard** (`/leaderboard`) - Tournament standings
-- **My Catches** (`/my-catches`) - Personal catch history  
-- **Profile** (`/profile`) - User profile management
-
-To restore full functionality, re-add the removed routes and components from the git history.
-
 ## Project info
 
 **URL**: https://lovable.dev/projects/9d7cee6c-3c40-4703-a3f9-ef23dbe7f5ac
