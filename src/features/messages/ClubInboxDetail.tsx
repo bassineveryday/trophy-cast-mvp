@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { mockClubInbox } from "@/data/mockMessages";
+// Mock empty club inbox for demo cleanup
+const mockClubInbox: any[] = [];
 
 const ClubInboxDetail = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -10,8 +11,13 @@ const ClubInboxDetail = () => {
   const item = mockClubInbox.find(i => i.id === itemId);
 
   if (!item) {
-    navigate('/messages?tab=club');
-    return null;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center text-muted-foreground">
+          <p>No club messages yet.</p>
+        </div>
+      </div>
+    );
   }
 
   return (

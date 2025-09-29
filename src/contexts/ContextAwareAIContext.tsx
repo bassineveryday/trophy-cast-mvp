@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Tournament } from "@/types";
-import { mockTournaments } from "@/data/mockData";
+// Mock empty tournaments for demo cleanup
+const mockTournaments: any[] = [];
 
 export type AIContext = 
   | "home"
@@ -44,24 +45,22 @@ export const ContextAwareAIProvider: React.FC<{ children: React.ReactNode }> = (
     
     if (path === "/") {
       setContext("home");
-      setContextData({ nextTournament: mockTournaments[0] });
+      setContextData({ nextTournament: null });
     } else if (path.includes("/plans")) {
       setContext("plans");
-      setContextData({ tournaments: mockTournaments, nextPlan: mockTournaments[0] });
+      setContextData({ tournaments: [], nextPlan: null });
     } else if (path.includes("/tournament-plan") || path.includes("/adjusted-plan")) {
       setContext("plan-report");
-      setContextData({ currentPlan: mockTournaments[0] });
+      setContextData({ currentPlan: null });
     } else if (path.includes("/tournament/")) {
       setContext("tournament-detail");
-      const tournamentId = params.tournamentId;
-      const tournament = mockTournaments.find(t => t.id === tournamentId) || mockTournaments[0];
-      setContextData({ tournament, hasHistory: Math.random() > 0.5 });
+      setContextData({ tournament: null, hasHistory: false });
     } else if (path.includes("/calendar") || path.includes("/dashboard")) {
       setContext("calendar");
-      setContextData({ tournaments: mockTournaments });
+      setContextData({ tournaments: [] });
     } else if (path.includes("/profile") || path.includes("/my-catches") || path.includes("/badges")) {
       setContext("profile");
-      setContextData({ totalTournaments: 15, wins: 3, topLakes: ["Lake Guntersville", "Lake Murray"] });
+      setContextData({ totalTournaments: 0, wins: 0, topLakes: [] });
     } else {
       setContext("other");
       setContextData(null);

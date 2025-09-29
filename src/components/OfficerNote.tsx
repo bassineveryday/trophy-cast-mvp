@@ -19,7 +19,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { OfficerNote as OfficerNoteType } from "@/data/mockMessages";
+// OfficerNote type definition
+interface OfficerNoteType {
+  id: string;
+  title: string;
+  contextLine: string;
+  status: string;
+  priority: string;
+  target?: {
+    type: string;
+    current: number;
+    needed: number;
+  };
+  author: {
+    name: string;
+    role: string;
+  };
+  createdAt: string;
+  resolvedAt?: string;
+  dueDate?: string;
+  threadId?: string;
+  eventDetails?: {
+    tournamentId: string;
+  };
+  clubId?: string;
+}
 
 interface OfficerNoteProps {
   note: OfficerNoteType;
