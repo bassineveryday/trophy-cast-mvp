@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/layouts/MainLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { VoiceProvider } from "@/contexts/VoiceContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
 import DevHealthButton from "@/components/DevHealthButton";
@@ -31,27 +32,29 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Auth Route - standalone, no layout */}
-            <Route path="/auth" element={<AuthPage />} />
+        <VoiceProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Auth Route - standalone, no layout */}
+              <Route path="/auth" element={<AuthPage />} />
 
-            {/* Main Application Routes - wrapped with MainLayout */}
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Homepage />} />
-              <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
-              <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-              <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
-              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            </Route>
+              {/* Main Application Routes - wrapped with MainLayout */}
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<Homepage />} />
+                <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
+                <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+                <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
+                <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              </Route>
 
-            {/* Standalone Pages - no shared layout needed */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        <Toaster />
-        <DevHealthButton />
+              {/* Standalone Pages - no shared layout needed */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <Toaster />
+          <DevHealthButton />
+        </VoiceProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
