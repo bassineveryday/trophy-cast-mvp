@@ -4,17 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, Archive, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import OfficerNote from "./OfficerNote";
-// Mock empty notes for demo cleanup
-const mockOfficerNotes: any[] = [];
-
-interface OfficerNoteType {
-  id: string;
-  title: string;
-  contextLine: string;
-  status: string;
-  priority: string;
-  clubId?: string;
-}
+import { mockOfficerNotes, OfficerNote as OfficerNoteType } from "@/data/mockMessages";
 import { useToast } from "@/hooks/use-toast";
 
 interface OfficerNotesSectionProps {
@@ -59,11 +49,7 @@ const OfficerNotesSection = ({
   };
 
   if (displayNotes.length === 0 && resolvedNotes.length === 0) {
-    return (
-      <div className="text-center p-8 text-muted-foreground">
-        <p>No officer notes yet.</p>
-      </div>
-    );
+    return null;
   }
 
   return (

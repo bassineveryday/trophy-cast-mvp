@@ -5,10 +5,6 @@ export default {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
-    fontFamily: {
-      sans: ['Raleway', 'system-ui', 'sans-serif'],
-      heading: ['Montserrat', 'system-ui', 'sans-serif'],
-    },
     container: {
       center: true,
       padding: "2rem",

@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Mic } from "lucide-react";
-// Mock empty profiles for demo cleanup
-const mockPublicProfiles: any = {};
+import { mockPublicProfiles } from "@/data/enhancedMockData";
 import { useToast } from "@/hooks/use-toast";
 
 const MessageNew = () => {

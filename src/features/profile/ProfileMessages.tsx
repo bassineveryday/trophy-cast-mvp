@@ -15,6 +15,8 @@ import {
   Building2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { mockMessageThreads, mockMessages, quickReplies } from "@/data/mockMessages";
+import { mockPublicProfiles } from "@/data/enhancedMockData";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProfileMessagesProps {
@@ -32,13 +34,20 @@ const ProfileMessages = ({ anglerId }: ProfileMessagesProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recordingTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Empty state for demo cleanup
-  const anglerData = null;
-  const clubInboxMessages: any[] = [];
-  const anglerThreads: any[] = [];
-  const selectedThreadData = null;
-  const threadMessages: any[] = [];
-  const quickReplies: string[] = [];
+  // Get angler data for club inbox messages
+  const anglerData = anglerId ? mockPublicProfiles[anglerId] : null;
+  const clubInboxMessages = anglerData?.clubInboxMessages || [];
+
+  // Filter threads for this angler (in a real app, this would be based on user authentication)
+  const anglerThreads = mockMessageThreads.filter(thread => 
+    // For demo, show all threads as if they belong to the current angler
+    true
+  );
+
+  const selectedThreadData = selectedThread ? 
+    mockMessageThreads.find(t => t.threadId === selectedThread) : null;
+  const threadMessages = selectedThread ? 
+    mockMessages.filter(m => m.threadId === selectedThread) : [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

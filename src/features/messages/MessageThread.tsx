@@ -13,6 +13,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { mockMessageThreads, mockMessages, quickReplies } from "@/data/mockMessages";
 import { useToast } from "@/hooks/use-toast";
 
 const MessageThread = () => {
@@ -26,31 +27,16 @@ const MessageThread = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recordingTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Empty state for demo cleanup
-  const thread = null;
-  const threadMessages: any[] = [];
-  const quickReplies: string[] = [];
+  const thread = mockMessageThreads.find(t => t.threadId === threadId);
+  const threadMessages = mockMessages.filter(m => m.threadId === threadId);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [threadMessages]);
 
   if (!thread) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
-            <span className="text-2xl">💬</span>
-          </div>
-          <h2 className="text-lg font-medium mb-2">No messages yet</h2>
-          <p className="text-sm text-muted-foreground mb-4">Start a conversation to see messages here.</p>
-          <Button onClick={() => navigate('/messages')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Messages
-          </Button>
-        </div>
-      </div>
-    );
+    navigate('/messages');
+    return null;
   }
 
   const getCommonGroundChips = (commonGround: any) => {

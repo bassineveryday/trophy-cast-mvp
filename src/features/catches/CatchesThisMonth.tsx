@@ -8,22 +8,31 @@ import { ArrowLeft, Fish, Trophy, Calendar, MapPin, Clock, Target, Ruler, Messag
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+// Data
+import { monthlyMockCatches } from "@/data/enhancedMockData";
+
 const CatchesThisMonth = () => {
   const [activeTab, setActiveTab] = useState("all");
 
-  // Empty state data
-  const monthlyMockCatches: any[] = [];
-  const tournamentCatches: any[] = [];
-  const recreationalCatches: any[] = [];
+  // Separate catches by tournament vs non-tournament
+  const tournamentCatches = monthlyMockCatches.filter(catch_ => catch_.isTournament);
+  const recreationalCatches = monthlyMockCatches.filter(catch_ => !catch_.isTournament);
 
   const getCatchesToShow = () => {
-    return [];
+    switch (activeTab) {
+      case "tournament":
+        return tournamentCatches;
+      case "recreational":
+        return recreationalCatches;
+      default:
+        return monthlyMockCatches;
+    }
   };
 
   const catches = getCatchesToShow();
-  const totalWeight = 0;
-  const averageWeight = 0;
-  const biggestCatch = null;
+  const totalWeight = catches.reduce((sum, catch_) => sum + catch_.weight, 0);
+  const averageWeight = totalWeight / catches.length;
+  const biggestCatch = catches.reduce((max, catch_) => catch_.weight > max.weight ? catch_ : max, catches[0]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,10 +54,10 @@ const CatchesThisMonth = () => {
         >
           <h1 className="text-2xl md:text-3xl font-bold mb-2 flex items-center">
             <Fish className="w-8 h-8 mr-3" />
-            This Month's Catches
+            September 2024 Catches
           </h1>
           <p className="text-lg opacity-90">
-            No catches this month yet
+            {monthlyMockCatches.length} fish caught • {totalWeight.toFixed(1)} lbs total
           </p>
         </motion.div>
       </div>
@@ -58,21 +67,21 @@ const CatchesThisMonth = () => {
         <div className="grid grid-cols-3 gap-4 mb-6">
           <Card className="text-center">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-primary">0</div>
+              <div className="text-2xl font-bold text-primary">{catches.length}</div>
               <div className="text-sm text-muted-foreground">Total Fish</div>
             </CardContent>
           </Card>
           
           <Card className="text-center">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-fishing-green">--</div>
+              <div className="text-2xl font-bold text-fishing-green">{averageWeight.toFixed(1)}</div>
               <div className="text-sm text-muted-foreground">Avg Weight</div>
             </CardContent>
           </Card>
           
           <Card className="text-center">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-trophy-gold">--</div>
+              <div className="text-2xl font-bold text-trophy-gold">{biggestCatch?.weight || 0}</div>
               <div className="text-sm text-muted-foreground">Biggest</div>
             </CardContent>
           </Card>
@@ -83,28 +92,28 @@ const CatchesThisMonth = () => {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all" className="flex items-center space-x-2">
               <Fish className="w-4 h-4" />
-              <span>All (0)</span>
+              <span>All ({monthlyMockCatches.length})</span>
             </TabsTrigger>
             <TabsTrigger value="tournament" className="flex items-center space-x-2">
               <Trophy className="w-4 h-4" />
-              <span>Tournament (0)</span>
+              <span>Tournament ({tournamentCatches.length})</span>
             </TabsTrigger>
             <TabsTrigger value="recreational" className="flex items-center space-x-2">
               <Target className="w-4 h-4" />
-              <span>Fun Fishing (0)</span>
+              <span>Fun Fishing ({recreationalCatches.length})</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-4">
-            <CatchList catches={[]} />
+            <CatchList catches={monthlyMockCatches} />
           </TabsContent>
           
           <TabsContent value="tournament" className="mt-4">
-            <CatchList catches={[]} />
+            <CatchList catches={tournamentCatches} />
           </TabsContent>
           
           <TabsContent value="recreational" className="mt-4">
-            <CatchList catches={[]} />
+            <CatchList catches={recreationalCatches} />
           </TabsContent>
         </Tabs>
       </div>
@@ -114,7 +123,7 @@ const CatchesThisMonth = () => {
 
 // Catch List Component
 interface CatchListProps {
-  catches: any[];
+  catches: typeof monthlyMockCatches;
 }
 
 const CatchList = ({ catches }: CatchListProps) => {
@@ -234,8 +243,7 @@ const CatchList = ({ catches }: CatchListProps) => {
       {catches.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
           <Fish className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p>No catches this month yet.</p>
-          <p className="text-sm mt-2">Start logging your catches to track your monthly progress!</p>
+          <p>No catches in this category yet.</p>
         </div>
       )}
     </div>

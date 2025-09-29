@@ -85,13 +85,13 @@ const ClubDashboard = () => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <img src={alabamaLogo} alt="Bass Club" className="w-16 h-16 rounded-full" />
+          <img src={alabamaLogo} alt="Alabama Bass Nation" className="w-16 h-16 rounded-full" />
           <div>
-            <h2 className="text-xl font-bold">Your Bass Club</h2>
-            <p className="text-sm opacity-90">Tournament Organization</p>
+            <h2 className="text-xl font-bold">Alabama Bass Nation</h2>
+            <p className="text-sm opacity-90">Official State Chapter</p>
             <div className="flex items-center mt-1">
               <Users className="w-4 h-4 mr-1" />
-              <span className="text-sm">-- members</span>
+              <span className="text-sm">2,847 active members</span>
             </div>
           </div>
         </div>
@@ -338,7 +338,7 @@ const ClubDashboard = () => {
                 
                 <div className="text-center pt-4">
                   <Button variant="outline" size="sm">
-                    View All Members
+                    View All 2,847 Members
                   </Button>
                 </div>
               </CardContent>

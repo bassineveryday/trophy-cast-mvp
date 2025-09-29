@@ -16,22 +16,12 @@ import AuthPage from "@/features/auth/AuthPage";
 // Catch Management Features
 import CatchLogging from "@/features/catches/CatchLogging";
 import MyCatches from "@/features/catches/MyCatches";
-import LogCatch from "@/features/catches/LogCatch";
 
 // Profile Features
 import Profile from "@/features/profile/Profile";
-import MyProfile from "@/features/profile/MyProfile";
-
-// Tournament Features
-import NewTournament from "@/features/tournaments/NewTournament";
-import MyTournaments from "@/features/tournaments/MyTournaments";
-import TournamentLeaderboard from "@/features/leaderboard/TournamentLeaderboard";
 
 // Leaderboard & Performance Features
 import Leaderboard from "@/features/leaderboard/Leaderboard";
-
-// Admin Features
-import CSVImport from "@/features/admin/CSVImport";
 
 // Shared Utility Pages
 import NotFound from "@/shared/pages/NotFound";
@@ -52,24 +42,10 @@ const App = () => (
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Homepage />} />
                 <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                
-                {/* Catch Management */}
                 <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
-                <Route path="catch/log" element={<ProtectedRoute><LogCatch /></ProtectedRoute>} />
-                <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
-                
-                {/* Tournament Management */}
-                <Route path="host/new-tournament" element={<ProtectedRoute><NewTournament /></ProtectedRoute>} />
-                <Route path="host/my-tournaments" element={<ProtectedRoute><MyTournaments /></ProtectedRoute>} />
-                <Route path="leaderboard/:tournamentId" element={<ProtectedRoute><TournamentLeaderboard /></ProtectedRoute>} />
-                
-                {/* Profile & Leaderboard */}
                 <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+                <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="profile/me" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
-                
-                {/* Admin */}
-                <Route path="admin/import-csv" element={<ProtectedRoute><CSVImport /></ProtectedRoute>} />
               </Route>
 
               {/* Standalone Pages - no shared layout needed */}
