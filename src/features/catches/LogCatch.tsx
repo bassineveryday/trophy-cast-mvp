@@ -245,14 +245,13 @@ export default function LogCatch() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tournament (Optional)</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select tournament" />
+                            <SelectValue placeholder="Select tournament (optional)" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="">No tournament</SelectItem>
                           {tournaments.map((t) => (
                             <SelectItem key={t.id} value={t.id}>
                               {t.name} ({new Date(t.date).toLocaleDateString()})
