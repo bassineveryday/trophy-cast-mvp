@@ -1559,65 +1559,7 @@ export type Database = {
       }
     }
     Views: {
-      member_import_staging_summary: {
-        Row: {
-          club_role: string | null
-          created_at: string | null
-          email_status: string | null
-          has_city: boolean | null
-          has_emergency_contact: boolean | null
-          has_home_state: boolean | null
-          id: string | null
-          import_log_id: string | null
-          is_duplicate: boolean | null
-          is_valid: boolean | null
-          name_status: string | null
-          phone_status: string | null
-          row_number: number | null
-          validation_errors: Json | null
-        }
-        Insert: {
-          club_role?: string | null
-          created_at?: string | null
-          email_status?: never
-          has_city?: never
-          has_emergency_contact?: never
-          has_home_state?: never
-          id?: string | null
-          import_log_id?: string | null
-          is_duplicate?: boolean | null
-          is_valid?: boolean | null
-          name_status?: never
-          phone_status?: never
-          row_number?: number | null
-          validation_errors?: Json | null
-        }
-        Update: {
-          club_role?: string | null
-          created_at?: string | null
-          email_status?: never
-          has_city?: never
-          has_emergency_contact?: never
-          has_home_state?: never
-          id?: string | null
-          import_log_id?: string | null
-          is_duplicate?: boolean | null
-          is_valid?: boolean | null
-          name_status?: never
-          phone_status?: never
-          row_number?: number | null
-          validation_errors?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "member_import_staging_import_log_id_fkey"
-            columns: ["import_log_id"]
-            isOneToOne: false
-            referencedRelation: "member_import_logs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       check_duplicate_email: {
