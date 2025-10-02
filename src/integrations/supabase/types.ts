@@ -1566,6 +1566,10 @@ export type Database = {
         Args: { email: string }
         Returns: boolean
       }
+      cleanup_old_staging_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_club_member_count: {
         Args: { club_uuid: string }
         Returns: number
