@@ -1,5 +1,13 @@
 import React, { useCallback } from "react";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { Check, ChevronDown, User, Fish, Users } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 function goHomeWithDemo(value: string | null) {
   const url = new URL(window.location.origin + "/");
@@ -25,66 +33,85 @@ export default function DemoSwitcher() {
     goHomeWithDemo("president");
   }, []);
 
-  // Keep the switcher subtle; only show a small pill in top-right
+  // Display label based on current mode
+  const displayLabel = !enabled 
+    ? "Your Profile" 
+    : role === "jake" 
+    ? "Viewing as: Jake" 
+    : "Viewing as: President";
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        right: 12,
-        top: 80,
-        zIndex: 9999,
-        display: "flex",
-        gap: 8,
-        padding: 8,
-        borderRadius: 12,
-        border: "1px solid rgba(0,0,0,0.12)",
-        background: "rgba(255,255,255,0.9)",
-        backdropFilter: "blur(6px)",
-      }}
-      aria-label="Demo mode switcher"
-    >
-      <button
-        onClick={setOff}
-        title="Demo Off"
-        style={{
-          padding: "6px 10px",
-          borderRadius: 8,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: !enabled ? "#eee" : "transparent",
-          fontSize: 12,
-          cursor: "pointer",
-        }}
-      >
-        Off
-      </button>
-      <button
-        onClick={setJake}
-        title="Jake (Demo Angler)"
-        style={{
-          padding: "6px 10px",
-          borderRadius: 8,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: role === "jake" ? "#eee" : "transparent",
-          fontSize: 12,
-          cursor: "pointer",
-        }}
-      >
-        Jake
-      </button>
-      <button
-        onClick={setPres}
-        title="Club President (Demo)"
-        style={{
-          padding: "6px 10px",
-          borderRadius: 8,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: role === "president" ? "#eee" : "transparent",
-          fontSize: 12,
-          cursor: "pointer",
-        }}
-      >
-        President
-      </button>
-    </div>
+    <>
+      {/* Demo Mode Banner - only shown when in demo mode */}
+      {enabled && (
+        <div 
+          className="fixed top-0 left-0 right-0 z-50 bg-yellow-50 border-b-2 border-yellow-400 h-10 flex items-center justify-center cursor-pointer hover:bg-yellow-100 transition-colors"
+          onClick={setOff}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && setOff()}
+        >
+          <p className="text-sm font-medium text-yellow-900 flex items-center gap-2">
+            <span>👁️</span>
+            <span className="hidden sm:inline">
+              Viewing as {role === "jake" ? "Jake" : "President"} (Demo Mode)
+            </span>
+            <span className="sm:hidden">
+              Demo: {role === "jake" ? "Jake" : "President"}
+            </span>
+            <span className="hidden sm:inline">- Click to return to Your Profile</span>
+            <span className="sm:hidden">- Tap to exit</span>
+          </p>
+        </div>
+      )}
+
+      {/* Profile Switcher Dropdown */}
+      <div className="fixed top-20 right-5 z-[9999]">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="bg-background/95 backdrop-blur-sm border-border shadow-md hover:bg-accent min-w-[140px] sm:min-w-[180px]"
+            >
+              <User className="h-4 w-4 mr-2" />
+              <span className="text-xs sm:text-sm">{displayLabel}</span>
+              <ChevronDown className="h-4 w-4 ml-2" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent 
+            align="end" 
+            className="w-[200px] sm:w-[240px] bg-background/95 backdrop-blur-sm border-border shadow-lg"
+          >
+            <DropdownMenuItem 
+              onClick={setOff}
+              className="cursor-pointer hover:bg-accent"
+            >
+              <User className="h-4 w-4 mr-2" />
+              <span className="flex-1">Your Profile</span>
+              {!enabled && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              onClick={setJake}
+              className="cursor-pointer hover:bg-accent"
+            >
+              <Fish className="h-4 w-4 mr-2" />
+              <span className="flex-1">Jake (Active Angler Demo)</span>
+              {role === "jake" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              onClick={setPres}
+              className="cursor-pointer hover:bg-accent"
+            >
+              <Users className="h-4 w-4 mr-2" />
+              <span className="flex-1">President (Club Admin Demo)</span>
+              {role === "president" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </>
   );
 }
