@@ -23,7 +23,6 @@ import MyCatches from "@/features/catches/MyCatches";
 import Profile from "@/features/profile/Profile";
 import ProfilePage from "@/features/profile/ProfilePage";
 import TrophyRoomPage from "@/components/profile/TrophyRoomPage";
-import { EditProfile } from "@/features/profile/EditProfile";
 
 // Trophy Room
 import TrophyRoom from "@/features/trophies/TrophyRoom";
@@ -90,7 +89,6 @@ const App = () => (
                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="profile/trophy-room" element={<ProtectedRoute><TrophyRoomPage /></ProtectedRoute>} />
                 <Route path="profile/:username" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                <Route path="edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
                 
                 {/* Club Routes */}
                 <Route path="club/dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
