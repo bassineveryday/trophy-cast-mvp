@@ -169,15 +169,102 @@ const Homepage = () => {
       {/* AI Status Bar */}
       <AIStatusBar />
 
-      {/* Hero Section */}
-      <div className="relative bg-gradient-hero text-white px-4 py-8 overflow-hidden">
+            {/* Hero Section */}
+      <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
         {/* Logo - Top Left */}
         <div className="absolute top-4 left-4 z-20">
           <div className="flex items-center space-x-2">
-            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-12 h-12 object-contain" />
-            <div className="text-trophy-gold font-bold text-lg tracking-wide">TrophyCast</div>
+            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-10 h-10 object-contain" />
+            <div className="text-trophy-gold font-bold text-base tracking-wide">TrophyCast</div>
           </div>
         </div>
+
+        {/* Decorative Logo Background */}
+        <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4">
+          <img src={bassTrophyLogo} alt="" className="w-32 h-32 object-contain transform rotate-12" />
+        </div>
+
+        {/* Notification Bell - Top Right */}
+        <div className="absolute top-4 right-4 z-20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 relative">
+                <Bell className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80 max-h-96 overflow-y-auto" align="end">
+              <div className="p-2 font-semibold text-sm border-b">Recent Notifications</div>
+              <div className="p-8 text-center text-muted-foreground">
+                <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No notifications yet</p>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="relative z-10 pt-12">
+          {/* Welcome Message - Centered */}
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-bold mb-1">
+              Welcome back, {greetName}!
+            </h2>
+            <p className="text-sm opacity-90">Ready to fish?</p>
+          </div>
+
+          {/* Main tagline - Centered */}
+          <div className="text-center mb-6">
+            <motion.h1 
+              className="text-2xl font-bold mb-2" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Where Every Cast Counts
+            </motion.h1>
+            <motion.p 
+              className="text-sm opacity-90 mb-4" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              AI-powered tournament fishing companion
+            </motion.p>
+          </div>
+
+          {/* Your Profile Button - Below tagline, centered */}
+          <div className="flex justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="bg-white/10 hover:bg-white/20 text-white border-white/30"
+                >
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
+                      <span className="text-xs font-bold">{greetName[0].toUpperCase()}</span>
+                    </div>
+                    <span>Your Profile</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48">
+                <DropdownMenuItem onClick={() => window.location.href = '/profile'}>
+                  View Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.location.href = '/settings'}>
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => window.location.href = '/auth'}>
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
+
 
         {/* Decorative Logo Background */}
         <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4">
