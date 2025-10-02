@@ -1,4 +1,87 @@
 export type DemoRole = "off" | "jake" | "president";
+// src/demo/demoData.ts
+
+// ===== 1. ADD JAKE'S CLUBS HERE (at the top, before demoUsers) =====
+const jakeClub1 = {
+  id: "club-alabama-bass-12",
+  name: "Alabama Bass Chapter 12",
+  location: "Birmingham, AL",
+  memberCount: 47,
+  establishedYear: 2018,
+  memberRole: "member",
+};
+
+const jakeClub2 = {
+  id: "club-tennessee-valley",
+  name: "Tennessee Valley Anglers",
+  location: "Huntsville, AL",
+  memberCount: 63,
+  establishedYear: 2015,
+  memberRole: "member",
+};
+
+// ===== 2. ADD JAKE'S STATS HERE =====
+const jakeStats = {
+  totalCatches: 87,
+  biggestBass: 6.8,
+  tournamentWins: 2,
+  topFinishes: 8,
+  yearsActive: 3,
+  avgCatchWeight: 3.2,
+};
+
+// ===== 3. ADD JAKE'S CATCHES HERE =====
+const jakeCatches = [
+  {
+    id: "catch-jake-1",
+    species: "Largemouth Bass",
+    weight: 5.4,
+    length: 22.5,
+    date: "2025-09-28",
+    location: "Lake Guntersville, AL",
+    photo: "/images/demo/bass-1.jpg",
+    club: "club-alabama-bass-12",
+  },
+  {
+    id: "catch-jake-2",
+    species: "Largemouth Bass",
+    weight: 4.2,
+    length: 19.8,
+    date: "2025-09-15",
+    location: "Wheeler Lake, AL",
+    photo: "/images/demo/bass-2.jpg",
+    club: "club-tennessee-valley",
+  },
+  {
+    id: "catch-jake-3",
+    species: "Smallmouth Bass",
+    weight: 3.9,
+    length: 18.2,
+    date: "2025-08-30",
+    location: "Pickwick Lake, TN",
+    photo: "/images/demo/bass-3.jpg",
+    club: "club-tennessee-valley",
+  },
+];
+
+// ===== 4. FIND YOUR EXISTING demoUsers OBJECT AND UPDATE JAKE =====
+export const demoUsers = {
+  jake: {
+    id: "user-jake-demo",
+    username: "jake_angler",
+    email: "jake@example.com",
+    firstName: "Jake",
+    lastName: "Wilson",
+    avatar: "/images/demo/jake-avatar.jpg",
+    clubs: [jakeClub1, jakeClub2], // ← ADD THIS LINE
+    stats: jakeStats,                // ← ADD THIS LINE
+    recentCatches: jakeCatches,      // ← ADD THIS LINE
+    isAdmin: false,                   // ← ADD THIS LINE
+  },
+  mike: {
+    // Mike's existing data stays unchanged
+  },
+};
 
 export const demoUsers = {
   jake: {
