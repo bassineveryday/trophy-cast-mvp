@@ -14,7 +14,6 @@ export const demoUsers = {
     avatar_url: null,
   },
 } as const;
-
 // JAKE'S DEMO PROFILE DATA
 export const jakeProfile = {
   "id": "demo-jake",
