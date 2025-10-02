@@ -170,53 +170,71 @@ const Homepage = () => {
       <AIStatusBar />
 
       {/* Hero Section */}
-      <div className="relative bg-gradient-hero text-white px-4 py-12 overflow-hidden">
-        {/* Logo - Centered Top */}
-        <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center p-3 shadow-lg">
-            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-full h-full object-contain" />
+      <div className="relative bg-gradient-hero text-white px-4 py-8 overflow-hidden">
+        {/* Logo - Top Left */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="flex items-center space-x-2">
+            <img src={bassTrophyLogo} alt="TrophyCast Logo" className="w-12 h-12 object-contain" />
+            <div className="text-trophy-gold font-bold text-lg tracking-wide">TrophyCast</div>
           </div>
         </div>
 
         {/* Decorative Logo Background */}
-        <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4 pointer-events-none">
+        <div className="absolute top-0 right-0 opacity-10 -mr-8 -mt-4">
           <img src={bassTrophyLogo} alt="" className="w-32 h-32 object-contain transform rotate-12" />
         </div>
 
-        {/* Content Container */}
-        <div className="relative z-10 max-w-lg mx-auto text-center space-y-6">
-          {/* Welcome Message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-2xl font-bold mb-2">
-              Welcome back, {greetName}!
-            </h2>
-            <p className="text-lg opacity-90">Ready to fish?</p>
-          </motion.div>
+        {/* Notification Bell - Top Right */}
+        <div className="absolute top-4 right-4 z-20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 relative">
+                <Bell className="w-6 h-6" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80 max-h-96 overflow-y-auto" align="end">
+              <div className="p-2 font-semibold text-sm border-b">Recent Notifications</div>
+              <div className="p-8 text-center text-muted-foreground">
+                <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No notifications yet</p>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
-          {/* Main Tagline */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <div className="relative z-10">
+          {/* User greeting */}
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-white"></div>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold cursor-pointer hover:opacity-80 transition-opacity" onClick={() => window.location.href = '/profile'}>
+                Welcome back, {greetName}!
+              </h2>
+              <p className="text-sm opacity-90 mb-2">Ready to fish?</p>
+            </div>
+          </div>
+
+          {/* Main tagline */}
+          <div className="text-center">
+            <motion.h1 
+              className="text-3xl font-bold mb-2" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               Where Every Cast Counts
-            </h1>
-          </motion.div>
-
-          {/* Subtitle */}
-          <motion.p 
-            className="text-lg opacity-90" 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            AI-powered tournament fishing companion
-          </motion.p>
+            </motion.h1>
+            <motion.p 
+              className="text-base opacity-90 mb-6" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              AI-powered tournament fishing companion
+            </motion.p>
+          </div>
         </div>
       </div>
 
