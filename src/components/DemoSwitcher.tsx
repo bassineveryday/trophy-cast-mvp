@@ -25,13 +25,13 @@ export default function DemoSwitcher() {
     goHomeWithDemo("president");
   }, []);
 
-  // Keep the switcher subtle; only show a small pill in bottom-right
+  // Keep the switcher subtle; only show a small pill in top-right
   return (
     <div
       style={{
         position: "fixed",
         right: 12,
-        bottom: 12,
+        top: 80,
         zIndex: 9999,
         display: "flex",
         gap: 8,
