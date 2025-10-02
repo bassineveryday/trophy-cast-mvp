@@ -44,6 +44,7 @@ import TournamentDetail from "@/features/tournaments/TournamentDetailPlaceholder
 // Club Features
 import ClubDashboard from "@/features/clubs/ClubDashboardPlaceholder";
 import ClubFeed from "@/features/clubs/ClubFeedPlaceholder";
+import ClubDetailPage from "@/components/club/ClubDetailPage";
 
 // Community Features
 import CommunityDock from "@/features/community/CommunityDock";
@@ -86,6 +87,7 @@ const App = () => (
                 {/* Club Routes */}
                 <Route path="club/dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
                 <Route path="club/feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+                <Route path="clubs/:clubId" element={<ProtectedRoute><ClubDetailPage /></ProtectedRoute>} />
                 
                 {/* Community Route */}
                 <Route path="community" element={<ProtectedRoute><CommunityDock /></ProtectedRoute>} />
