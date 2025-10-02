@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -442,7 +443,7 @@ const Plans = () => {
   const totalPlans = organizedPlans.active.length + organizedPlans.upcoming.length + organizedPlans.past.length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="bg-gradient-to-r from-water-blue-dark to-fishing-green-dark text-white p-4">
         <div className="flex items-center justify-between mb-4">
@@ -648,6 +649,8 @@ const Plans = () => {
       
       {/* Context-Aware AI Button */}
       <ContextAwareFloatingButton />
+      
+      <BottomNavigation />
     </div>
   );
 };

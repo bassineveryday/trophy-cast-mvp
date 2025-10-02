@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/PageHeader";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 const CatchLogging = () => {
   const [weight, setWeight] = useState("");
@@ -147,7 +148,7 @@ const CatchLogging = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <PageHeader title="Log Catch" />
 
       <div className="p-4 space-y-6">
@@ -373,6 +374,8 @@ const CatchLogging = () => {
           </p>
         </div>
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };

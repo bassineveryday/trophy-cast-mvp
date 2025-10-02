@@ -7,6 +7,7 @@ import { Trophy, Award, Star, Sparkles, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 import { MEMBER_PROFILES } from "@/data/memberProfiles";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 const TrophyRoomPage = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const TrophyRoomPage = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center pb-20">
         <div className="text-center">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
           <h2 className="text-xl font-bold mb-2">Trophy Room</h2>
@@ -49,7 +50,7 @@ const TrophyRoomPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
         <Button
@@ -204,6 +205,8 @@ const TrophyRoomPage = () => {
           </Button>
         </div>
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };

@@ -538,8 +538,106 @@ const Homepage = () => {
       )}
       <div className="px-4 mb-6">
         <Card>
-          <CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />Followed Anglers</div><Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow other anglers to see their activity" })}>Browse</Button></CardTitle></CardHeader>
-          <CardContent><div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No followed anglers yet</p><p className="text-xs mt-1">Follow other anglers to see their catches and updates</p></div></CardContent>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />
+                {role === "off" ? "Suggested Anglers" : "Following"}
+              </div>
+              {role === "president" && (
+                <Button variant="outline" size="sm" onClick={() => navigate("/profile/following")}>
+                  View All (11)
+                </Button>
+              )}
+              {role === "off" && (
+                <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Browse all anglers" })}>
+                  Browse
+                </Button>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {role === "off" ? (
+              <div className="space-y-3">
+                {/* Suggested Anglers for Default Users */}
+                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">MJ</div>
+                    <div>
+                      <p className="font-semibold text-sm">Mike Johnson</p>
+                      <p className="text-xs text-muted-foreground">President, ABC12</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
+                </div>
+                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-fishing-green/10 flex items-center justify-center text-fishing-green font-semibold text-sm">JW</div>
+                    <div>
+                      <p className="font-semibold text-sm">Jake Wilson</p>
+                      <p className="text-xs text-muted-foreground">Member, ABC12 + TVA</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
+                </div>
+                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-full bg-water-blue/10 flex items-center justify-center text-water-blue font-semibold text-sm">JS</div>
+                    <div>
+                      <p className="font-semibold text-sm">John Smith</p>
+                      <p className="text-xs text-muted-foreground">President, TVA</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
+                </div>
+              </div>
+            ) : role === "jake" ? (
+              <div className="space-y-3">
+                {/* Jake's Followed Anglers */}
+                {[
+                  { name: "Mike Johnson", role: "President, ABC12", initials: "MJ", color: "primary" },
+                  { name: "Tom Wilson", role: "VP, ABC12", initials: "TW", color: "water-blue" },
+                  { name: "Sarah Martinez", role: "Secretary, ABC12", initials: "SM", color: "fishing-green" },
+                  { name: "John Smith", role: "President, TVA", initials: "JS", color: "trophy-gold" },
+                  { name: "Amy Garcia", role: "VP, TVA", initials: "AG", color: "primary" }
+                ].map((angler, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 rounded-full bg-${angler.color}/10 flex items-center justify-center text-${angler.color} font-semibold text-sm`}>{angler.initials}</div>
+                      <div>
+                        <p className="font-semibold text-sm">{angler.name}</p>
+                        <p className="text-xs text-muted-foreground">{angler.role}</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => toast({ title: "Coming Soon", description: "Unfollow feature" })}>Unfollow</Button>
+                  </div>
+                ))}
+              </div>
+            ) : role === "president" ? (
+              <div className="space-y-3">
+                {/* Mike's First 5 Followed Anglers */}
+                {[
+                  { name: "Jake Wilson", role: "Member, ABC12 + TVA", initials: "JW", color: "fishing-green" },
+                  { name: "Tom Wilson", role: "VP, ABC12", initials: "TW", color: "water-blue" },
+                  { name: "Sarah Martinez", role: "Secretary, ABC12", initials: "SM", color: "fishing-green" },
+                  { name: "David Brown", role: "TD, ABC12", initials: "DB", color: "primary" },
+                  { name: "Jennifer Lee", role: "Member, ABC12", initials: "JL", color: "trophy-gold" }
+                ].map((angler, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 rounded-full bg-${angler.color}/10 flex items-center justify-center text-${angler.color} font-semibold text-sm`}>{angler.initials}</div>
+                      <div>
+                        <p className="font-semibold text-sm">{angler.name}</p>
+                        <p className="text-xs text-muted-foreground">{angler.role}</p>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => toast({ title: "Coming Soon", description: "Unfollow feature" })}>Unfollow</Button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No followed anglers yet</p><p className="text-xs mt-1">Follow other anglers to see their catches and updates</p></div>
+            )}
+          </CardContent>
         </Card>
       </div>
       <div className="px-4 mb-6">

@@ -8,6 +8,7 @@ import { Trophy, Fish, Target, Award, MapPin, MessageSquare, ArrowLeft, Calendar
 import { useDemoMode } from "@/contexts/DemoModeContext";
 import { MEMBER_PROFILES } from "@/data/memberProfiles";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -21,7 +22,7 @@ const ProfilePage = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center pb-20">
         <div className="text-center">
           <h2 className="text-xl font-bold mb-2">Profile not found</h2>
           <p className="text-muted-foreground mb-4">Enable demo mode or select a valid profile</p>
@@ -36,7 +37,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
         <Button
@@ -337,6 +338,8 @@ const ProfilePage = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };

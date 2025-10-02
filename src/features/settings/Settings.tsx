@@ -4,10 +4,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Settings as SettingsIcon, Bell, Lock, User, Palette } from "lucide-react";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 export default function Settings() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <PageHeader title="Settings" />
       
       <div className="p-4 space-y-6">
@@ -124,6 +125,8 @@ export default function Settings() {
           </CardContent>
         </Card>
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 }

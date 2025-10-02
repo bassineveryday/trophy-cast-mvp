@@ -19,6 +19,7 @@ import { useMemo, useState } from "react";
 import UniversalAvatar from "@/components/UniversalAvatar";
 import { PageHeader } from "@/components/PageHeader";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 /* ------------ Types ------------ */
 type ChangeDir = "up" | "down" | "flat";
@@ -129,7 +130,7 @@ const Leaderboard = () => {
   const currentTournamentData = tournamentLeaderboards[selectedTournament as keyof typeof tournamentLeaderboards];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <PageHeader title="Leaderboard" />
 
       {/* Body */}
@@ -500,6 +501,8 @@ const Leaderboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };

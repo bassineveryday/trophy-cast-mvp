@@ -6,14 +6,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, Fish, Target, MapPin, Clock, Save, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CalendarIcon, Fish, Target, MapPin, Clock, Save, Loader2, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 interface TripPlan {
   lures: Array<{ name: string; description: string }>;
@@ -23,6 +24,7 @@ interface TripPlan {
 }
 
 const AICoachPreTrip = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { enabled: isDemoMode } = useDemoMode();
   const [waterBody, setWaterBody] = useState("");
@@ -179,10 +181,19 @@ const AICoachPreTrip = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-water-blue-dark to-fishing-green-dark text-white p-6">
-        <div className="max-w-4xl mx-auto">
+      <div className="bg-gradient-to-r from-water-blue-dark to-fishing-green-dark text-white p-6 relative">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute top-4 left-4 text-white hover:bg-white/20"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+        <div className="max-w-4xl mx-auto pt-8">
           <h1 className="text-2xl font-bold mb-2">Pre-Trip Planning</h1>
           <p>Get AI-powered fishing plans tailored to your trip</p>
         </div>
@@ -409,6 +420,8 @@ const AICoachPreTrip = () => {
           </div>
         )}
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };
