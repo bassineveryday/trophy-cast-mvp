@@ -16,7 +16,6 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import AIStatusBar from "@/components/AIStatusBar";
 import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
-import { BottomNavigation } from "@/components/BottomNavigation";
 import DemoSwitcher from "@/components/DemoSwitcher";
 
 // Assets
@@ -363,9 +362,6 @@ const Homepage = () => {
             )}
           </div>
         </div>
-
-        {/* Navigation */}
-        <BottomNavigation />
       </div>
 
       {/* Recent Activity */}

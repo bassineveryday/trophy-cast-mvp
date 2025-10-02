@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { 
   Camera, 
-  ChevronLeft, 
   Clock,
   Fish,
   Ruler,
@@ -17,8 +16,8 @@ import {
   Trash2,
   Mic
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { PageHeader } from "@/components/PageHeader";
 
 const CatchLogging = () => {
   const [weight, setWeight] = useState("");
@@ -149,27 +148,7 @@ const CatchLogging = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-success to-fishing-green-light text-white p-4">
-        <div className="flex items-center mb-4">
-          <Link to="/">
-            <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <h1 className="text-xl font-bold ml-2">Log Your Catch</h1>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">Smith Lake Championship</h2>
-            <p className="text-sm opacity-90">Tournament in Progress</p>
-          </div>
-          <Badge className="bg-white text-success font-semibold">
-            LIVE
-          </Badge>
-        </div>
-      </div>
+      <PageHeader title="Log Catch" />
 
       <div className="p-4 space-y-6">
         {/* Voice Capture Interface */}

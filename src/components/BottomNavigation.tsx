@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Trophy, Award, Fish, Brain } from "lucide-react";
+import { Home, Target, Award, Fish, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const BottomNavigation = () => {
@@ -7,10 +7,10 @@ export const BottomNavigation = () => {
 
   const navItems = [
     { to: "/", icon: Home, label: "Home", color: "water-blue" },
-    { to: "/leaderboard", icon: Trophy, label: "Leaderboard", color: "trophy-gold" },
-    { to: "/ai-coach", icon: Brain, label: "AI Coach", featured: true, color: "trophy-gold" },
-    { to: "/catch-logging", icon: Fish, label: "Log Catch", color: "fishing-green" },
-    { to: "/trophy-room", icon: Award, label: "Trophy Room", color: "amber" },
+    { to: "/tournaments/dashboard", icon: Target, label: "Tournaments", color: "orange" },
+    { to: "/ai-coach", icon: Brain, label: "Coach", featured: true, color: "trophy-gold" },
+    { to: "/catch-logging", icon: Fish, label: "Catch", color: "fishing-green" },
+    { to: "/trophy-room", icon: Award, label: "Trophies", color: "amber" },
   ];
 
   return (
@@ -29,10 +29,12 @@ export const BottomNavigation = () => {
               <div className={cn(
                 "p-2 rounded-xl transition-all duration-200",
                 location.pathname === to && color === "water-blue" && "bg-[hsl(var(--water-blue))]/10 text-[hsl(var(--water-blue))]",
+                location.pathname === to && color === "orange" && "bg-orange-500/10 text-orange-500",
                 location.pathname === to && color === "trophy-gold" && "bg-[hsl(var(--trophy-gold))]/10 text-[hsl(var(--trophy-gold))]",
                 location.pathname === to && color === "fishing-green" && "bg-[hsl(var(--fishing-green))]/10 text-[hsl(var(--fishing-green))]",
                 location.pathname === to && color === "amber" && "bg-amber-500/10 text-amber-500",
                 location.pathname !== to && color === "water-blue" && "text-[hsl(var(--water-blue))]/70 hover:text-[hsl(var(--water-blue))] hover:bg-[hsl(var(--water-blue))]/5",
+                location.pathname !== to && color === "orange" && "text-orange-500/70 hover:text-orange-500 hover:bg-orange-500/5",
                 location.pathname !== to && color === "trophy-gold" && "text-[hsl(var(--trophy-gold))]/70 hover:text-[hsl(var(--trophy-gold))] hover:bg-[hsl(var(--trophy-gold))]/5",
                 location.pathname !== to && color === "fishing-green" && "text-[hsl(var(--fishing-green))]/70 hover:text-[hsl(var(--fishing-green))] hover:bg-[hsl(var(--fishing-green))]/5",
                 location.pathname !== to && color === "amber" && "text-amber-500/70 hover:text-amber-500 hover:bg-amber-500/5",
@@ -43,10 +45,12 @@ export const BottomNavigation = () => {
               <span className={cn(
                 "text-xs font-medium mt-1",
                 location.pathname === to && color === "water-blue" && "text-[hsl(var(--water-blue))]",
+                location.pathname === to && color === "orange" && "text-orange-500",
                 location.pathname === to && color === "trophy-gold" && "text-[hsl(var(--trophy-gold))]",
                 location.pathname === to && color === "fishing-green" && "text-[hsl(var(--fishing-green))]",
                 location.pathname === to && color === "amber" && "text-amber-500",
                 location.pathname !== to && color === "water-blue" && "text-[hsl(var(--water-blue))]/70",
+                location.pathname !== to && color === "orange" && "text-orange-500/70",
                 location.pathname !== to && color === "trophy-gold" && "text-[hsl(var(--trophy-gold))]/70",
                 location.pathname !== to && color === "fishing-green" && "text-[hsl(var(--fishing-green))]/70",
                 location.pathname !== to && color === "amber" && "text-amber-500/70"

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home } from "lucide-react";
+import { Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +13,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AvatarUpload } from "@/components/AvatarUpload";
 import { TechniqueIcon } from "@/components/TechniqueIcon";
 import { ProfileMicroCopy } from "@/components/ProfileMicroCopy";
+import { PageHeader } from "@/components/PageHeader";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -47,16 +48,10 @@ const Profile = () => {
     );
   }
   return (
-    <div className="min-h-screen bg-background p-4">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="mr-2">
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-        </Link>
-        <h1 className="text-2xl font-bold">Profile</h1>
-      </div>
+    <div className="min-h-screen bg-background">
+      <PageHeader title="Your Profile" />
+      
+      <div className="p-4">
 
       {/* Enhanced User Profile Header */}
       <Card className="mb-6">
@@ -323,6 +318,7 @@ const Profile = () => {
         currentTechniques={profile.signature_techniques || []}
         onUpdate={handleTechniquesUpdate}
       />
+      </div>
     </div>
   );
 };

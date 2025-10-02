@@ -8,7 +8,6 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  ChevronLeft,
   Crown,
   Medal,
   Award,
@@ -17,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import UniversalAvatar from "@/components/UniversalAvatar";
+import { PageHeader } from "@/components/PageHeader";
 
 /* ------------ Types ------------ */
 type ChangeDir = "up" | "down" | "flat";
@@ -90,31 +90,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-trophy-gold to-trophy-gold-light p-4 text-primary-foreground">
-        <div className="mb-4 flex items-center">
-          <Link to="/" aria-label="Back to Home">
-            <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/10">
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <h1 className="ml-2 text-xl font-bold">Leaderboards</h1>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">{eventTitle}</h2>
-            <p className="text-sm opacity-90">Live Tournament Results</p>
-          </div>
-          <Badge
-            className="bg-success text-success-foreground"
-            aria-live="polite"
-            aria-label="Live updates active"
-          >
-            LIVE
-          </Badge>
-        </div>
-      </div>
+      <PageHeader title="Leaderboard" />
 
       {/* Body */}
       <div className="p-4">

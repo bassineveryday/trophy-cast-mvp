@@ -19,8 +19,14 @@ import AuthPage from "@/features/auth/AuthPage";
 import CatchLogging from "@/features/catches/CatchLogging";
 import MyCatches from "@/features/catches/MyCatches";
 
-// Profile Features
+// Profile & Settings Features
 import Profile from "@/features/profile/Profile";
+
+// Trophy Room
+import TrophyRoom from "@/features/trophies/TrophyRoom";
+
+// Settings
+import Settings from "@/features/settings/Settings";
 
 // Leaderboard & Performance Features
 import Leaderboard from "@/features/leaderboard/Leaderboard";
@@ -70,6 +76,8 @@ const App = () => (
                 <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                 <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                <Route path="trophy-room" element={<ProtectedRoute><TrophyRoom /></ProtectedRoute>} />
+                <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                 
                 {/* Tournament Routes */}
                 <Route path="tournaments/dashboard" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
