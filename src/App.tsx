@@ -10,7 +10,6 @@ import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
-import DevHealthButton from "@/components/DevHealthButton";
 import DemoSwitcher from "@/components/DemoSwitcher";
 
 // Auth Feature
@@ -100,7 +99,6 @@ const App = () => (
               </ContextAwareAIProvider>
             </BrowserRouter>
             <Toaster />
-            <DevHealthButton />
             <DemoSwitcher />
           </VoiceProvider>
         </AuthProvider>
