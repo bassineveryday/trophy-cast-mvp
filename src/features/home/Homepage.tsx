@@ -10,21 +10,47 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDemoMode } from "@/contexts/DemoModeContext";
 
 // Components
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import AIStatusBar from "@/components/AIStatusBar";
 import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import DemoSwitcher from "@/components/DemoSwitcher";
 
 // Assets
 import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
 
-// Force refresh to clear currentClub reference cache
+// Demo profile data - inline to prevent auto-deletion
+const DEMO_PROFILES = {
+  jake: {
+    displayName: "Jake Wilson",
+    clubs: [
+      { id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "Member" },
+      { id: "tennessee-valley-anglers", name: "Tennessee Valley Anglers", role: "Member" }
+    ],
+    adminButtons: []
+  },
+  president: {
+    displayName: "Mike Johnson",
+    clubs: [
+      { id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "President" }
+    ],
+    adminButtons: [
+      { label: "Board of Directors", to: "/admin/board-of-directors", icon: Building2 },
+      { label: "Manage Club", to: "/clubs/alabama-bass-chapter-12/manage", icon: Building2 }
+    ]
+  }
+};
 
 const Homepage = () => {
   const { user, loading } = useAuth();
+  const { demoMode } = useDemoMode();
+  
+  // Get active demo profile
+  const activeProfile = demoMode !== "off" ? DEMO_PROFILES[demoMode as keyof typeof DEMO_PROFILES] : null;
 
   // Helper function for weight conversion
   const ozToLbOz = (oz: number) => {
@@ -34,7 +60,7 @@ const Homepage = () => {
   };
 
   // Dynamic greeting based on auth
-  const greetName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || "angler";
+  const greetName = activeProfile?.displayName || user?.user_metadata?.display_name || user?.email?.split('@')[0] || "angler";
 
   // State management
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -171,7 +197,7 @@ const Homepage = () => {
 
       {/* Top Bar */}
       <div className="bg-background border-b border-border h-12 flex items-center justify-end px-4">
-        <DemoSwitcher />
+        <DemoSwitcher inline />
       </div>
 
       {/* Hero Section */}
@@ -354,91 +380,4 @@ const Homepage = () => {
               </CardContent>
             </Card>
             {openDropdown === 'notifications' && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
-                <div className="p-2">
-                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No notifications yet</div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="px-4 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Users className="w-5 h-5 mr-2 text-primary" />
-                Recent Activity
-              </div>
-              <Link to="/club-feed">
-                <Button variant="outline" size="sm">View All</Button>
-              </Link>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="p-8 text-center text-muted-foreground">
-              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No recent activity yet</p>
-              <p className="text-xs mt-1">Activity from your clubs will appear here</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Followed Anglers */}
-      <div className="px-4 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Users className="w-5 h-5 mr-2 text-primary" />
-                Followed Anglers
-              </div>
-              <Button variant="outline" size="sm" onClick={() => toast({
-                title: "Coming Soon",
-                description: "Follow other anglers to see their activity"
-              })}>
-                Browse
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="p-8 text-center text-muted-foreground">
-              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No followed anglers yet</p>
-              <p className="text-xs mt-1">Follow other anglers to see their catches and updates</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Next Tournament Preview */}
-      <div className="px-4 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2 text-primary" />
-              Next Tournament
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="p-8 text-center text-muted-foreground">
-              <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No tournaments scheduled yet</p>
-              <p className="text-xs mt-1">Tournament schedule will appear here</p>
-              <Link to="/leaderboard" className="block mt-4">
-                <Button size="sm">Browse Tournaments</Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-    </div>
-  );
-};
-
-export default Homepage;
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-
