@@ -66,6 +66,96 @@ export const demoTournament = {
   lake: "Lake Demo",
 };
 
+export const demoTournaments = [
+  {
+    id: "lake-powell-spring",
+    name: "Lake Powell Spring Classic",
+    date: "2025-04-15",
+    time: "6:00 AM",
+    location: "Lake Powell, AZ",
+    club: {
+      id: "rocky-mountain-bass",
+      name: "Rocky Mountain Bass Club",
+      logo_url: "/src/assets/river-valley-logo.png"
+    },
+    registered: 23,
+    max_participants: 50,
+    status: "open",
+    entry_fee: 50,
+    description: "Spring bass tournament on beautiful Lake Powell",
+    rules: "5 bass limit, minimum 12 inches, no culling after weigh-in",
+    prizes: { first: 500, second: 300, third: 150 }
+  },
+  {
+    id: "memorial-day-bash",
+    name: "Memorial Day Bass Bash",
+    date: "2025-05-26",
+    time: "5:30 AM",
+    location: "Lake Mead, NV",
+    club: {
+      id: "lake-mead-anglers",
+      name: "Lake Mead Anglers",
+      logo_url: "/src/assets/alabama-bass-logo.png"
+    },
+    registered: 45,
+    max_participants: 60,
+    status: "open",
+    entry_fee: 75,
+    description: "Big tournament with big prizes!"
+  },
+  {
+    id: "colorado-cup",
+    name: "Colorado Cup",
+    date: "2025-05-10",
+    time: "7:00 AM",
+    location: "Chatfield Reservoir, CO",
+    club: {
+      id: "colorado-bass-fed",
+      name: "Colorado Bass Federation",
+      logo_url: "/src/assets/bass-trophy-logo.png"
+    },
+    registered: 50,
+    max_participants: 50,
+    status: "active",
+    entry_fee: 100,
+    description: "Premier Colorado bass tournament"
+  },
+  {
+    id: "spring-opener",
+    name: "Spring Opener",
+    date: "2025-03-20",
+    time: "6:30 AM",
+    location: "Cherry Creek Reservoir, CO",
+    club: {
+      id: "rocky-mountain-bass",
+      name: "Rocky Mountain Bass Club",
+      logo_url: "/src/assets/river-valley-logo.png"
+    },
+    registered: 38,
+    max_participants: 40,
+    status: "completed",
+    entry_fee: 50,
+    description: "Season opener tournament"
+  },
+  {
+    id: "texas-lunker",
+    name: "Texas Lunker Challenge",
+    date: "2025-06-05",
+    time: "5:00 AM",
+    location: "Lake Fork, TX",
+    club: {
+      id: "texas-bass-nation",
+      name: "Texas Bass Nation",
+      logo_url: "/src/assets/trophy-cast-logo.png"
+    },
+    registered: 12,
+    max_participants: 100,
+    status: "open",
+    entry_fee: 150,
+    description: "Hunt for trophy Texas bass at legendary Lake Fork"
+  }
+];
+
 export const demoCatches = [
   {
     id: "demo-c1",

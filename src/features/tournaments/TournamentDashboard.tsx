@@ -1,173 +1,195 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 import { 
-  Calendar as CalendarIcon, 
-  Plus, 
   Trophy, 
-  MapPin, 
-  DollarSign, 
-  Users,
+  Plus,
+  Medal,
+  TrendingUp,
+  Award,
+  Calendar,
   Clock,
+  MapPin,
+  Users,
+  DollarSign,
   CheckCircle,
+  AlertCircle,
   XCircle,
-  AlertCircle
+  Filter
 } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
-import { useTournaments, useCreateTournament } from '@/hooks/useTournaments';
-import { useClubs } from '@/hooks/useClubs';
+import { useDemoMode } from '@/contexts/DemoModeContext';
+import { demoTournaments } from '@/demo/demoData';
+import { useTournaments } from '@/hooks/useTournaments';
 import { useIsClubOfficer } from '@/hooks/useRoles';
-import type { Tournament } from '@/types/database';
+import { format } from 'date-fns';
 
-const createTournamentSchema = z.object({
-  name: z.string().trim().min(1, 'Tournament name is required').max(100, 'Name must be less than 100 characters'),
-  date: z.date({ required_error: 'Tournament date is required' }),
-  location: z.string().trim().min(1, 'Location is required').max(200, 'Location must be less than 200 characters'),
-  club_id: z.string().optional(),
-  entry_fee: z.number().min(0, 'Entry fee must be positive').max(10000, 'Entry fee must be reasonable'),
-  status: z.enum(['upcoming', 'active', 'completed', 'cancelled']).default('upcoming'),
-  description: z.string().max(1000, 'Description must be less than 1000 characters').optional()
-});
-
-type CreateTournamentFormData = z.infer<typeof createTournamentSchema>;
+type SortOption = 'date' | 'name' | 'distance' | 'registrations';
 
 export default function TournamentDashboard() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const { data: tournaments = [], isLoading } = useTournaments();
-  const { data: clubs = [] } = useClubs();
+  const { enabled: demoMode } = useDemoMode();
+  const { data: realTournaments = [], isLoading } = useTournaments();
   const isClubOfficer = useIsClubOfficer();
-  const createTournamentMutation = useCreateTournament();
+  const [sortBy, setSortBy] = useState<SortOption>('date');
 
-  const form = useForm<CreateTournamentFormData>({
-    resolver: zodResolver(createTournamentSchema),
-    defaultValues: {
-      name: '',
-      location: '',
-      entry_fee: 0,
-      status: 'upcoming',
-      description: ''
-    }
+  // Use demo data if in demo mode, otherwise use real data
+  const tournaments = demoMode ? demoTournaments : realTournaments;
+
+  // Filter tournaments by status
+  const now = new Date();
+  const upcoming = tournaments.filter((t: any) => {
+    const tDate = new Date(t.date);
+    return (t.status === 'open' || t.status === 'upcoming') && tDate >= now;
+  });
+  const active = tournaments.filter((t: any) => t.status === 'active');
+  const past = tournaments.filter((t: any) => {
+    const tDate = new Date(t.date);
+    return t.status === 'completed' || tDate < now;
   });
 
-  // Separate tournaments by status and date
-  const now = new Date();
-  const upcomingTournaments = tournaments.filter(t => 
-    t.status === 'upcoming' && new Date(t.date) >= now
-  );
-  const pastTournaments = tournaments.filter(t => 
-    t.status === 'completed' || new Date(t.date) < now
-  );
-  const activeTournaments = tournaments.filter(t => t.status === 'active');
-
-  const handleCreateTournament = async (data: CreateTournamentFormData) => {
-    try {
-      await createTournamentMutation.mutateAsync({
-        name: data.name,
-        date: format(data.date, 'yyyy-MM-dd'),
-        location: data.location,
-        club_id: data.club_id,
-        entry_fee: data.entry_fee,
-        status: data.status
-      });
-      setIsCreateDialogOpen(false);
-      form.reset();
-    } catch (error) {
-      console.error('Error creating tournament:', error);
-    }
+  // Mock user stats (in real app, fetch from API)
+  const userStats = {
+    totalTournaments: 24,
+    bestFinish: "2nd",
+    totalPoints: 1850,
+    seasonRank: "#5 in Colorado"
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'upcoming': return <Clock className="w-4 h-4 text-water-blue" />;
-      case 'active': return <AlertCircle className="w-4 h-4 text-trophy-gold" />;
-      case 'completed': return <CheckCircle className="w-4 h-4 text-fishing-green" />;
-      case 'cancelled': return <XCircle className="w-4 h-4 text-destructive" />;
-      default: return <Clock className="w-4 h-4" />;
-    }
+  const getStatusBadge = (status: string) => {
+    const statusConfig = {
+      open: { label: 'Open Registration', color: 'bg-fishing-green text-white', icon: CheckCircle },
+      closed: { label: 'Registration Closed', color: 'bg-yellow-500 text-white', icon: XCircle },
+      active: { label: 'In Progress', color: 'bg-water-blue text-white', icon: AlertCircle },
+      completed: { label: 'Completed', color: 'bg-muted text-muted-foreground', icon: CheckCircle }
+    };
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.open;
+    const Icon = config.icon;
+    return (
+      <Badge className={cn('flex items-center gap-1', config.color)}>
+        <Icon className="w-3 h-3" />
+        {config.label}
+      </Badge>
+    );
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'upcoming': return 'bg-water-blue/10 text-water-blue border-water-blue/20';
-      case 'active': return 'bg-trophy-gold/10 text-trophy-gold border-trophy-gold/20';
-      case 'completed': return 'bg-fishing-green/10 text-fishing-green border-fishing-green/20';
-      case 'cancelled': return 'bg-destructive/10 text-destructive border-destructive/20';
-      default: return 'bg-muted text-muted-foreground';
-    }
-  };
+  const TournamentCard = ({ tournament }: { tournament: any }) => {
+    const registrationProgress = (tournament.registered / tournament.max_participants) * 100;
+    const isUserRegistered = Math.random() > 0.5; // Mock - in real app check actual registration
 
-  const TournamentCard = ({ tournament }: { tournament: Tournament }) => (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-lg">{tournament.name}</CardTitle>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <CalendarIcon className="w-3 h-3" />
-                {format(new Date(tournament.date), 'MMM dd, yyyy')}
-              </span>
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                {tournament.location}
-              </span>
+    return (
+      <Card className="hover:shadow-lg transition-shadow overflow-hidden group">
+        {/* Banner Image */}
+        <div className="h-48 bg-gradient-to-br from-water-blue/20 to-fishing-green/20 relative overflow-hidden">
+          <img 
+            src="/src/assets/hero-fishing.jpg" 
+            alt={tournament.name}
+            className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute top-3 right-3">
+            {getStatusBadge(tournament.status)}
+          </div>
+        </div>
+
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-bold">{tournament.name}</CardTitle>
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span>{format(new Date(tournament.date), 'MMM dd, yyyy')} • {tournament.time}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              <span>{tournament.location}</span>
             </div>
           </div>
-          <Badge className={cn('flex items-center gap-1', getStatusColor(tournament.status))}>
-            {getStatusIcon(tournament.status)}
-            {tournament.status}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            {tournament.club && (
-              <span className="flex items-center gap-1">
-                <Users className="w-3 h-3" />
-                {tournament.club.name}
+        </CardHeader>
+
+        <CardContent className="space-y-3">
+          {/* Host Club */}
+          <Link 
+            to={`/clubs/${tournament.club?.id || 'club'}`}
+            className="flex items-center gap-2 hover:underline"
+          >
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+              {tournament.club?.logo_url ? (
+                <img src={tournament.club.logo_url} alt={tournament.club.name} className="w-full h-full object-cover" />
+              ) : (
+                <Trophy className="w-4 h-4 text-muted-foreground" />
+              )}
+            </div>
+            <span className="text-sm font-medium">{tournament.club?.name || 'Independent'}</span>
+          </Link>
+
+          {/* Registration Progress */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">
+                <Users className="w-3 h-3 inline mr-1" />
+                {tournament.registered}/{tournament.max_participants} registered
               </span>
-            )}
-            {tournament.entry_fee && tournament.entry_fee > 0 && (
-              <span className="flex items-center gap-1">
-                <DollarSign className="w-3 h-3" />
-                ${tournament.entry_fee}
-              </span>
-            )}
+              <span className="font-medium">{Math.round(registrationProgress)}%</span>
+            </div>
+            <Progress value={registrationProgress} className="h-2" />
           </div>
-          <Button variant="outline" size="sm">
-            View Details
+
+          {/* Entry Fee & Action */}
+          <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center gap-1 text-sm font-semibold">
+              <DollarSign className="w-4 h-4 text-trophy-gold" />
+              ${tournament.entry_fee}
+            </div>
+            <Link to={`/tournaments/${tournament.id}`}>
+              <Button 
+                size="sm"
+                variant={isUserRegistered ? "outline" : "default"}
+                className={!isUserRegistered ? "bg-fishing-green hover:bg-fishing-green/90" : ""}
+              >
+                {isUserRegistered ? "View Details" : "Register"}
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const EmptyState = ({ title, description, showCreate }: { title: string; description: string; showCreate?: boolean }) => (
+    <Card>
+      <CardContent className="flex flex-col items-center justify-center py-12">
+        <Trophy className="w-16 h-16 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground text-center mb-4 max-w-md">{description}</p>
+        {showCreate && isClubOfficer && (
+          <Button className="bg-trophy-gold hover:bg-trophy-gold/90">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Your First Tournament
           </Button>
-        </div>
+        )}
       </CardContent>
     </Card>
   );
 
-  if (isLoading) {
+  if (isLoading && !demoMode) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-muted rounded w-1/3"></div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-48 bg-muted rounded"></div>
-            ))}
-          </div>
+      <div className="container mx-auto p-6 space-y-6">
+        <Skeleton className="h-12 w-1/3" />
+        <div className="grid gap-4 md:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-32" />
+          ))}
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <Skeleton key={i} className="h-96" />
+          ))}
         </div>
       </div>
     );
@@ -176,272 +198,183 @@ export default function TournamentDashboard() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Trophy className="w-8 h-8 text-trophy-gold" />
-            Tournament Dashboard
+          <h1 className="text-4xl font-bold flex items-center gap-3">
+            <Trophy className="w-10 h-10 text-trophy-gold" />
+            My Tournaments
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage and track fishing tournaments
+            Browse and register for fishing tournaments
           </p>
         </div>
         
         {isClubOfficer && (
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Tournament
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Create New Tournament</DialogTitle>
-                <DialogDescription>
-                  Set up a new fishing tournament for your club
-                </DialogDescription>
-              </DialogHeader>
-              
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleCreateTournament)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tournament Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Spring Bass Tournament 2024" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Tournament Date</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) => date < new Date()}
-                              initialFocus
-                              className="p-3 pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Location</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Lake Guntersville, AL" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="club_id"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Club (Optional)</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a club" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {clubs.map((club) => (
-                              <SelectItem key={club.id} value={club.id}>
-                                {club.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="entry_fee"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Entry Fee ($)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            step="0.01" 
-                            placeholder="50.00"
-                            {...field}
-                            onChange={(e) => field.onChange(Number(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control} 
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description (Optional)</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Tournament details, rules, prizes..."
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsCreateDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      type="submit" 
-                      disabled={createTournamentMutation.isPending}
-                    >
-                      {createTournamentMutation.isPending ? 'Creating...' : 'Create Tournament'}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <Button className="bg-trophy-gold hover:bg-trophy-gold/90 font-semibold">
+            <Plus className="w-5 h-5 mr-2" />
+            Create Tournament
+          </Button>
         )}
       </div>
 
-      {/* Tournament Tabs */}
-      <Tabs defaultValue="upcoming" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="upcoming" className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            Upcoming ({upcomingTournaments.length})
-          </TabsTrigger>
-          <TabsTrigger value="active" className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4" />
-            Active ({activeTournaments.length})
-          </TabsTrigger>
-          <TabsTrigger value="past" className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4" />
-            Past ({pastTournaments.length})
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="upcoming" className="space-y-4">
-          {upcomingTournaments.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Trophy className="w-12 h-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Upcoming Tournaments</h3>
-                <p className="text-muted-foreground text-center mb-4">
-                  There are no tournaments scheduled for the future.
-                </p>
-                {isClubOfficer && (
-                  <Button onClick={() => setIsCreateDialogOpen(true)}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Your First Tournament
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {upcomingTournaments.map((tournament) => (
-                <TournamentCard key={tournament.id} tournament={tournament} />
-              ))}
+      {/* Quick Stats Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Tournaments
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-water-blue" />
+              <span className="text-3xl font-bold">{userStats.totalTournaments}</span>
             </div>
-          )}
-        </TabsContent>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="active" className="space-y-4">
-          {activeTournaments.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Active Tournaments</h3>
-                <p className="text-muted-foreground text-center">
-                  There are no tournaments currently running.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {activeTournaments.map((tournament) => (
-                <TournamentCard key={tournament.id} tournament={tournament} />
-              ))}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Best Finish
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <Medal className="w-5 h-5 text-trophy-gold" />
+              <span className="text-3xl font-bold">{userStats.bestFinish} Place</span>
             </div>
-          )}
-        </TabsContent>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="past" className="space-y-4">
-          {pastTournaments.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <CheckCircle className="w-12 h-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Past Tournaments</h3>
-                <p className="text-muted-foreground text-center">
-                  Tournament history will appear here once tournaments are completed.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {pastTournaments.map((tournament) => (
-                <TournamentCard key={tournament.id} tournament={tournament} />
-              ))}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Season Points
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-fishing-green" />
+              <span className="text-3xl font-bold">{userStats.totalPoints.toLocaleString()}</span>
             </div>
-          )}
-        </TabsContent>
-      </Tabs>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Season Rank
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-trophy-gold" />
+              <span className="text-3xl font-bold">{userStats.seasonRank}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters & Tabs */}
+      <div className="flex items-center justify-between gap-4">
+        <Tabs defaultValue="upcoming" className="flex-1">
+          <TabsList className="grid w-full grid-cols-4 max-w-2xl">
+            <TabsTrigger value="upcoming" className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              Upcoming ({upcoming.length})
+            </TabsTrigger>
+            <TabsTrigger value="active" className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              Active ({active.length})
+            </TabsTrigger>
+            <TabsTrigger value="past" className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4" />
+              Past ({past.length})
+            </TabsTrigger>
+            <TabsTrigger value="all" className="flex items-center gap-2">
+              <Filter className="w-4 h-4" />
+              All ({tournaments.length})
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Sort Controls */}
+          <div className="flex justify-end mt-4">
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="date">Date</SelectItem>
+                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="distance">Distance</SelectItem>
+                <SelectItem value="registrations">Registrations</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <TabsContent value="upcoming" className="mt-6">
+            {upcoming.length === 0 ? (
+              <EmptyState 
+                title="No Upcoming Tournaments"
+                description="Check back soon for new tournaments!"
+              />
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {upcoming.map((tournament: any) => (
+                  <TournamentCard key={tournament.id} tournament={tournament} />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="active" className="mt-6">
+            {active.length === 0 ? (
+              <EmptyState 
+                title="No Active Tournaments"
+                description="No tournaments are currently in progress."
+              />
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {active.map((tournament: any) => (
+                  <TournamentCard key={tournament.id} tournament={tournament} />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="past" className="mt-6">
+            {past.length === 0 ? (
+              <EmptyState 
+                title="No Past Tournaments"
+                description="Tournament history will appear here once tournaments are completed."
+              />
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {past.map((tournament: any) => (
+                  <TournamentCard key={tournament.id} tournament={tournament} />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="all" className="mt-6">
+            {tournaments.length === 0 ? (
+              <EmptyState 
+                title="No Tournaments Yet"
+                description="No tournaments yet - create your first club tournament!"
+                showCreate
+              />
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {tournaments.map((tournament: any) => (
+                  <TournamentCard key={tournament.id} tournament={tournament} />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
