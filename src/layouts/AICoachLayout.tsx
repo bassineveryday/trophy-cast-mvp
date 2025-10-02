@@ -1,64 +1,59 @@
-import { Outlet } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, Brain } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { VoiceProvider } from "@/contexts/VoiceContext";
-import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
-import { VoiceToggle } from "@/components/voice/VoiceToggle";
-import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Home, MapPin, Compass, Target } from 'lucide-react';
 
-/**
- * AICoachLayout - Specialized layout for AI Coach feature flows
- * Provides consistent header, navigation, and AI-specific UI elements
- * Used for all /ai-coach/* routes
- */
-export const AICoachLayout = () => {
+export function AICoachLayout() {
+  const location = useLocation();
+  
+  const navItems = [
+    { path: '/ai-coach', label: 'Overview', icon: Home },
+    { path: '/ai-coach/pre-trip', label: 'Pre-Trip', icon: MapPin },
+    { path: '/ai-coach/at-lake', label: 'At Lake', icon: Compass },
+  ];
+
   return (
-    <ContextAwareAIProvider>
-      <VoiceProvider>
-        <Toaster />
-        <Sonner />
-        
-        <div className="min-h-screen bg-background">
-          {/* AI Coach Header - consistent across all AI coach pages */}
-          <div className="bg-gradient-water text-white p-4">
-            <div className="flex items-center mb-4">
-              <Link to="/">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
-                  <ChevronLeft className="w-5 h-5" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Mobile header */}
+      <div className="lg:hidden border-b p-4 flex items-center gap-4">
+        <Button variant="ghost" size="icon" asChild>
+          <Link to="/dashboard"><ArrowLeft className="h-5 w-5" /></Link>
+        </Button>
+        <h1 className="text-xl font-bold">AI Coach</h1>
+      </div>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="hidden lg:flex flex-col w-64 border-r min-h-screen p-6">
+          <Button variant="ghost" className="mb-6 justify-start" asChild>
+            <Link to="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Link>
+          </Button>
+
+          <nav className="space-y-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  location.pathname === item.path
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted'
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                <span>{item.label}</span>
               </Link>
-              <h1 className="text-xl font-bold ml-2 flex items-center">
-                <Brain className="w-6 h-6 mr-2" />
-                AI Coach
-              </h1>
-            </div>
-          </div>
+            ))}
+          </nav>
+        </aside>
 
-          <div className="p-4">
-            {/* Voice controls - available on all AI coach pages */}
-            <div className="mb-4 space-y-3">
-              <VoiceToggle />
-              
-              {/* Demo notice - consistent across AI coach features */}
-              <div className="text-center">
-                <Badge variant="secondary" className="bg-muted text-muted-foreground">
-                  Demo only—no live AI
-                </Badge>
-              </div>
-            </div>
-
-            {/* AI Coach content area */}
-            <Outlet />
-          </div>
-
-          {/* Context-aware AI button - available throughout AI coach flows */}
-          <ContextAwareFloatingButton />
-        </div>
-      </VoiceProvider>
-    </ContextAwareAIProvider>
+        {/* Main content */}
+        <main className="flex-1 p-6">
+          <Outlet />
+        </main>
+      </div>
+    </div>
   );
-};
+}

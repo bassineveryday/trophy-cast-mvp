@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          response: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          response?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          response?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       catch_environmental_correlation: {
         Row: {
           catch_id: string | null
@@ -176,6 +200,38 @@ export type Database = {
             columns: ["tournament_id"]
             isOneToOne: false
             referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      club_members: {
+        Row: {
+          club_id: string | null
+          id: string
+          joined_at: string | null
+          role: string | null
+          user_id: string | null
+        }
+        Insert: {
+          club_id?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          club_id?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "club_members_club_id_fkey"
+            columns: ["club_id"]
+            isOneToOne: false
+            referencedRelation: "clubs"
             referencedColumns: ["id"]
           },
         ]
@@ -458,6 +514,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      messages: {
+        Row: {
+          channel_id: string
+          content: string
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          channel_id: string
+          content: string
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          channel_id?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      missions: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          progress: number | null
+          status: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          progress?: number | null
+          status?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          progress?: number | null
+          status?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       permissions: {
         Row: {
@@ -890,6 +1000,38 @@ export type Database = {
         }
         Relationships: []
       }
+      tournament_registrations: {
+        Row: {
+          created_at: string | null
+          id: string
+          status: string | null
+          tournament_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          tournament_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          tournament_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tournament_registrations_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tournaments: {
         Row: {
           club_id: string | null
@@ -1160,6 +1302,45 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           platform_role?: Database["public"]["Enums"]["platform_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          ai_coach_enabled: boolean | null
+          allow_location_sharing: boolean | null
+          coaching_intensity: string | null
+          contribute_conservation_data: boolean | null
+          display_in_leaderboards: boolean | null
+          public_profile: boolean | null
+          share_catch_patterns: boolean | null
+          show_catches_in_feed: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_coach_enabled?: boolean | null
+          allow_location_sharing?: boolean | null
+          coaching_intensity?: string | null
+          contribute_conservation_data?: boolean | null
+          display_in_leaderboards?: boolean | null
+          public_profile?: boolean | null
+          share_catch_patterns?: boolean | null
+          show_catches_in_feed?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_coach_enabled?: boolean | null
+          allow_location_sharing?: boolean | null
+          coaching_intensity?: string | null
+          contribute_conservation_data?: boolean | null
+          display_in_leaderboards?: boolean | null
+          public_profile?: boolean | null
+          share_catch_patterns?: boolean | null
+          show_catches_in_feed?: boolean | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []

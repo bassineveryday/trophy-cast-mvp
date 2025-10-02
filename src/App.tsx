@@ -9,6 +9,7 @@ import { VoiceProvider } from "@/contexts/VoiceContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
 import DevHealthButton from "@/components/DevHealthButton";
+import DemoSwitcher from "@/components/DemoSwitcher";
 
 // Auth Feature
 import AuthPage from "@/features/auth/AuthPage";
@@ -22,6 +23,26 @@ import Profile from "@/features/profile/Profile";
 
 // Leaderboard & Performance Features
 import Leaderboard from "@/features/leaderboard/Leaderboard";
+
+// AI Coach Features
+import { AICoachLayout } from "@/layouts/AICoachLayout";
+import AICoach from "@/features/ai-coach/AICoach";
+import AICoachPreTrip from "@/features/ai-coach/AICoachPreTripPlaceholder";
+import AICoachAtLake from "@/features/ai-coach/AICoachAtLakePlaceholder";
+
+// Tournament Features
+import TournamentDashboard from "@/features/tournaments/TournamentDashboardPlaceholder";
+import TournamentDetail from "@/features/tournaments/TournamentDetailPlaceholder";
+
+// Club Features
+import ClubDashboard from "@/features/clubs/ClubDashboardPlaceholder";
+import ClubFeed from "@/features/clubs/ClubFeedPlaceholder";
+
+// Community Features
+import CommunityDock from "@/features/community/CommunityDock";
+
+// Trust Center
+import TrustCenter from "@/features/trust-center/TrustCenter";
 
 // Shared Utility Pages
 import NotFound from "@/shared/pages/NotFound";
@@ -46,6 +67,27 @@ const App = () => (
                 <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                 <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                
+                {/* Tournament Routes */}
+                <Route path="tournaments/dashboard" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
+                <Route path="tournaments/:id" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
+                
+                {/* Club Routes */}
+                <Route path="club/dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />
+                <Route path="club/feed" element={<ProtectedRoute><ClubFeed /></ProtectedRoute>} />
+                
+                {/* Community Route */}
+                <Route path="community" element={<ProtectedRoute><CommunityDock /></ProtectedRoute>} />
+                
+                {/* Trust Center */}
+                <Route path="trust-center" element={<ProtectedRoute><TrustCenter /></ProtectedRoute>} />
+              </Route>
+
+              {/* AI Coach Routes - separate layout */}
+              <Route path="/ai-coach" element={<AICoachLayout />}>
+                <Route index element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
+                <Route path="pre-trip" element={<ProtectedRoute><AICoachPreTrip /></ProtectedRoute>} />
+                <Route path="at-lake" element={<ProtectedRoute><AICoachAtLake /></ProtectedRoute>} />
               </Route>
 
               {/* Standalone Pages - no shared layout needed */}
@@ -54,6 +96,7 @@ const App = () => (
           </BrowserRouter>
           <Toaster />
           <DevHealthButton />
+          <DemoSwitcher />
         </VoiceProvider>
       </AuthProvider>
     </TooltipProvider>
