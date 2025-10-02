@@ -1316,6 +1316,7 @@ export type Database = {
           public_profile: boolean | null
           share_catch_patterns: boolean | null
           show_catches_in_feed: boolean | null
+          unwind_mode_enabled: boolean | null
           updated_at: string | null
           user_id: string
         }
@@ -1328,6 +1329,7 @@ export type Database = {
           public_profile?: boolean | null
           share_catch_patterns?: boolean | null
           show_catches_in_feed?: boolean | null
+          unwind_mode_enabled?: boolean | null
           updated_at?: string | null
           user_id: string
         }
@@ -1340,6 +1342,7 @@ export type Database = {
           public_profile?: boolean | null
           share_catch_patterns?: boolean | null
           show_catches_in_feed?: boolean | null
+          unwind_mode_enabled?: boolean | null
           updated_at?: string | null
           user_id?: string
         }
