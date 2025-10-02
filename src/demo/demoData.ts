@@ -53,7 +53,6 @@ export const jakeProfile = {
   ],
   "quickActions": []
 };
-
 // MIKE'S DEMO PROFILE DATA
 export const mikeProfile = {
   "id": "demo-mike",
