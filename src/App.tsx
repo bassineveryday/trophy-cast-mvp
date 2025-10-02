@@ -7,6 +7,7 @@ import { MainLayout } from "@/layouts/MainLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { VoiceProvider } from "@/contexts/VoiceContext";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
+import { ContextAwareAIProvider } from "@/contexts/ContextAwareAIContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
 import DevHealthButton from "@/components/DevHealthButton";
@@ -57,7 +58,8 @@ const App = () => (
         <AuthProvider>
           <VoiceProvider>
             <BrowserRouter>
-            <Routes>
+              <ContextAwareAIProvider>
+                <Routes>
               {/* Auth Route - standalone, no layout */}
               <Route path="/auth" element={<AuthPage />} />
 
@@ -94,7 +96,8 @@ const App = () => (
 
               {/* Standalone Pages - no shared layout needed */}
               <Route path="*" element={<NotFound />} />
-            </Routes>
+                </Routes>
+              </ContextAwareAIProvider>
             </BrowserRouter>
             <Toaster />
             <DevHealthButton />
