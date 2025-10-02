@@ -78,6 +78,7 @@ const Homepage = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isVoiceListening, setIsVoiceListening] = useState(false);
+  const [showAllActivity, setShowAllActivity] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -271,8 +272,18 @@ const Homepage = () => {
                     </>
                   ) : (
                     <>
-                      <div className="text-xs text-gray-500 py-2 px-3 text-center">No tournaments scheduled yet</div>
-                      <Link to="/leaderboard" className="block"><div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center">Browse Tournaments</div></Link>
+                      {/* Show public tournaments for default users */}
+                      <div className="text-xs py-2 px-3 hover:bg-blue-50 rounded mb-1">
+                        <div className="font-semibold text-blue-700">Fall Classic</div>
+                        <div className="text-gray-500">Lake Guntersville • Oct 15, 2025</div>
+                        <div className="text-gray-400 text-[10px] mt-1">Alabama Bass Chapter 12</div>
+                      </div>
+                      <div className="text-xs py-2 px-3 hover:bg-blue-50 rounded mb-1">
+                        <div className="font-semibold text-blue-700">Tennessee Valley Open</div>
+                        <div className="text-gray-500">Pickwick Lake • Oct 22, 2025</div>
+                        <div className="text-gray-400 text-[10px] mt-1">Tennessee Valley Anglers</div>
+                      </div>
+                      <Link to="/leaderboard" className="block mt-1"><div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center font-semibold">View All Tournaments</div></Link>
                     </>
                   )}
                 </div>
@@ -301,7 +312,47 @@ const Homepage = () => {
       <div className="px-4 mb-6">
         <Card>
           <CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />Recent Activity</div><Link to="/club-feed"><Button variant="outline" size="sm">View All</Button></Link></CardTitle></CardHeader>
-          <CardContent className="space-y-3"><div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No recent activity yet</p><p className="text-xs mt-1">Activity from your clubs will appear here</p></div></CardContent>
+          <CardContent className="space-y-3">
+            {activeProfile ? (
+              <div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No recent activity yet</p><p className="text-xs mt-1">Activity from your clubs will appear here</p></div>
+            ) : (
+              <>
+                <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 font-semibold text-sm flex-shrink-0">MJ</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Fish className="w-4 h-4 text-emerald-600" />
+                      <span className="text-xs font-semibold text-emerald-600">Alabama Bass Chapter 12</span>
+                    </div>
+                    <p className="text-sm font-medium">Mike Johnson caught 6.8 lb bass at Lake Martin</p>
+                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-semibold text-sm flex-shrink-0">AB</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Trophy className="w-4 h-4 text-amber-600" />
+                      <span className="text-xs font-semibold text-amber-600">Alabama Bass Chapter 12</span>
+                    </div>
+                    <p className="text-sm font-medium">Tournament registration opens: Fall Classic</p>
+                    <p className="text-xs text-muted-foreground">5 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-trophy-gold/10 flex items-center justify-center text-trophy-gold font-semibold text-sm flex-shrink-0">JW</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Trophy className="w-4 h-4 text-trophy-gold" />
+                      <span className="text-xs font-semibold text-trophy-gold">Tennessee Valley Anglers</span>
+                    </div>
+                    <p className="text-sm font-medium">Jake Wilson won Tennessee Valley Open</p>
+                    <p className="text-xs text-muted-foreground">1 day ago</p>
+                  </div>
+                </div>
+              </>
+            )}
+          </CardContent>
         </Card>
       </div>
       {activeProfile && activeProfile.clubs.length > 0 && (<div className="px-4 mb-6"><Card><CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />My Clubs</div></CardTitle></CardHeader><CardContent className="space-y-3">{activeProfile.clubs.map((club) => (<div key={club.id} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate(`/clubs/${club.id}`)}><div className="flex items-center justify-between"><div><h4 className="font-semibold">{club.name}</h4><p className="text-sm text-muted-foreground">{club.role}</p></div><ArrowRight className="w-5 h-5 text-muted-foreground" /></div></div>))}{activeProfile.adminButtons.length > 0 && (<div className="mt-4 pt-4 border-t space-y-2">{activeProfile.adminButtons.map((btn) => (<Link key={btn.label} to={btn.to}><Button variant="outline" className="w-full justify-start" size="sm"><btn.icon className="w-4 h-4 mr-2" />{btn.label}</Button></Link>))}</div>)}</CardContent></Card></div>)}
@@ -350,28 +401,41 @@ const Homepage = () => {
                       <p className="text-xs text-muted-foreground">1 day ago</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 font-semibold text-sm flex-shrink-0">TV</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Calendar className="w-4 h-4 text-purple-600" />
-                        <span className="text-xs font-semibold text-purple-600">Tennessee Valley Anglers</span>
+                  {showAllActivity && (
+                    <>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 font-semibold text-sm flex-shrink-0">TV</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Calendar className="w-4 h-4 text-purple-600" />
+                            <span className="text-xs font-semibold text-purple-600">Tennessee Valley Anglers</span>
+                          </div>
+                          <p className="text-sm font-medium">Club meeting scheduled for Oct 8</p>
+                          <p className="text-xs text-muted-foreground">2 days ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">Club meeting scheduled for Oct 8</p>
-                      <p className="text-xs text-muted-foreground">2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-semibold text-sm flex-shrink-0">AB</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Trophy className="w-4 h-4 text-amber-600" />
-                        <span className="text-xs font-semibold text-amber-600">Alabama Bass Chapter 12</span>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-semibold text-sm flex-shrink-0">AB</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Trophy className="w-4 h-4 text-amber-600" />
+                            <span className="text-xs font-semibold text-amber-600">Alabama Bass Chapter 12</span>
+                          </div>
+                          <p className="text-sm font-medium">Fall Classic details posted</p>
+                          <p className="text-xs text-muted-foreground">3 days ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">Fall Classic details posted</p>
-                      <p className="text-xs text-muted-foreground">3 days ago</p>
-                    </div>
-                  </div>
+                    </>
+                  )}
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full transition-all duration-300"
+                    onClick={() => setShowAllActivity(!showAllActivity)}
+                  >
+                    {showAllActivity ? 'Show Less' : 'Show More'}
+                  </Button>
                 </>
               )}
               {role === "president" && (
@@ -409,50 +473,63 @@ const Homepage = () => {
                       <p className="text-xs text-muted-foreground">6 hours ago</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">TW</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Award className="w-4 h-4 text-blue-600" />
-                        <span className="text-xs font-semibold text-blue-600">Alabama Bass Chapter 12</span>
+                  {showAllActivity && (
+                    <>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">TW</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Award className="w-4 h-4 text-blue-600" />
+                            <span className="text-xs font-semibold text-blue-600">Alabama Bass Chapter 12</span>
+                          </div>
+                          <p className="text-sm font-medium">New officer elected: Vice President Tom Wilson</p>
+                          <p className="text-xs text-muted-foreground">1 day ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">New officer elected: Vice President Tom Wilson</p>
-                      <p className="text-xs text-muted-foreground">1 day ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-semibold text-sm flex-shrink-0">AB</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Trophy className="w-4 h-4 text-amber-600" />
-                        <span className="text-xs font-semibold text-amber-600">Alabama Bass Chapter 12</span>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-semibold text-sm flex-shrink-0">AB</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Trophy className="w-4 h-4 text-amber-600" />
+                            <span className="text-xs font-semibold text-amber-600">Alabama Bass Chapter 12</span>
+                          </div>
+                          <p className="text-sm font-medium">State Championship registration open</p>
+                          <p className="text-xs text-muted-foreground">2 days ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">State Championship registration open</p>
-                      <p className="text-xs text-muted-foreground">2 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success font-semibold text-sm flex-shrink-0">AB</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Star className="w-4 h-4 text-success" />
-                        <span className="text-xs font-semibold text-success">Alabama Bass Chapter 12</span>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success font-semibold text-sm flex-shrink-0">AB</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Star className="w-4 h-4 text-success" />
+                            <span className="text-xs font-semibold text-success">Alabama Bass Chapter 12</span>
+                          </div>
+                          <p className="text-sm font-medium">Club fundraiser raised $2,500</p>
+                          <p className="text-xs text-muted-foreground">3 days ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">Club fundraiser raised $2,500</p>
-                      <p className="text-xs text-muted-foreground">3 days ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">AB</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Users className="w-4 h-4 text-blue-600" />
-                        <span className="text-xs font-semibold text-blue-600">Alabama Bass Chapter 12</span>
+                      <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">AB</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Users className="w-4 h-4 text-blue-600" />
+                            <span className="text-xs font-semibold text-blue-600">Alabama Bass Chapter 12</span>
+                          </div>
+                          <p className="text-sm font-medium">Welcome new members: 3 anglers joined</p>
+                          <p className="text-xs text-muted-foreground">4 days ago</p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium">Welcome new members: 3 anglers joined</p>
-                      <p className="text-xs text-muted-foreground">4 days ago</p>
-                    </div>
-                  </div>
+                    </>
+                  )}
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full transition-all duration-300"
+                    onClick={() => setShowAllActivity(!showAllActivity)}
+                  >
+                    {showAllActivity ? 'Show Less' : 'Show More'}
+                  </Button>
                 </>
               )}
             </CardContent>
