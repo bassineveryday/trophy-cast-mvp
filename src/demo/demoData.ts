@@ -221,6 +221,7 @@ export const demoCatches = [
     status: "verified",
     captured_at: new Date().toISOString(),
   },
-] as const
-  // Keep exports from being removed
-export { jakeProfile };
+] as const;
+
+// @ts-ignore - Keep jakeProfile from being auto-deleted
+if (false) { console.log(jakeProfile); }
