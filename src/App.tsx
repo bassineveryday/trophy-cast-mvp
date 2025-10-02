@@ -21,6 +21,9 @@ import MyCatches from "@/features/catches/MyCatches";
 
 // Profile & Settings Features
 import Profile from "@/features/profile/Profile";
+import ProfilePage from "@/features/profile/ProfilePage";
+import TrophyRoomPage from "@/components/profile/TrophyRoomPage";
+import { EditProfile } from "@/features/profile/EditProfile";
 
 // Trophy Room
 import TrophyRoom from "@/features/trophies/TrophyRoom";
@@ -76,13 +79,18 @@ const App = () => (
                 <Route path="catch-logging" element={<ProtectedRoute><CatchLogging /></ProtectedRoute>} />
                 <Route path="leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
                 <Route path="my-catches" element={<ProtectedRoute><MyCatches /></ProtectedRoute>} />
-                <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="trophy-room" element={<ProtectedRoute><TrophyRoom /></ProtectedRoute>} />
                 <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                 
                 {/* Tournament Routes */}
                 <Route path="tournaments/dashboard" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
                 <Route path="tournaments/:id" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
+                
+                {/* Profile Routes */}
+                <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                <Route path="profile/trophy-room" element={<ProtectedRoute><TrophyRoomPage /></ProtectedRoute>} />
+                <Route path="profile/:username" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                <Route path="edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
                 
                 {/* Club Routes */}
                 <Route path="club/dashboard" element={<ProtectedRoute><ClubDashboard /></ProtectedRoute>} />

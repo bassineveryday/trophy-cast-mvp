@@ -169,7 +169,11 @@ const ClubDetailPage = () => {
               </CardHeader>
               <CardContent className="space-y-2">
                 {club.members.map((member) => (
-                  <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                  <div 
+                    key={member.id} 
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" 
+                    onClick={() => navigate(`/profile/${member.name.toLowerCase().replace(' ', '-')}`)}
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
                         {member.initials}
