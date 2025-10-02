@@ -212,7 +212,7 @@ const Homepage = () => {
           </div>
 
           {/* Main tagline - Centered */}
-          <div className="text-center mb-6">
+          <div className="text-center">
             <motion.h1 
               className="text-2xl font-bold mb-2" 
               initial={{ opacity: 0, y: 20 }}
@@ -222,45 +222,13 @@ const Homepage = () => {
               Where Every Cast Counts
             </motion.h1>
             <motion.p 
-              className="text-sm opacity-90 mb-4" 
+              className="text-sm opacity-90" 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               AI-powered tournament fishing companion
             </motion.p>
-          </div>
-
-          {/* Your Profile Button - Below tagline, centered */}
-          <div className="flex justify-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="bg-white/10 hover:bg-white/20 text-white border-white/30"
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center">
-                      <span className="text-xs font-bold">{greetName[0].toUpperCase()}</span>
-                    </div>
-                    <span>Your Profile</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-48">
-                <DropdownMenuItem onClick={() => window.location.href = '/profile'}>
-                  View Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => window.location.href = '/settings'}>
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => window.location.href = '/auth'}>
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       </div>

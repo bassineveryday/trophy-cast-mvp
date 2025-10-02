@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 import { useDemoMode } from "@/contexts/DemoModeContext";
-import { Check, ChevronDown, User, Fish, Users } from "lucide-react";
+import { Check, ChevronDown, User, Fish, Users, Settings, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
@@ -108,6 +109,24 @@ export default function DemoSwitcher() {
               <Users className="h-4 w-4 mr-2" />
               <span className="flex-1">President (Club Admin Demo)</span>
               {role === "president" && <Check className="h-4 w-4 text-primary" />}
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem 
+              onClick={() => window.location.href = '/settings'}
+              className="cursor-pointer hover:bg-accent"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              <span className="flex-1">Settings</span>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              onClick={() => window.location.href = '/auth'}
+              className="cursor-pointer hover:bg-accent"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              <span className="flex-1">Sign Out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
