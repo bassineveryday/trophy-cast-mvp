@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Trophy, Fish, Target, Award, MapPin, MessageSquare, Edit3, Building, Calendar, Home, Users } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { ContextAwareFloatingButton } from "@/components/voice/ContextAwareFloatingButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSignatureTechniques } from "@/hooks/useSignatureTechniques";
@@ -14,11 +14,21 @@ import { AvatarUpload } from "@/components/AvatarUpload";
 import { TechniqueIcon } from "@/components/TechniqueIcon";
 import { ProfileMicroCopy } from "@/components/ProfileMicroCopy";
 import { PageHeader } from "@/components/PageHeader";
+import { useDemoMode } from "@/contexts/DemoModeContext";
+import { MEMBER_PROFILES } from "@/data/memberProfiles";
+import { BottomNavigation } from "@/components/BottomNavigation";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const { role } = useDemoMode();
   const { profile, loading, uploadAvatar, updateProfile } = useProfileData();
   const { getSignatureTechniques } = useSignatureTechniques();
+  
+  // Check if showing demo profile
+  const isDemo = role === "jake" || role === "president";
+  const demoUsername = role === "jake" ? "jake-wilson" : role === "president" ? "mike-johnson" : null;
+  const demoProfile = demoUsername ? MEMBER_PROFILES[demoUsername] : null;
   const [showEditTechniques, setShowEditTechniques] = useState(false);
 
   const handleTechniquesUpdate = (newTechniques: string[]) => {
@@ -29,26 +39,107 @@ const Profile = () => {
     return await uploadAvatar(file);
   };
 
-  if (loading) {
+  // Show demo profile if in demo mode
+  if (isDemo && demoProfile) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background pb-20">
+        <PageHeader title={`${demoProfile.name}'s Profile`} />
+        
+        <div className="p-4">
+          <Card className="mb-6">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-2xl mb-4">
+                  {demoProfile.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <h2 className="text-2xl font-bold mb-2">{demoProfile.name}</h2>
+                <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                  <Home className="w-4 h-4" />
+                  <span className="text-sm">{demoProfile.hometown}</span>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">{demoProfile.bio}</p>
+                
+                {demoProfile.clubs.map((club, idx) => (
+                  <Badge key={idx} variant="outline" className="mb-2">
+                    <Building className="w-3 h-3 mr-1" />
+                    {club.name} • {club.role}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Trophy className="w-5 h-5 mr-2 text-trophy-gold" />
+                Career Statistics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-3 bg-accent rounded-lg">
+                  <p className="text-2xl font-bold text-trophy-gold">{demoProfile.stats.tournaments}</p>
+                  <p className="text-xs text-muted-foreground">Tournaments</p>
+                </div>
+                <div className="text-center p-3 bg-accent rounded-lg">
+                  <p className="text-2xl font-bold text-trophy-gold">{demoProfile.stats.winRate}%</p>
+                  <p className="text-xs text-muted-foreground">Win Rate</p>
+                </div>
+                <div className="text-center p-3 bg-accent rounded-lg">
+                  <p className="text-2xl font-bold text-fishing-green">{demoProfile.stats.catches}</p>
+                  <p className="text-xs text-muted-foreground">Catches</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Button variant="outline" className="w-full" onClick={() => navigate("/profile/trophy-room")}>
+              <Trophy className="w-4 h-4 mr-2" />
+              Trophy Room ({demoProfile.trophies.length})
+            </Button>
+            <Button variant="outline" className="w-full" onClick={() => navigate(`/profile/${demoUsername}`)}>
+              <Users className="w-4 h-4 mr-2" />
+              Full Profile
+            </Button>
+          </div>
+        </div>
+        
+        <BottomNavigation />
+      </div>
+    );
+  }
+
+  // Loading state for real user
+  if (loading && !isDemo) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center pb-20">
         <LoadingSpinner message="Loading profile..." />
       </div>
     );
   }
 
+  // Real user profile - show Supabase data only
   if (!profile || !user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Profile not found</h2>
-          <p className="text-muted-foreground">Please try refreshing the page.</p>
+      <div className="min-h-screen bg-background pb-20">
+        <PageHeader title="Your Profile" />
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+            <h2 className="text-xl font-bold mb-2">Profile not found</h2>
+            <p className="text-muted-foreground mb-4">Please try refreshing the page or creating your profile.</p>
+            <Button onClick={() => window.location.reload()}>Refresh Page</Button>
+          </div>
         </div>
+        <BottomNavigation />
       </div>
     );
   }
+  // Real user profile with actual Supabase data
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <PageHeader title="Your Profile" />
       
       <div className="p-4">
@@ -319,6 +410,8 @@ const Profile = () => {
         onUpdate={handleTechniquesUpdate}
       />
       </div>
+      
+      <BottomNavigation />
     </div>
   );
 };
