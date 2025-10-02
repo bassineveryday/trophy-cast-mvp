@@ -20,7 +20,47 @@ import DemoSwitcher from "@/components/DemoSwitcher";
 import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
 
 const Homepage = () => {
-  const DEMO_PROFILES = { jake: { displayName: "Jake Wilson", clubs: [{ id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "Member" }, { id: "tennessee-valley-anglers", name: "Tennessee Valley Anglers", role: "Member" }], adminButtons: [] }, president: { displayName: "Mike Johnson", clubs: [{ id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "President" }], adminButtons: [{ label: "Board of Directors", to: "/admin/board-of-directors", icon: Building2 }, { label: "Manage Club", to: "/clubs/alabama-bass-chapter-12/manage", icon: Building2 }] } };
+  const DEMO_PROFILES = { 
+    jake: { 
+      displayName: "Jake Wilson", 
+      clubs: [
+        { id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "Member" }, 
+        { id: "tennessee-valley-anglers", name: "Tennessee Valley Anglers", role: "Member" }
+      ], 
+      adminButtons: [],
+      upcomingTournaments: [
+        { name: "Fall Classic", location: "Lake Guntersville", date: "Oct 15, 2025" },
+        { name: "Tennessee Valley Open", location: "Pickwick Lake", date: "Oct 22, 2025" }
+      ],
+      recentCatches: [
+        { species: "Largemouth Bass", weight: "4.2 lbs", location: "Lake Guntersville", date: "Oct 1" },
+        { species: "Smallmouth Bass", weight: "3.1 lbs", location: "Pickwick Lake", date: "Sept 28" },
+        { species: "Spotted Bass", weight: "2.8 lbs", location: "Lake Guntersville", date: "Sept 25" }
+      ]
+    }, 
+    president: { 
+      displayName: "Mike Johnson", 
+      clubs: [
+        { id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "President" }
+      ], 
+      adminButtons: [
+        { label: "Board of Directors", to: "/admin/board-of-directors", icon: Building2 }, 
+        { label: "Manage Club", to: "/clubs/alabama-bass-chapter-12/manage", icon: Building2 }
+      ],
+      upcomingTournaments: [
+        { name: "Alabama State Championship", location: "Lake Guntersville", date: "Oct 10, 2025" },
+        { name: "President's Cup", location: "Lake Martin", date: "Oct 18, 2025" },
+        { name: "Fall Classic", location: "Lake Guntersville", date: "Oct 15, 2025" }
+      ],
+      recentCatches: [
+        { species: "Largemouth Bass", weight: "6.8 lbs", location: "Lake Martin", date: "Oct 2" },
+        { species: "Largemouth Bass", weight: "5.4 lbs", location: "Lake Guntersville", date: "Sept 30" },
+        { species: "Spotted Bass", weight: "4.1 lbs", location: "Lake Martin", date: "Sept 27" },
+        { species: "Smallmouth Bass", weight: "3.9 lbs", location: "Pickwick Lake", date: "Sept 24" },
+        { species: "Largemouth Bass", weight: "5.2 lbs", location: "Lake Guntersville", date: "Sept 20" }
+      ]
+    } 
+  };
   
   const { user, loading } = useAuth();
   const { role } = useDemoMode();
@@ -147,17 +187,35 @@ const Homepage = () => {
                   <ChevronDown className={`w-4 h-4 text-emerald-600 transition-transform ${openDropdown === 'catches' ? 'rotate-180' : ''}`} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-2xl font-bold text-emerald-700 mb-1">0</p>
-                  <p className="text-sm text-gray-600 mb-2">Catches This Week</p>
-                  <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">No catches yet</div>
+                  <p className="text-2xl font-bold text-emerald-700 mb-1">{activeProfile?.recentCatches?.length || 0}</p>
+                  <p className="text-sm text-gray-600 mb-2">Recent Catches</p>
+                  {activeProfile?.recentCatches?.length ? (
+                    <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">View details</div>
+                  ) : (
+                    <div className="text-xs bg-emerald-200 text-emerald-700 px-2 py-1 rounded-full inline-block">No catches yet</div>
+                  )}
                 </div>
               </CardContent>
             </Card>
             {openDropdown === 'catches' && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
                 <div className="p-2">
-                  <div className="text-xs text-gray-500 py-2 px-3 text-center">No catches logged yet</div>
-                  <Link to="/catch-logging" className="block"><div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer text-center">Log Your First Catch</div></Link>
+                  {activeProfile?.recentCatches?.length ? (
+                    <>
+                      {activeProfile.recentCatches.map((catchData, idx) => (
+                        <div key={idx} className="text-xs py-2 px-3 hover:bg-emerald-50 rounded mb-1">
+                          <div className="font-semibold text-emerald-700">{catchData.species} - {catchData.weight}</div>
+                          <div className="text-gray-500">{catchData.location} • {catchData.date}</div>
+                        </div>
+                      ))}
+                      <Link to="/my-catches" className="block mt-1"><div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer text-center font-semibold">View All Catches</div></Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-xs text-gray-500 py-2 px-3 text-center">No catches logged yet</div>
+                      <Link to="/catch-logging" className="block"><div className="text-xs text-emerald-600 py-2 px-3 hover:bg-emerald-50 rounded cursor-pointer text-center">Log Your First Catch</div></Link>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -186,13 +244,38 @@ const Homepage = () => {
                   <ChevronDown className={`w-4 h-4 text-blue-600 transition-transform ${openDropdown === 'tournaments' ? 'rotate-180' : ''}`} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-2xl font-bold text-blue-700 mb-1">0</p>
+                  <p className="text-2xl font-bold text-blue-700 mb-1">{activeProfile?.upcomingTournaments?.length || 0}</p>
                   <p className="text-sm text-gray-600 mb-2">Upcoming Tournaments</p>
-                  <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">No tournaments scheduled</div>
+                  {activeProfile?.upcomingTournaments?.length ? (
+                    <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">View schedule</div>
+                  ) : (
+                    <div className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full inline-block">No tournaments scheduled</div>
+                  )}
                 </div>
               </CardContent>
             </Card>
-            {openDropdown === 'tournaments' && (<div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden"><div className="p-2"><div className="text-xs text-gray-500 py-2 px-3 text-center">No tournaments scheduled yet</div><Link to="/leaderboard" className="block"><div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center">Browse Tournaments</div></Link></div></div>)}
+            {openDropdown === 'tournaments' && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="p-2">
+                  {activeProfile?.upcomingTournaments?.length ? (
+                    <>
+                      {activeProfile.upcomingTournaments.map((tournament, idx) => (
+                        <div key={idx} className="text-xs py-2 px-3 hover:bg-blue-50 rounded mb-1">
+                          <div className="font-semibold text-blue-700">{tournament.name}</div>
+                          <div className="text-gray-500">{tournament.location} • {tournament.date}</div>
+                        </div>
+                      ))}
+                      <Link to="/leaderboard" className="block mt-1"><div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center font-semibold">View All Tournaments</div></Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-xs text-gray-500 py-2 px-3 text-center">No tournaments scheduled yet</div>
+                      <Link to="/leaderboard" className="block"><div className="text-xs text-blue-600 py-2 px-3 hover:bg-blue-50 rounded cursor-pointer text-center">Browse Tournaments</div></Link>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div className="relative">
             <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 cursor-pointer hover:shadow-lg transition-shadow h-full" onClick={() => toggleDropdown('notifications')}>
