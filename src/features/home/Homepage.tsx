@@ -435,8 +435,6 @@ const Homepage = () => {
         </Card>
       </div>
 
-      {/* Always-visible Floating Mic Button */}
-      <FloatingMicButton />
     </div>
   );
 };
