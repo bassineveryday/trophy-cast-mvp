@@ -313,7 +313,7 @@ const Homepage = () => {
         <Card>
           <CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />Recent Activity</div><Link to="/club-feed"><Button variant="outline" size="sm">View All</Button></Link></CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            {activeProfile ? (
+            {role === "jake" || role === "president" ? (
               <div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No recent activity yet</p><p className="text-xs mt-1">Activity from your clubs will appear here</p></div>
             ) : (
               <>
@@ -544,8 +544,110 @@ const Homepage = () => {
       </div>
       <div className="px-4 mb-6">
         <Card>
-          <CardHeader><CardTitle className="flex items-center"><Calendar className="w-5 h-5 mr-2 text-primary" />Next Tournament</CardTitle></CardHeader>
-          <CardContent className="space-y-3"><div className="p-8 text-center text-muted-foreground"><Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No tournaments scheduled yet</p><p className="text-xs mt-1">Tournament schedule will appear here</p><Link to="/leaderboard" className="block mt-4"><Button size="sm">Browse Tournaments</Button></Link></div></CardContent>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Calendar className="w-5 h-5 mr-2 text-primary" />
+              {role === "jake" ? "Your Next Tournament" : role === "president" ? "Your Next Tournament (Director)" : "Browse Tournaments"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {role === "jake" ? (
+              <>
+                <div className="border-b pb-3">
+                  <h3 className="font-bold text-lg mb-1">Fall Classic</h3>
+                  <p className="text-sm text-muted-foreground">October 15, 2025 (Tuesday)</p>
+                  <p className="text-2xl font-bold text-primary mt-2">13 days away</p>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Location:</span>
+                    <span className="font-medium">Lake Guntersville</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant="outline" className="bg-success/10 text-success border-success/20">✓ Registered</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Competitors:</span>
+                    <span className="font-medium">18 registered</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Weather:</span>
+                    <span className="font-medium">☀️ Sunny, 72°F</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Button variant="outline" size="sm" onClick={() => navigate("/leaderboard")}>
+                    View Details
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Weather forecast feature" })}>
+                    Weather
+                  </Button>
+                  <Button variant="outline" size="sm" className="col-span-2" onClick={() => navigate("/ai-coach")}>
+                    Tournament Prep
+                  </Button>
+                </div>
+              </>
+            ) : role === "president" ? (
+              <>
+                <div className="border-b pb-3">
+                  <h3 className="font-bold text-lg mb-1">Alabama State Championship</h3>
+                  <p className="text-sm text-muted-foreground">October 10, 2025 (Thursday)</p>
+                  <p className="text-2xl font-bold text-primary mt-2">8 days away</p>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Location:</span>
+                    <span className="font-medium">Lake Guntersville</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Director + Competitor</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Competitors:</span>
+                    <span className="font-medium">42 registered</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Weather:</span>
+                    <span className="font-medium">⛅ Partly Cloudy, 68°F</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Check-ins:</span>
+                    <span className="font-medium">0/42</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Button variant="default" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Director dashboard" })}>
+                    Director Dashboard
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => navigate("/leaderboard")}>
+                    View Details
+                  </Button>
+                  <Button variant="outline" size="sm" className="col-span-2" onClick={() => toast({ title: "Coming Soon", description: "Weather forecast feature" })}>
+                    Weather Forecast
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-3">
+                  <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate("/leaderboard")}>
+                    <h4 className="font-semibold mb-1">Fall Classic</h4>
+                    <p className="text-sm text-muted-foreground">October 15, 2025 • Lake Guntersville</p>
+                    <p className="text-xs text-muted-foreground mt-1">Alabama Bass Chapter 12</p>
+                    <Button variant="outline" size="sm" className="w-full mt-2">View Details</Button>
+                  </div>
+                  <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate("/leaderboard")}>
+                    <h4 className="font-semibold mb-1">Tennessee Valley Open</h4>
+                    <p className="text-sm text-muted-foreground">October 22, 2025 • Pickwick Lake</p>
+                    <p className="text-xs text-muted-foreground mt-1">Tennessee Valley Anglers</p>
+                    <Button variant="outline" size="sm" className="w-full mt-2">View Details</Button>
+                  </div>
+                </div>
+              </>
+            )}
+          </CardContent>
         </Card>
       </div>
     </div>
