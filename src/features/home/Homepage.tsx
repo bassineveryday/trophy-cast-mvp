@@ -66,6 +66,10 @@ const Homepage = () => {
   const { user, loading } = useAuth();
   const { role } = useDemoMode();
   const activeProfile = role !== "off" ? DEMO_PROFILES[role as keyof typeof DEMO_PROFILES] : null;
+  
+  // Data separation: real users vs demo users
+  const isRealUser = role === "off";
+  const isDemoMode = role === "jake" || role === "president";
 
   const ozToLbOz = (oz: number) => {
     const lb = Math.floor(oz / 16);
@@ -311,10 +315,30 @@ const Homepage = () => {
       </div>
       <div className="px-4 mb-6">
         <Card>
-          <CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />Recent Activity</div><Link to="/club-feed"><Button variant="outline" size="sm">View All</Button></Link></CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 mr-2 text-primary" />
+                Recent Activity
+              </div>
+            </CardTitle>
+          </CardHeader>
           <CardContent className="space-y-3">
-            {role === "jake" || role === "president" ? (
-              <div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No recent activity yet</p><p className="text-xs mt-1">Activity from your clubs will appear here</p></div>
+            {isRealUser ? (
+              <div className="text-center p-8 text-muted-foreground">
+                <Users className="w-8 h-8 mx-auto mb-4 opacity-50" />
+                <p className="text-sm">No recent activity</p>
+                <p className="text-xs mt-2">Join clubs to see activity from your community</p>
+                <Button 
+                  className="mt-4" 
+                  onClick={() => toast({
+                    title: "Coming Soon",
+                    description: "Club directory coming soon"
+                  })}
+                >
+                  Find Clubs
+                </Button>
+              </div>
             ) : (
               <>
                 <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
@@ -355,8 +379,10 @@ const Homepage = () => {
           </CardContent>
         </Card>
       </div>
-      {activeProfile && activeProfile.clubs.length > 0 && (<div className="px-4 mb-6"><Card><CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />My Clubs</div></CardTitle></CardHeader><CardContent className="space-y-3">{activeProfile.clubs.map((club) => (<div key={club.id} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate(`/clubs/${club.id}`)}><div className="flex items-center justify-between"><div><h4 className="font-semibold">{club.name}</h4><p className="text-sm text-muted-foreground">{club.role}</p></div><ArrowRight className="w-5 h-5 text-muted-foreground" /></div></div>))}{activeProfile.adminButtons.length > 0 && (<div className="mt-4 pt-4 border-t space-y-2">{activeProfile.adminButtons.map((btn) => (<Link key={btn.label} to={btn.to}><Button variant="outline" className="w-full justify-start" size="sm"><btn.icon className="w-4 h-4 mr-2" />{btn.label}</Button></Link>))}</div>)}</CardContent></Card></div>)}
-      {activeProfile && (
+      {/* My Clubs - Only show for demo users */}
+      {isDemoMode && activeProfile && activeProfile.clubs.length > 0 && (<div className="px-4 mb-6"><Card><CardHeader><CardTitle className="flex items-center justify-between"><div className="flex items-center"><Users className="w-5 h-5 mr-2 text-primary" />My Clubs</div></CardTitle></CardHeader><CardContent className="space-y-3">{activeProfile.clubs.map((club) => (<div key={club.id} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate(`/clubs/${club.id}`)}><div className="flex items-center justify-between"><div><h4 className="font-semibold">{club.name}</h4><p className="text-sm text-muted-foreground">{club.role}</p></div><ArrowRight className="w-5 h-5 text-muted-foreground" /></div></div>))}{activeProfile.adminButtons.length > 0 && (<div className="mt-4 pt-4 border-t space-y-2">{activeProfile.adminButtons.map((btn) => (<Link key={btn.label} to={btn.to}><Button variant="outline" className="w-full justify-start" size="sm"><btn.icon className="w-4 h-4 mr-2" />{btn.label}</Button></Link>))}</div>)}</CardContent></Card></div>)}
+      {/* Club Activity Feed - Only show for demo users */}
+      {isDemoMode && activeProfile && (
         <div className="px-4 mb-6">
           <Card>
             <CardHeader>
@@ -556,39 +582,20 @@ const Homepage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {role === "off" ? (
-              <div className="space-y-3">
-                {/* Suggested Anglers for Default Users */}
-                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">MJ</div>
-                    <div>
-                      <p className="font-semibold text-sm">Mike Johnson</p>
-                      <p className="text-xs text-muted-foreground">President, ABC12</p>
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
-                </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-fishing-green/10 flex items-center justify-center text-fishing-green font-semibold text-sm">JW</div>
-                    <div>
-                      <p className="font-semibold text-sm">Jake Wilson</p>
-                      <p className="text-xs text-muted-foreground">Member, ABC12 + TVA</p>
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
-                </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-water-blue/10 flex items-center justify-center text-water-blue font-semibold text-sm">JS</div>
-                    <div>
-                      <p className="font-semibold text-sm">John Smith</p>
-                      <p className="text-xs text-muted-foreground">President, TVA</p>
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon", description: "Follow feature" })}>Follow</Button>
-                </div>
+            {isRealUser ? (
+              <div className="text-center p-8 text-muted-foreground">
+                <Users className="w-8 h-8 mx-auto mb-4 opacity-50" />
+                <p className="text-sm">Not following anyone yet</p>
+                <p className="text-xs mt-2">Follow other anglers to see their catches and updates</p>
+                <Button 
+                  className="mt-4" 
+                  onClick={() => toast({ 
+                    title: "Coming Soon", 
+                    description: "Browse anglers coming soon" 
+                  })}
+                >
+                  Find Anglers
+                </Button>
               </div>
             ) : role === "jake" ? (
               <div className="space-y-3">
@@ -634,9 +641,7 @@ const Homepage = () => {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="p-8 text-center text-muted-foreground"><Users className="w-8 h-8 mx-auto mb-2 opacity-50" /><p className="text-sm">No followed anglers yet</p><p className="text-xs mt-1">Follow other anglers to see their catches and updates</p></div>
-            )}
+            ) : null}
           </CardContent>
         </Card>
       </div>
@@ -645,7 +650,7 @@ const Homepage = () => {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Calendar className="w-5 h-5 mr-2 text-primary" />
-              {role === "jake" ? "Your Next Tournament" : role === "president" ? "Your Next Tournament (Director)" : "Browse Tournaments"}
+              {role === "jake" ? "Your Next Tournament" : role === "president" ? "Your Next Tournament (Director)" : "Next Tournament"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -728,22 +733,14 @@ const Homepage = () => {
                 </div>
               </>
             ) : (
-              <>
-                <div className="space-y-3">
-                  <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate("/leaderboard")}>
-                    <h4 className="font-semibold mb-1">Fall Classic</h4>
-                    <p className="text-sm text-muted-foreground">October 15, 2025 • Lake Guntersville</p>
-                    <p className="text-xs text-muted-foreground mt-1">Alabama Bass Chapter 12</p>
-                    <Button variant="outline" size="sm" className="w-full mt-2">View Details</Button>
-                  </div>
-                  <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer" onClick={() => navigate("/leaderboard")}>
-                    <h4 className="font-semibold mb-1">Tennessee Valley Open</h4>
-                    <p className="text-sm text-muted-foreground">October 22, 2025 • Pickwick Lake</p>
-                    <p className="text-xs text-muted-foreground mt-1">Tennessee Valley Anglers</p>
-                    <Button variant="outline" size="sm" className="w-full mt-2">View Details</Button>
-                  </div>
-                </div>
-              </>
+              <div className="text-center p-8 text-muted-foreground">
+                <Calendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm">No upcoming tournaments</p>
+                <p className="text-xs mt-2">Register for tournaments to see them here</p>
+                <Link to="/leaderboard">
+                  <Button className="mt-4">Browse Tournaments</Button>
+                </Link>
+              </div>
             )}
           </CardContent>
         </Card>
