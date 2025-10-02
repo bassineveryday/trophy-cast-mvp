@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Trophy, Award, Fish, Brain } from "lucide-react";
+import { Home, Target, Award, Fish, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const BottomNavigation = () => {
@@ -7,10 +7,10 @@ export const BottomNavigation = () => {
 
   const navItems = [
     { to: "/", icon: Home, label: "Home" },
-    { to: "/leaderboard", icon: Trophy, label: "Leaderboard" },
-    { to: "/ai-coach", icon: Brain, label: "AI Coach", featured: true },
-    { to: "/catch-logging", icon: Fish, label: "Log Catch" },
-    { to: "/trophy-room", icon: Trophy, label: "Trophy Room" },
+    { to: "/tournaments/dashboard", icon: Target, label: "Tourneys" },
+    { to: "/ai-coach", icon: Brain, label: "Coach", featured: true },
+    { to: "/catch-logging", icon: Fish, label: "Catch" },
+    { to: "/trophy-room", icon: Award, label: "Trophies" },
   ];
 
   return (

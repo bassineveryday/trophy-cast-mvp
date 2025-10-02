@@ -11,7 +11,7 @@ export default function TrophyRoom() {
         {/* Hero Section */}
         <div className="text-center py-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/10 mb-4">
-            <Award className="w-12 h-12 text-amber-500" />
+            <Trophy className="w-12 h-12 text-amber-500" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Your Trophy Room</h2>
           <p className="text-muted-foreground max-w-md mx-auto">
