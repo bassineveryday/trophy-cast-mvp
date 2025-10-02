@@ -14,94 +14,87 @@ export const demoUsers = {
     avatar_url: null,
   },
 } as const;
-// DEMO PROFILE DATA
-export const demoProfiles = {
-  jake: {
-    "id": "demo-jake",
-    "username": "jake_angler",
-    "displayName": "Jake Wilson",
-    "titleLine": "Member",
-    "role": "member",
-    "avatarUrl": "/images/avatars/jake.png",
-    "badges": [
-      { "id": "tournament-ready", "label": "Tournament Ready" },
-      { "id": "top20-15", "label": "15 Top-20 Finishes" },
-      { "id": "biggest-catch", "label": "Biggest Catch: 6.8 lb Bass" }
-    ],
-    "careerStats": {
-      "wins": 2,
-      "aoyTitles": 0,
-      "biggestCatchLb": 6.8,
-      "top10s": 8,
-      "top20s": 15,
-      "placeCounts": { "1st": 2, "2nd": 3, "3rd": 3 }
-    },
-    "clubMemberships": [
-      {
-        "clubId": "alabama-bass-chapter-12",
-        "clubName": "Alabama Bass Chapter 12",
-        "role": "Member"
-      },
-      {
-        "clubId": "tennessee-valley-anglers",
-        "clubName": "Tennessee Valley Anglers",
-        "role": "Member"
-      }
-    ],
-    "upcomingTournaments": [
-      { "id": "tourn-20251015", "name": "Fall Classic", "date": "2025-10-15" },
-      { "id": "tourn-20251022", "name": "Lake Guntersville Open", "date": "2025-10-22" }
-    ],
-    "quickActions": []
+
+// JAKE'S DEMO PROFILE DATA
+export const jakeProfile = {
+  "id": "demo-jake",
+  "username": "jake_angler",
+  "displayName": "Jake Wilson",
+  "titleLine": "Member",
+  "role": "member",
+  "avatarUrl": "/images/avatars/jake.png",
+  "badges": [
+    { "id": "tournament-ready", "label": "Tournament Ready" },
+    { "id": "top20-15", "label": "15 Top-20 Finishes" },
+    { "id": "biggest-catch", "label": "Biggest Catch: 6.8 lb Bass" }
+  ],
+  "careerStats": {
+    "wins": 2,
+    "aoyTitles": 0,
+    "biggestCatchLb": 6.8,
+    "top10s": 8,
+    "top20s": 15,
+    "placeCounts": { "1st": 2, "2nd": 3, "3rd": 3 }
   },
-  president: {
-    "id": "demo-mike",
-    "username": "mike_prez",
-    "displayName": "Mike Johnson",
-    "titleLine": "President, ABC-12",
-    "role": "president",
-    "avatarUrl": "/images/avatars/mike.png",
-    "badges": [
-      { "id": "aoy-2024", "label": "Angler of the Year 2024" },
-      { "id": "top10-50", "label": "50 Top-10 Finishes" },
-      { "id": "biggest-catch", "label": "Biggest Catch: 12.3 lb Bass" }
-    ],
-    "careerStats": {
-      "wins": 8,
-      "aoyTitles": 2,
-      "biggestCatchLb": 12.3,
-      "top10s": 50,
-      "top20s": 120,
-      "placeCounts": { "1st": 8, "2nd": 15, "3rd": 12 }
+  "clubMemberships": [
+    {
+      "clubId": "alabama-bass-chapter-12",
+      "clubName": "Alabama Bass Chapter 12",
+      "role": "Member"
     },
-    "clubMemberships": [
-      {
-        "clubId": "alabama-bass-chapter-12",
-        "clubName": "Alabama Bass Chapter 12",
-        "role": "President"
-      }
-    ],
-    "upcomingTournaments": [
-      { "id": "tourn-20250930", "name": "Fall Bass Classic", "date": "2025-09-30" }
-    ],
-    "quickActions": [
-      { "id": "bod-dashboard", "label": "Board of Directors", "to": "/admin/board-of-directors", "icon": "📊" },
-      { "id": "manage-club", "label": "Manage Club", "to": "/clubs/alabama-bass-chapter-12/manage", "icon": "⚙️" }
-    ]
-  }
+    {
+      "clubId": "tennessee-valley-anglers",
+      "clubName": "Tennessee Valley Anglers",
+      "role": "Member"
+    }
+  ],
+  "upcomingTournaments": [
+    { "id": "tourn-20251015", "name": "Fall Classic", "date": "2025-10-15" },
+    { "id": "tourn-20251022", "name": "Lake Guntersville Open", "date": "2025-10-22" }
+  ],
+  "quickActions": []
 };
 
-// Legacy exports for backward compatibility
-export const mikeProfile = demoProfiles.president;
+
+
+// MIKE'S DEMO PROFILE DATA
+export const mikeProfile = {
+  "id": "demo-mike",
+  "username": "mike_prez",
+  "displayName": "Mike Johnson",
+  "titleLine": "President, ABC-12",
+  "role": "president",
+  "avatarUrl": "/images/avatars/mike.png",
+  "badges": [
+    { "id": "aoy-2024", "label": "Angler of the Year 2024" },
+    { "id": "top10-50", "label": "50 Top-10 Finishes" },
+    { "id": "biggest-catch", "label": "Biggest Catch: 12.3 lb Bass" }
+  ],
+  "careerStats": {
+    "wins": 8,
+    "aoyTitles": 2,
+    "biggestCatchLb": 12.3,
+    "top10s": 50,
+    "top20s": 120,
+    "placeCounts": { "1st": 8, "2nd": 15, "3rd": 12 }
+  },
+  "clubMemberships": [
+    {
+      "clubId": "alabama-bass-chapter-12",
+      "clubName": "Alabama Bass Chapter 12",
+      "role": "President"
+    }
+  ],
+  "upcomingTournaments": [
+    { "id": "tourn-20250930", "name": "Fall Bass Classic", "date": "2025-09-30" }
+  ],
+  "quickActions": [
+    { "id": "bod-dashboard", "label": "Board of Directors", "to": "/admin/board-of-directors", "icon": "📊" },
+    { "id": "manage-club",    "label": "Manage Club",      "to": "/clubs/alabama-bass-chapter-12/manage", "icon": "⚙️" }
+  ]
+};
 
 export const demoClub = {
-  id: "demo-club-alabama",
-  name: "Demo: Alabama Bass Chapter",
-};
-
-export const jakeProfile = demoProfiles.jake;
-export const mikeProfile = demoProfiles.president;
-
   id: "demo-club-alabama",
   name: "Demo: Alabama Bass Chapter",
 };
