@@ -23,8 +23,8 @@ const Homepage = () => {
   const DEMO_PROFILES = { jake: { displayName: "Jake Wilson", clubs: [{ id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "Member" }, { id: "tennessee-valley-anglers", name: "Tennessee Valley Anglers", role: "Member" }], adminButtons: [] }, president: { displayName: "Mike Johnson", clubs: [{ id: "alabama-bass-chapter-12", name: "Alabama Bass Chapter 12", role: "President" }], adminButtons: [{ label: "Board of Directors", to: "/admin/board-of-directors", icon: Building2 }, { label: "Manage Club", to: "/clubs/alabama-bass-chapter-12/manage", icon: Building2 }] } };
   
   const { user, loading } = useAuth();
-  const { demoMode } = useDemoMode();
-  const activeProfile = demoMode !== "off" ? DEMO_PROFILES[demoMode as keyof typeof DEMO_PROFILES] : null;
+  const { role } = useDemoMode();
+  const activeProfile = role !== "off" ? DEMO_PROFILES[role as keyof typeof DEMO_PROFILES] : null;
 
   const ozToLbOz = (oz: number) => {
     const lb = Math.floor(oz / 16);
@@ -32,7 +32,7 @@ const Homepage = () => {
     return lb > 0 ? `${lb} lb ${rem} oz` : `${oz} oz`;
   };
 
-  const greetName = (demoMode !== "off" && activeProfile) ? activeProfile.displayName : (user?.user_metadata?.display_name || user?.email?.split('@')[0] || "angler");
+  const greetName = (role !== "off" && activeProfile) ? activeProfile.displayName : (user?.user_metadata?.display_name || user?.email?.split('@')[0] || "angler");
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -110,7 +110,7 @@ const Homepage = () => {
     <div className="min-h-screen bg-background">
       <AnimatePresence>{isRefreshing && <LoadingSpinner message="Refreshing..." />}</AnimatePresence>
       <AIStatusBar />
-      <div className="bg-background border-b border-border h-12 flex items-center justify-end px-4"><DemoSwitcher inline /></div>
+      <div className="bg-background border-b border-border h-12 flex items-center justify-end px-4"><DemoSwitcher /></div>
       <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
         <div className="absolute top-4 left-4 z-20">
           <div className="flex items-center space-x-2">
