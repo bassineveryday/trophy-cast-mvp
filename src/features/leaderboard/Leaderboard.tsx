@@ -49,11 +49,11 @@ interface AOYAngler {
 
 /* ------------ Mock Data ------------ */
 const LIVE_LEADERBOARD: LiveAngler[] = [
-  { id: "dt", rank: 1, name: "David Thompson", anglerId: "david-thompson", weightLbs: 18.45, bigLbs: 4.8, change: "up", avatar: "DT" },
-  { id: "jp", rank: 2, name: "Jake Patterson", anglerId: "jake-patterson", weightLbs: 17.92, bigLbs: 5.2, change: "up", avatar: "JP", previousRank: 5 },
-  { id: "mj", rank: 3, name: "Mike Johnson", anglerId: "mike-johnson", weightLbs: 17.33, bigLbs: 4.1, change: "up", avatar: "MJ" },
-  { id: "sm", rank: 4, name: "Sarah Martinez", anglerId: "sarah-martinez", weightLbs: 16.89, bigLbs: 4.9, change: "down", avatar: "SM" },
-  { id: "cw", rank: 5, name: "Chris Wilson", anglerId: "chris-wilson", weightLbs: 16.22, bigLbs: 3.9, change: "down", avatar: "CW" },
+  { id: "mj", rank: 1, name: "Mike Johnson", anglerId: "mike-johnson", weightLbs: 24.8, bigLbs: 5.6, change: "up", avatar: "MJ" },
+  { id: "dt", rank: 2, name: "David Thompson", anglerId: "david-thompson", weightLbs: 23.5, bigLbs: 4.8, change: "flat", avatar: "DT" },
+  { id: "jw", rank: 3, name: "Jake Wilson", anglerId: "jake-wilson", weightLbs: 22.9, bigLbs: 5.2, change: "up", avatar: "JW", previousRank: 5 },
+  { id: "sm", rank: 4, name: "Sarah Martinez", anglerId: "sarah-martinez", weightLbs: 21.7, bigLbs: 4.9, change: "down", avatar: "SM" },
+  { id: "ca", rank: 5, name: "Chris Anderson", anglerId: "chris-anderson", weightLbs: 20.3, bigLbs: 3.9, change: "down", avatar: "CA" },
 ];
 
 const AOY_STANDINGS: AOYAngler[] = [
@@ -158,8 +158,8 @@ const Leaderboard = () => {
 
               <CardContent className="space-y-3">
                 {liveData.map((angler) => {
-                  const isUser = angler.name === "Mike Johnson";
-                  const isHot = angler.name === "Jake Patterson";
+                  const isUser = (role === "president" && angler.name === "Mike Johnson") || (role === "jake" && angler.name === "Jake Wilson");
+                  const isHot = angler.name === "Jake Wilson" && angler.previousRank;
 
                   return (
                     <div
@@ -180,15 +180,15 @@ const Leaderboard = () => {
                             name={angler.name}
                             photoUrl="/placeholder.svg"
                             club={{
-                              id: angler.anglerId.includes("patterson") ? "alabama-bass-nation" :
+                              id: angler.anglerId.includes("wilson") || angler.anglerId.includes("johnson") ? "alabama-bass-chapter-12" :
                                   angler.anglerId.includes("santos") ? "river-valley" :
                                   angler.anglerId.includes("thompson") ? "trophy-cast" : "alabama-bass-nation",
-                              abbreviation: angler.anglerId.includes("patterson") ? "ABN-12" :
+                              abbreviation: angler.anglerId.includes("wilson") || angler.anglerId.includes("johnson") ? "ABC-12" :
                                            angler.anglerId.includes("santos") ? "RVIBC" :
                                            angler.anglerId.includes("thompson") ? "TCES" : "ABN-12"
                             }}
                             role="Tournament Angler"
-                            city={angler.anglerId.includes("patterson") ? "Huntsville, AL" :
+                            city={angler.anglerId.includes("wilson") || angler.anglerId.includes("johnson") ? "Huntsville, AL" :
                                  angler.anglerId.includes("santos") ? "Nashville, TN" :
                                  angler.anglerId.includes("thompson") ? "Birmingham, AL" : "Alabama"} 
                             anglerId={angler.anglerId}
