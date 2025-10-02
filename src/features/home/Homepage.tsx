@@ -17,6 +17,7 @@ import AIStatusBar from "@/components/AIStatusBar";
 import { FloatingMicButton } from "@/components/voice/FloatingMicButton";
 import UniversalAvatar from "@/components/UniversalAvatar";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import DemoSwitcher from "@/components/DemoSwitcher";
 
 // Assets
 import bassTrophyLogo from "@/assets/bass-trophy-logo.png";
@@ -169,7 +170,12 @@ const Homepage = () => {
       {/* AI Status Bar */}
       <AIStatusBar />
 
-            {/* Hero Section */}
+      {/* Top Bar */}
+      <div className="bg-background border-b border-border h-12 flex items-center justify-end px-4">
+        <DemoSwitcher inline />
+      </div>
+
+      {/* Hero Section */}
       <div className="relative bg-gradient-hero text-white px-4 py-6 overflow-hidden">
         {/* Logo - Top Left */}
         <div className="absolute top-4 left-4 z-20">

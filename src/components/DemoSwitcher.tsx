@@ -19,7 +19,11 @@ function goHomeWithDemo(value: string | null) {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
-export default function DemoSwitcher() {
+interface DemoSwitcherProps {
+  inline?: boolean;
+}
+
+export default function DemoSwitcher({ inline = false }: DemoSwitcherProps) {
   const { enabled, role } = useDemoMode();
   
   const setOff = useCallback(() => {
@@ -67,13 +71,16 @@ export default function DemoSwitcher() {
       )}
 
       {/* Profile Switcher Dropdown */}
-      <div className="fixed top-20 right-5 z-[9999]">
+      <div className={inline ? "" : "fixed top-20 right-5 z-[9999]"}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
               variant="outline" 
               size="sm"
-              className="bg-background/95 backdrop-blur-sm border-border shadow-md hover:bg-accent min-w-[140px] sm:min-w-[180px]"
+              className={inline 
+                ? "bg-background border-border hover:bg-accent min-w-[140px] sm:min-w-[180px]" 
+                : "bg-background/95 backdrop-blur-sm border-border shadow-md hover:bg-accent min-w-[140px] sm:min-w-[180px]"
+              }
             >
               <User className="h-4 w-4 mr-2" />
               <span className="text-xs sm:text-sm">{displayLabel}</span>
