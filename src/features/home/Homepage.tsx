@@ -172,7 +172,7 @@ const Homepage = () => {
 
       {/* Top Bar */}
       <div className="bg-background border-b border-border h-12 flex items-center justify-end px-4">
-        <DemoSwitcher inline />
+        <DemoSwitcher />
       </div>
 
       {/* Hero Section */}
