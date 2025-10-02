@@ -53,6 +53,8 @@ export const jakeProfile = {
   ],
   "quickActions": []
 };
+
+
 // MIKE'S DEMO PROFILE DATA
 export const mikeProfile = {
   "id": "demo-mike",
@@ -219,4 +221,6 @@ export const demoCatches = [
     status: "verified",
     captured_at: new Date().toISOString(),
   },
-] as const;
+] as const
+  // Keep exports from being removed
+export { jakeProfile };
