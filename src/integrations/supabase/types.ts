@@ -635,6 +635,7 @@ export type Database = {
           home_state: string | null
           id: string
           is_demo: boolean | null
+          linked_member_id: string | null
           name: string
           signature_techniques: string[] | null
           tournaments_fished: number | null
@@ -655,6 +656,7 @@ export type Database = {
           home_state?: string | null
           id?: string
           is_demo?: boolean | null
+          linked_member_id?: string | null
           name: string
           signature_techniques?: string[] | null
           tournaments_fished?: number | null
@@ -675,6 +677,7 @@ export type Database = {
           home_state?: string | null
           id?: string
           is_demo?: boolean | null
+          linked_member_id?: string | null
           name?: string
           signature_techniques?: string[] | null
           tournaments_fished?: number | null
