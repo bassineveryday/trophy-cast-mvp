@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('[Auth] Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
 
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) {
           setTimeout(async () => {
             try {
+              console.log('[Auth] Fetching profile for user:', session.user.id);
               const { data: profileData, error } = await supabase
                 .from('profiles')
                 .select('*')
@@ -51,12 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 .maybeSingle();
 
               if (error) {
-                console.error('Error fetching profile:', error);
+                console.error('[Auth] Error fetching profile:', error);
               } else {
+                console.log('[Auth] Profile loaded:', profileData?.name);
                 setProfile(profileData);
               }
             } catch (error) {
-              console.error('Error fetching profile:', error);
+              console.error('[Auth] Error fetching profile:', error);
             } finally {
               setLoading(false);
             }
@@ -126,21 +129,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('[Auth] Attempting sign in for:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
       if (error) {
+        console.error('[Auth] Sign in error:', error);
         toast({
           variant: "destructive",
           title: "Sign In Error",
           description: error.message
         });
+      } else {
+        console.log('[Auth] Sign in successful:', data.user?.email);
       }
 
       return { error };
     } catch (error) {
+      console.error('[Auth] Sign in exception:', error);
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       toast({
         variant: "destructive",

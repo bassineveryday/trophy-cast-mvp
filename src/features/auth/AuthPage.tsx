@@ -65,16 +65,21 @@ export default function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!loading && user) {
+      console.log('[AuthPage] User authenticated, redirecting to:', from);
       navigate(from, { replace: true });
     }
   }, [user, loading, navigate, from]);
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
+    console.log('[AuthPage] Starting sign in for:', data.email);
     try {
       const { error } = await signIn(data.email, data.password);
       if (!error) {
+        console.log('[AuthPage] Sign in successful, redirecting to:', from);
         navigate(from, { replace: true });
+      } else {
+        console.error('[AuthPage] Sign in failed');
       }
     } finally {
       setIsLoading(false);
