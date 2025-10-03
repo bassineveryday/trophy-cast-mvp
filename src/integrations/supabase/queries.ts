@@ -61,3 +61,54 @@ export async function fetchEventPointsForMyClub(eventId?: string) {
   if (error) throw error;
   return data ?? [];
 }
+
+/**
+ * Fetch lifetime tournament results for current user (lane-safe)
+ * Returns all results for the current user's linked member across all seasons
+ */
+export async function fetchMyLifetime() {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("linked_member_id, is_demo")
+    .eq("id", (await supabase.auth.getUser()).data.user?.id)
+    .single();
+  
+  if (!profile?.linked_member_id) return [];
+  
+  const { data, error } = await supabase
+    .from("tournament_results")
+    .select("*")
+    .eq("member_id", profile.linked_member_id)
+    .eq("is_demo", profile.is_demo)
+    .order("event_date", { ascending: false });
+  
+  if (error) throw error;
+  return data ?? [];
+}
+
+/**
+ * Fetch current season tournament results for current user (lane-safe)
+ * Returns results for the current season only
+ */
+export async function fetchMySeason(seasonYear?: number) {
+  const currentYear = seasonYear ?? new Date().getFullYear();
+  
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("linked_member_id, is_demo")
+    .eq("id", (await supabase.auth.getUser()).data.user?.id)
+    .single();
+  
+  if (!profile?.linked_member_id) return [];
+  
+  const { data, error } = await supabase
+    .from("tournament_results")
+    .select("*")
+    .eq("member_id", profile.linked_member_id)
+    .eq("is_demo", profile.is_demo)
+    .eq("season", currentYear)
+    .order("event_date", { ascending: false });
+  
+  if (error) throw error;
+  return data ?? [];
+}
