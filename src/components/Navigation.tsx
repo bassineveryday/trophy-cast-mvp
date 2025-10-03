@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, User, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { LaneBadge } from '@/components/LaneBadge';
 
 export function Navigation() {
   const { user, profile, signOut } = useAuth();
@@ -19,7 +20,8 @@ export function Navigation() {
     : user.email?.[0]?.toUpperCase() || 'U';
 
   return (
-    <div className="flex items-center justify-end p-4">
+    <div className="flex items-center justify-end gap-3 p-4">
+      <LaneBadge />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
