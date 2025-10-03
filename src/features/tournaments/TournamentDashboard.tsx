@@ -38,12 +38,14 @@ export default function TournamentDashboard() {
         // Check if user is club officer
         const { data: roleData } = await supabase
           .from('user_roles')
-          .select('club_role')
-          .eq('user_id', user.id)
-          .eq('is_active', true)
-          .in('club_role', ['president', 'vice_president', 'tournament_director', 'club_admin']);
+          .select('*')
+          .eq('user_id', user.id) as any;
         
-        setIsClubOfficer(roleData && roleData.length > 0);
+        const isOfficer = roleData?.some((r: any) => 
+          ['president', 'vice_president', 'tournament_director', 'club_admin', 'secretary'].includes(r.role_name)
+        );
+        
+        setIsClubOfficer(isOfficer || false);
 
         // Fetch tournaments filtered by user's club
         if (!profile?.club_id) {
@@ -209,7 +211,7 @@ export default function TournamentDashboard() {
 
       {isClubOfficer && (
         <Button 
-          className="fixed bottom-20 right-6 h-14 rounded-full shadow-lg bg-water-blue hover:bg-water-blue/90 text-white"
+          className="fixed bottom-8 right-8 z-50 h-14 rounded-full shadow-lg bg-water-blue hover:bg-water-blue/90 text-white"
           size="lg"
           onClick={() => toast({
             title: 'Coming Soon',
