@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   ArrowLeft,
   Trophy,
@@ -40,23 +41,58 @@ export default function TournamentDetail() {
   const { toast } = useToast();
   const { enabled: demoMode } = useDemoMode();
   const [isSubmitCatchOpen, setIsSubmitCatchOpen] = useState(false);
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [participantCount, setParticipantCount] = useState(0);
+  const [isRegistering, setIsRegistering] = useState(false);
   
   // Get tournament data
   const { data: realTournament } = useTournament(tournamentId || '');
   const demoTournament = demoTournaments.find(t => t.id === tournamentId);
   const tournament: any = demoMode ? demoTournament : realTournament;
 
-  // Mock data for demo
-  const isUserRegistered = Math.random() > 0.3;
-  const canRegister = tournament?.status === 'open' || tournament?.status === 'upcoming';
+  const canRegister = tournament && new Date(tournament.date) >= new Date();
   const isActive = tournament?.status === 'active';
   const isCompleted = tournament?.status === 'completed';
+  
+  // Fetch registration status and participant count
+  useEffect(() => {
+    if (!tournamentId || demoMode) return;
+    
+    async function fetchRegistrationData() {
+      try {
+        // Check if current user is registered
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: registrationData } = await supabase
+            .from('tournament_registrations')
+            .select('*')
+            .eq('tournament_id', tournamentId)
+            .eq('user_id', user.id)
+            .maybeSingle();
+          
+          setIsUserRegistered(!!registrationData);
+        }
+        
+        // Get participant count
+        const { count } = await supabase
+          .from('tournament_registrations')
+          .select('*', { count: 'exact', head: true })
+          .eq('tournament_id', tournamentId);
+        
+        setParticipantCount(count || 0);
+      } catch (error) {
+        console.error('Error fetching registration data:', error);
+      }
+    }
+    
+    fetchRegistrationData();
+  }, [tournamentId, demoMode]);
   
   // Normalize tournament data
   const tournamentData = {
     ...tournament,
     time: tournament?.time || '6:00 AM',
-    registered: tournament?.registered || 0,
+    registered: demoMode ? (tournament?.registered || 0) : participantCount,
     max_participants: tournament?.max_participants || 50,
     description: tournament?.description || 'Tournament details coming soon',
     rules: tournament?.rules || '5 bass limit, minimum 12 inches',
@@ -88,11 +124,51 @@ export default function TournamentDetail() {
     { id: '3', author: 'Sarah Johnson', avatar: '/src/assets/profiles/sarah-johnson.jpg', time: '1 day ago', content: 'First time fishing Lake Powell - any tips from the locals?', likes: 15, comments: 7 },
   ];
 
-  const handleRegister = () => {
-    toast({
-      title: 'Registration Successful!',
-      description: `You're registered for ${tournament?.name}`,
-    });
+  const handleRegister = async () => {
+    if (!tournament?.id || isRegistering) return;
+    
+    setIsRegistering(true);
+    try {
+      const { error } = await supabase.rpc('register_for_tournament', {
+        p_tournament_id: tournament.id
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: 'Registration Successful!',
+        description: `You're registered for ${tournament?.name}`,
+      });
+      
+      // Refetch registration status and participant count
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: registrationData } = await supabase
+          .from('tournament_registrations')
+          .select('*')
+          .eq('tournament_id', tournament.id)
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setIsUserRegistered(!!registrationData);
+      }
+      
+      const { count } = await supabase
+        .from('tournament_registrations')
+        .select('*', { count: 'exact', head: true })
+        .eq('tournament_id', tournament.id);
+      
+      setParticipantCount(count || 0);
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Registration Failed',
+        description: 'There was an error registering for the tournament. Please try again.',
+      });
+    } finally {
+      setIsRegistering(false);
+    }
   };
 
   const handleSubmitCatch = () => {
@@ -175,15 +251,16 @@ export default function TournamentDetail() {
               {isUserRegistered ? (
                 <Badge className="bg-fishing-green text-white px-6 py-3 text-lg">
                   <CheckCircle className="w-5 h-5 mr-2" />
-                  Registered
+                  Registered ✓
                 </Badge>
               ) : canRegister ? (
                 <Button 
                   size="lg"
                   className="bg-fishing-green hover:bg-fishing-green/90 text-white px-8"
                   onClick={handleRegister}
+                  disabled={isRegistering}
                 >
-                  Register Now
+                  {isRegistering ? 'Registering...' : 'Register Now'}
                 </Button>
               ) : (
                 <Badge variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white/20 px-6 py-3 text-lg">

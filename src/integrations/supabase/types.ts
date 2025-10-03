@@ -38,6 +38,33 @@ export type Database = {
         }
         Relationships: []
       }
+      aoy_standings: {
+        Row: {
+          aoy_rank: number | null
+          boater_status: string | null
+          member_id: string
+          member_name: string | null
+          season_year: number
+          total_aoy_points: number | null
+        }
+        Insert: {
+          aoy_rank?: number | null
+          boater_status?: string | null
+          member_id: string
+          member_name?: string | null
+          season_year: number
+          total_aoy_points?: number | null
+        }
+        Update: {
+          aoy_rank?: number | null
+          boater_status?: string | null
+          member_id?: string
+          member_name?: string | null
+          season_year?: number
+          total_aoy_points?: number | null
+        }
+        Relationships: []
+      }
       catch_environmental_correlation: {
         Row: {
           catch_id: string | null
@@ -890,6 +917,33 @@ export type Database = {
           },
         ]
       }
+      settings_audit: {
+        Row: {
+          changed_at: string | null
+          id: string
+          new_value: string | null
+          old_value: string | null
+          setting_key: string
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          setting_key: string
+          user_id: string
+        }
+        Update: {
+          changed_at?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          setting_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       solunar_forecasts: {
         Row: {
           created_at: string | null
@@ -1000,6 +1054,108 @@ export type Database = {
         }
         Relationships: []
       }
+      tournament_entries: {
+        Row: {
+          checked_in: boolean | null
+          created_at: string | null
+          event_id: string
+          id: string
+          member_id: string
+          season: number | null
+        }
+        Insert: {
+          checked_in?: boolean | null
+          created_at?: string | null
+          event_id: string
+          id?: string
+          member_id: string
+          season?: number | null
+        }
+        Update: {
+          checked_in?: boolean | null
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          member_id?: string
+          season?: number | null
+        }
+        Relationships: []
+      }
+      tournament_events: {
+        Row: {
+          event_date: string | null
+          event_id: string
+          lake: string | null
+          participants: number | null
+          season: number | null
+          tournament_code: string | null
+          tournament_name: string | null
+        }
+        Insert: {
+          event_date?: string | null
+          event_id: string
+          lake?: string | null
+          participants?: number | null
+          season?: number | null
+          tournament_code?: string | null
+          tournament_name?: string | null
+        }
+        Update: {
+          event_date?: string | null
+          event_id?: string
+          lake?: string | null
+          participants?: number | null
+          season?: number | null
+          tournament_code?: string | null
+          tournament_name?: string | null
+        }
+        Relationships: []
+      }
+      tournament_members: {
+        Row: {
+          address: string | null
+          bass_number: string | null
+          boater_status: string | null
+          city: string | null
+          email_primary: string | null
+          is_rookie: boolean | null
+          member_id: string
+          member_name: string | null
+          member_name_clean: string | null
+          mobile_phone: string | null
+          state: string | null
+          zip: string | null
+        }
+        Insert: {
+          address?: string | null
+          bass_number?: string | null
+          boater_status?: string | null
+          city?: string | null
+          email_primary?: string | null
+          is_rookie?: boolean | null
+          member_id: string
+          member_name?: string | null
+          member_name_clean?: string | null
+          mobile_phone?: string | null
+          state?: string | null
+          zip?: string | null
+        }
+        Update: {
+          address?: string | null
+          bass_number?: string | null
+          boater_status?: string | null
+          city?: string | null
+          email_primary?: string | null
+          is_rookie?: boolean | null
+          member_id?: string
+          member_name?: string | null
+          member_name_clean?: string | null
+          mobile_phone?: string | null
+          state?: string | null
+          zip?: string | null
+        }
+        Relationships: []
+      }
       tournament_registrations: {
         Row: {
           created_at: string | null
@@ -1032,6 +1188,84 @@ export type Database = {
           },
         ]
       }
+      tournament_results: {
+        Row: {
+          aoy_points: number | null
+          big_bass_lbs: number | null
+          big_bass_payout: number | null
+          big_fish: number | null
+          boat_weight_payout: number | null
+          cash_payout: number | null
+          catch_count: number | null
+          event_date: string | null
+          event_id: string | null
+          fish_count: number | null
+          lake: string | null
+          member_id: string | null
+          member_name: string | null
+          place: number | null
+          result_id: number
+          result_text: string | null
+          season: number | null
+          source: string | null
+          total_weight: number | null
+          tournament_code: string | null
+          tournament_name: string | null
+          visibility: string | null
+          weight_lbs: number | null
+        }
+        Insert: {
+          aoy_points?: number | null
+          big_bass_lbs?: number | null
+          big_bass_payout?: number | null
+          big_fish?: number | null
+          boat_weight_payout?: number | null
+          cash_payout?: number | null
+          catch_count?: number | null
+          event_date?: string | null
+          event_id?: string | null
+          fish_count?: number | null
+          lake?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          result_id?: number
+          result_text?: string | null
+          season?: number | null
+          source?: string | null
+          total_weight?: number | null
+          tournament_code?: string | null
+          tournament_name?: string | null
+          visibility?: string | null
+          weight_lbs?: number | null
+        }
+        Update: {
+          aoy_points?: number | null
+          big_bass_lbs?: number | null
+          big_bass_payout?: number | null
+          big_fish?: number | null
+          boat_weight_payout?: number | null
+          cash_payout?: number | null
+          catch_count?: number | null
+          event_date?: string | null
+          event_id?: string | null
+          fish_count?: number | null
+          lake?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          result_id?: number
+          result_text?: string | null
+          season?: number | null
+          source?: string | null
+          total_weight?: number | null
+          tournament_code?: string | null
+          tournament_name?: string | null
+          visibility?: string | null
+          weight_lbs?: number | null
+        }
+        Relationships: []
+      }
       tournaments: {
         Row: {
           club_id: string | null
@@ -1039,6 +1273,7 @@ export type Database = {
           created_by: string | null
           date: string
           entry_fee: number | null
+          event_id: string | null
           id: string
           location: string
           name: string
@@ -1051,6 +1286,7 @@ export type Database = {
           created_by?: string | null
           date: string
           entry_fee?: number | null
+          event_id?: string | null
           id?: string
           location: string
           name: string
@@ -1063,6 +1299,7 @@ export type Database = {
           created_by?: string | null
           date?: string
           entry_fee?: number | null
+          event_id?: string | null
           id?: string
           location?: string
           name?: string
@@ -1515,6 +1752,36 @@ export type Database = {
           },
         ]
       }
+      user_settings: {
+        Row: {
+          ai_coach_enabled: boolean | null
+          allow_conservation_contribution: boolean | null
+          allow_location_capture: boolean | null
+          share_to_club_default: boolean | null
+          share_to_public_default: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_coach_enabled?: boolean | null
+          allow_conservation_contribution?: boolean | null
+          allow_location_capture?: boolean | null
+          share_to_club_default?: boolean | null
+          share_to_public_default?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_coach_enabled?: boolean | null
+          allow_conservation_contribution?: boolean | null
+          allow_location_capture?: boolean | null
+          share_to_club_default?: boolean | null
+          share_to_public_default?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       water_bodies: {
         Row: {
           average_depth: number | null
@@ -1559,7 +1826,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_aoy_best4: {
+        Row: {
+          aoy_total_best4: number | null
+          blanks_fished: number | null
+          events_counted: number | null
+          events_fished: number | null
+          member_id: string | null
+        }
+        Relationships: []
+      }
+      v_aoy_standings: {
+        Row: {
+          aoy_points: number | null
+          aoy_rank: number | null
+          blanks_fished: number | null
+          events_counted: number | null
+          events_fished: number | null
+          is_rookie: boolean | null
+          member_id: string | null
+          member_name: string | null
+        }
+        Relationships: []
+      }
+      v_event_points: {
+        Row: {
+          event_id: string | null
+          event_points: number | null
+          is_blank: boolean | null
+          member_id: string | null
+          place: number | null
+        }
+        Relationships: []
+      }
+      v_event_rank: {
+        Row: {
+          big_fish: number | null
+          event_id: string | null
+          member_id: string | null
+          place: number | null
+          total_weight: number | null
+        }
+        Relationships: []
+      }
+      v_rookie_of_year: {
+        Row: {
+          blanks_fished: number | null
+          events_counted: number | null
+          events_fished: number | null
+          member_name: string | null
+          roy_points: number | null
+          roy_rank: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_duplicate_email: {
@@ -1618,6 +1938,10 @@ export type Database = {
           _table_name: string
           _user_id?: string
         }
+        Returns: undefined
+      }
+      register_for_tournament: {
+        Args: { p_tournament_id: string }
         Returns: undefined
       }
       user_has_permission: {
