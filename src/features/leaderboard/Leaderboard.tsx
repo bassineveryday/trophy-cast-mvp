@@ -25,6 +25,7 @@ import { useDemoMode } from "@/contexts/DemoModeContext";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { supabase } from "@/integrations/supabase/client";
 import AOYStandings from "./AOYStandings";
+import { demoClub } from "@/demo/demoData";
 
 /* ------------ Types ------------ */
 type ChangeDir = "up" | "down" | "flat";
@@ -90,7 +91,29 @@ const Leaderboard = () => {
   const eventTitle = "Smith Lake Championship";
   const lastUpdated = "Updated 2 min ago";
   const [selectedTournament, setSelectedTournament] = useState("fall-classic");
-  const { role } = useDemoMode();
+  const { role, enabled } = useDemoMode();
+  const [userClubId, setUserClubId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchUserClub() {
+      if (enabled) {
+        // In demo mode, use the demo club ID
+        setUserClubId(demoClub.id);
+      } else {
+        // In production, fetch from user's profile
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('club_id')
+            .eq('user_id', user.id)
+            .single();
+          setUserClubId(profile?.club_id || null);
+        }
+      }
+    }
+    fetchUserClub();
+  }, [enabled]);
 
   // Tournament leaderboard data
   const tournamentLeaderboards = {
@@ -385,7 +408,13 @@ const Leaderboard = () => {
 
           {/* AOY */}
           <TabsContent value="aoy" className="space-y-4">
-            <AOYStandings />
+            {userClubId ? (
+              <AOYStandings clubId={userClubId} />
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                Please join a club to view AOY standings
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
