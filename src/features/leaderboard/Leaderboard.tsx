@@ -4,6 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   Trophy,
   TrendingUp,
@@ -15,11 +18,13 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import UniversalAvatar from "@/components/UniversalAvatar";
 import { PageHeader } from "@/components/PageHeader";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { supabase } from "@/integrations/supabase/client";
+import AOYStandings from "./AOYStandings";
 
 /* ------------ Types ------------ */
 type ChangeDir = "up" | "down" | "flat";
@@ -380,124 +385,7 @@ const Leaderboard = () => {
 
           {/* AOY */}
           <TabsContent value="aoy" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Award className="mr-2 h-5 w-5 text-trophy-gold" aria-hidden />
-                  <span>Angler of the Year Race</span>
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="space-y-3">
-                {AOY_STANDINGS.map((angler) => (
-                  <div
-                    key={angler.id}
-                    className={[
-                      "rounded-lg border p-4 transition-colors",
-                      angler.isUser ? "border-primary bg-accent" : "hover:bg-muted/50",
-                    ].join(" ")}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex h-8 w-8 items-center justify-center">
-                          <RankIcon rank={angler.rank} />
-                        </div>
-
-                        <UniversalAvatar
-                          name={angler.name}
-                          photoUrl="/placeholder.svg"
-                          club={{
-                            id: angler.anglerId.includes("patterson") ? "alabama-bass-nation" :
-                                angler.anglerId.includes("santos") ? "river-valley" :
-                                angler.anglerId.includes("tommy") ? "trophy-cast" : "alabama-bass-nation",
-                            abbreviation: angler.anglerId.includes("patterson") ? "ABN-12" :
-                                         angler.anglerId.includes("santos") ? "RVIBC" :
-                                         angler.anglerId.includes("tommy") ? "TCES" : "ABN-12"
-                          }}
-                          role={angler.rank === 1 ? "AOY Champion" : "Tournament Angler"}
-                          city={angler.anglerId.includes("patterson") ? "Huntsville, AL" :
-                               angler.anglerId.includes("santos") ? "Nashville, TN" :
-                               angler.anglerId.includes("tommy") ? "Birmingham, AL" : "Alabama"}
-                          anglerId={angler.anglerId}
-                          size="card"
-                          isAOYChampion={angler.rank === 1}
-                          className={angler.isUser ? "border-primary" : ""}
-                        />
-
-                        <div>
-                          <p 
-                            className="font-semibold cursor-pointer hover:text-primary transition-colors"
-                            onClick={() => window.location.href = `/anglers/${angler.anglerId}`}
-                          >
-                            {angler.name}
-                            {angler.isUser && <span className="ml-1 text-xs text-primary">(You)</span>}
-                          </p>
-                          <p className="text-sm text-muted-foreground">Earnings: {angler.earnings}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-2 text-right">
-                        <div>
-                          <div className="text-lg font-bold">{angler.points}</div>
-                          <div className="text-xs text-muted-foreground">points</div>
-                        </div>
-                        
-                        {!angler.isUser && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="w-8 h-8 text-muted-foreground hover:text-primary"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.location.href = `/messages/new?to=${angler.anglerId}`;
-                            }}
-                            aria-label={`Message ${angler.name}`}
-                          >
-                            <MessageSquare className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="py-2 text-center">
-                  <div className="text-sm text-muted-foreground" aria-hidden>
-                    …
-                  </div>
-                </div>
-
-                <div className="pt-4 text-center">
-                  <Button asChild variant="outline" size="sm">
-                    <Link to="/aoy">View Full AOY Standings</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AOY Progress */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Your AOY Progress</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">1,247</div>
-                  <div className="text-sm text-muted-foreground">Total Points</div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <div className="text-lg font-semibold text-success">+85</div>
-                    <div className="text-xs text-muted-foreground">Points This Month</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-semibold text-fishing-green">3</div>
-                    <div className="text-xs text-muted-foreground">Spots Gained</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <AOYStandings />
           </TabsContent>
         </Tabs>
       </div>
