@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { mockClubInbox } from "@/data/mockMessages";
+import DOMPurify from 'dompurify';
 
 const ClubInboxDetail = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -47,7 +48,12 @@ const ClubInboxDetail = () => {
         {/* Content */}
         <div className="prose prose-sm max-w-none">
           <div 
-            dangerouslySetInnerHTML={{ __html: item.content }}
+            dangerouslySetInnerHTML={{ 
+              __html: DOMPurify.sanitize(item.content, {
+                ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'a'],
+                ALLOWED_ATTR: ['href', 'target', 'rel']
+              })
+            }}
             className="space-y-4"
           />
         </div>

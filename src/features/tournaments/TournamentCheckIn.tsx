@@ -59,7 +59,7 @@ export default function TournamentCheckIn() {
           .eq('user_id', user.id) as any;
         
         const isOfficerRole = roleData?.some((r: any) => 
-          ['president', 'vice_president', 'tournament_director', 'club_admin', 'secretary'].includes(r.role_name)
+          ['president', 'vice_president', 'tournament_director', 'club_admin', 'secretary'].includes(r.club_role)
         );
 
         if (!isOfficerRole) {

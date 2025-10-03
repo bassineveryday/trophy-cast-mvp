@@ -49,10 +49,12 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@supabase/supabase-js": "^2.58.0",
     "@tanstack/react-query": "^5.83.0",
+    "@types/dompurify": "^3.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "dompurify": "^3.2.7",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.19",
     "input-otp": "^1.4.2",
@@ -75,6 +77,8 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@tailwindcss/typography": "^0.5.16",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -86,14 +90,12 @@
     "globals": "^15.15.0",
     "lovable-tagger": "^1.1.9",
     "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "rollup-plugin-visualizer": "^6.0.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",
-    "prettier": "^3.6.2",
-    "rollup-plugin-visualizer": "^6.0.3",
-    "vitest": "^3.2.4",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0"
+    "vitest": "^3.2.4"
   }
 }

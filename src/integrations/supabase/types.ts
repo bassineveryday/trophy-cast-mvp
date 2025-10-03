@@ -1963,6 +1963,10 @@ export type Database = {
         Args: { _user_id: string }
         Returns: boolean
       }
+      is_super_admin: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
       is_valid_email: {
         Args: { email: string }
         Returns: boolean
