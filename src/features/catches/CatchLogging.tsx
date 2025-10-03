@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Camera, 
   Clock,
@@ -19,8 +20,10 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/PageHeader";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { createCatch, CreateCatchDTO } from "./api";
 
 const CatchLogging = () => {
+  const [species, setSpecies] = useState<"Largemouth" | "Smallmouth" | "Spotted" | "Other">("Largemouth");
   const [weight, setWeight] = useState("");
   const [length, setLength] = useState("");
   const [location, setLocation] = useState("");
@@ -100,35 +103,28 @@ const CatchLogging = () => {
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/catches", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          weight,
-          length,
-          location,
-          notes,
-          photos,
-        }),
-      });
+      // Convert pounds to ounces, inches to millimeters
+      const weightInOz = parseFloat(weight) * 16;
+      const lengthInMm = parseFloat(length) * 25.4;
 
-      if (!res.ok) {
-        toast({
-          title: "Failed to log catch",
-          description: "Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
+      const catchDTO: CreateCatchDTO = {
+        species,
+        weight_oz: weightInOz,
+        length_mm: lengthInMm,
+        notes: notes || undefined,
+        // TODO: Add photo_key when photo upload is implemented
+        // TODO: Add tournament_id if catch is during tournament
+      };
+
+      const result = await createCatch(catchDTO);
 
       toast({
-        title: "Catch Logged Successfully!",
-        description: `Your ${weight} lb, ${length}" bass has been recorded in the tournament.`,
+        title: `Catch Logged Successfully! (${(result as any)._lane})`,
+        description: `Your ${weight} lb, ${length}" ${species} bass has been recorded.`,
       });
 
       // Reset form
+      setSpecies("Largemouth");
       setWeight("");
       setLength("");
       setLocation("");
@@ -137,9 +133,10 @@ const CatchLogging = () => {
       setVoiceInput("");
       setIsListening(false);
     } catch (error) {
+      console.error("Failed to log catch:", error);
       toast({
         title: "Failed to log catch",
-        description: "Please check your connection and try again.",
+        description: error instanceof Error ? error.message : "Please check your connection and try again.",
         variant: "destructive",
       });
     } finally {
@@ -272,6 +269,21 @@ const CatchLogging = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="species">Species</Label>
+              <Select value={species} onValueChange={(value: any) => setSpecies(value)}>
+                <SelectTrigger id="species">
+                  <SelectValue placeholder="Select species" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Largemouth">Largemouth Bass</SelectItem>
+                  <SelectItem value="Smallmouth">Smallmouth Bass</SelectItem>
+                  <SelectItem value="Spotted">Spotted Bass</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="weight">Weight (lbs)</Label>
               <div className="relative">
