@@ -31,6 +31,8 @@ export default function AOYStandings() {
   const [rookieStandings, setRookieStandings] = useState<AOYStanding[]>([]);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [biggestBass, setBiggestBass] = useState<number | null>(null);
+  const [totalEarnings, setTotalEarnings] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -71,6 +73,49 @@ export default function AOYStandings() {
         const userStanding = mappedStandings?.find(s => s.member_id === user.id);
         if (userStanding) {
           setUserStats(userStanding as UserStats);
+        }
+
+        // Query for biggest bass of the season
+        const { data: biggestBassData } = await supabase
+          .from('tournament_results')
+          .select('big_bass_lbs, event_date')
+          .eq('member_id', user.id)
+          .not('big_bass_lbs', 'is', null)
+          .order('big_bass_lbs', { ascending: false })
+          .limit(1);
+
+        if (biggestBassData && biggestBassData.length > 0) {
+          const result = biggestBassData[0];
+          // Check if the event date is in the selected season
+          const eventYear = result.event_date ? new Date(result.event_date).getFullYear() : null;
+          if (eventYear === parseInt(selectedSeason)) {
+            setBiggestBass(result.big_bass_lbs);
+          } else {
+            setBiggestBass(null);
+          }
+        } else {
+          setBiggestBass(null);
+        }
+
+        // Query for total earnings of the season
+        const { data: earningsData } = await supabase
+          .from('tournament_results')
+          .select('cash_payout, event_date')
+          .eq('member_id', user.id);
+
+        if (earningsData) {
+          // Filter by season and sum payouts
+          const seasonEarnings = earningsData
+            .filter(r => {
+              if (!r.event_date) return false;
+              const eventYear = new Date(r.event_date).getFullYear();
+              return eventYear === parseInt(selectedSeason);
+            })
+            .reduce((sum, r) => sum + (r.cash_payout || 0), 0);
+          
+          setTotalEarnings(seasonEarnings);
+        } else {
+          setTotalEarnings(0);
         }
       }
 
@@ -152,8 +197,8 @@ export default function AOYStandings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-center">
-              <div className="text-5xl font-bold text-water-blue">{userStats.aoy_rank}</div>
-              <div className="text-sm text-muted-foreground mt-1">Current Rank</div>
+              <div className="text-5xl font-bold text-water-blue mb-1">{userStats.aoy_rank}</div>
+              <div className="text-sm text-muted-foreground">Current Rank</div>
             </div>
 
             <div className="grid grid-cols-3 gap-4 text-center">
@@ -163,11 +208,26 @@ export default function AOYStandings() {
               </div>
               <div>
                 <div className="text-2xl font-bold">—</div>
-                <div className="text-xs text-muted-foreground">Events Fished</div>
+                <div className="text-xs text-muted-foreground">Events Counted</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-fishing-green">—</div>
-                <div className="text-xs text-muted-foreground">Events Counted</div>
+                <div className="text-2xl font-bold text-fishing-green">
+                  {biggestBass !== null ? `${biggestBass.toFixed(2)} 🐟` : 'No bass recorded'}
+                </div>
+                <div className="text-xs text-muted-foreground">Biggest Bass (lbs)</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-trophy-gold">
+                  💰 ${(totalEarnings || 0).toFixed(2)}
+                </div>
+                <div className="text-xs text-muted-foreground">Total Earnings</div>
+              </div>
+              <div className="opacity-0">
+                <div className="text-2xl font-bold">—</div>
+                <div className="text-xs text-muted-foreground">Spacer</div>
               </div>
             </div>
 
