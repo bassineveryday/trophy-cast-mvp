@@ -1062,6 +1062,8 @@ export type Database = {
           id: string
           member_id: string
           season: number | null
+          tournament_id: string | null
+          user_id: string | null
         }
         Insert: {
           checked_in?: boolean | null
@@ -1070,6 +1072,8 @@ export type Database = {
           id?: string
           member_id: string
           season?: number | null
+          tournament_id?: string | null
+          user_id?: string | null
         }
         Update: {
           checked_in?: boolean | null
@@ -1078,35 +1082,46 @@ export type Database = {
           id?: string
           member_id?: string
           season?: number | null
+          tournament_id?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
       tournament_events: {
         Row: {
+          created_at: string | null
           event_date: string | null
           event_id: string
+          id: string | null
           lake: string | null
           participants: number | null
           season: number | null
           tournament_code: string | null
+          tournament_id: string | null
           tournament_name: string | null
         }
         Insert: {
+          created_at?: string | null
           event_date?: string | null
           event_id: string
+          id?: string | null
           lake?: string | null
           participants?: number | null
           season?: number | null
           tournament_code?: string | null
+          tournament_id?: string | null
           tournament_name?: string | null
         }
         Update: {
+          created_at?: string | null
           event_date?: string | null
           event_id?: string
+          id?: string | null
           lake?: string | null
           participants?: number | null
           season?: number | null
           tournament_code?: string | null
+          tournament_id?: string | null
           tournament_name?: string | null
         }
         Relationships: []
@@ -1158,6 +1173,8 @@ export type Database = {
       }
       tournament_registrations: {
         Row: {
+          checked_in: boolean | null
+          checked_in_at: string | null
           created_at: string | null
           id: string
           status: string | null
@@ -1165,6 +1182,8 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          checked_in?: boolean | null
+          checked_in_at?: string | null
           created_at?: string | null
           id?: string
           status?: string | null
@@ -1172,6 +1191,8 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          checked_in?: boolean | null
+          checked_in_at?: string | null
           created_at?: string | null
           id?: string
           status?: string | null
@@ -1886,9 +1907,21 @@ export type Database = {
         Args: { email: string }
         Returns: boolean
       }
+      check_in_angler: {
+        Args: {
+          p_is_checked_in: boolean
+          p_tournament_id: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       cleanup_old_staging_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      create_event_for_today: {
+        Args: { p_tournament_id: string }
+        Returns: string
       }
       get_club_member_count: {
         Args: { club_uuid: string }
@@ -1942,6 +1975,10 @@ export type Database = {
       }
       register_for_tournament: {
         Args: { p_tournament_id: string }
+        Returns: undefined
+      }
+      seed_entries_for_event: {
+        Args: { p_event_id: string }
         Returns: undefined
       }
       user_has_permission: {

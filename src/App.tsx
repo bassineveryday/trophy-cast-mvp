@@ -41,7 +41,8 @@ import AICoachAtLake from "@/features/ai-coach/AICoachAtLakePlaceholder";
 
 // Tournament Features
 import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
-import TournamentDetail from "@/features/tournaments/TournamentDetailPlaceholder";
+import TournamentDetail from "@/features/tournaments/TournamentDetail";
+import TournamentCheckIn from "@/features/tournaments/TournamentCheckIn";
 
 // Club Features
 import ClubDashboard from "@/features/clubs/ClubDashboardPlaceholder";
@@ -83,6 +84,7 @@ const App = () => (
                 
                 {/* Tournament Routes */}
                 <Route path="tournaments/dashboard" element={<ProtectedRoute><TournamentDashboard /></ProtectedRoute>} />
+                <Route path="tournaments/:tournamentId/check-in" element={<ProtectedRoute><TournamentCheckIn /></ProtectedRoute>} />
                 <Route path="tournaments/:id" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
                 
                 {/* Profile Routes */}

@@ -44,6 +44,7 @@ export default function TournamentDetail() {
   const [isUserRegistered, setIsUserRegistered] = useState(false);
   const [participantCount, setParticipantCount] = useState(0);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isOfficer, setIsOfficer] = useState(false);
   
   // Get tournament data
   const { data: realTournament } = useTournament(tournamentId || '');
@@ -60,18 +61,29 @@ export default function TournamentDetail() {
     
     async function fetchRegistrationData() {
       try {
-        // Check if current user is registered
         const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { data: registrationData } = await supabase
-            .from('tournament_registrations')
-            .select('*')
-            .eq('tournament_id', tournamentId)
-            .eq('user_id', user.id)
-            .maybeSingle();
-          
-          setIsUserRegistered(!!registrationData);
-        }
+        if (!user) return;
+        
+        // Check if user is club officer
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('*')
+          .eq('user_id', user.id) as any;
+        
+        const isOfficerRole = roleData?.some((r: any) => 
+          ['president', 'vice_president', 'tournament_director', 'club_admin', 'secretary'].includes(r.role_name)
+        );
+        setIsOfficer(isOfficerRole || false);
+        
+        // Check if current user is registered
+        const { data: registrationData } = await supabase
+          .from('tournament_registrations')
+          .select('*')
+          .eq('tournament_id', tournamentId)
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setIsUserRegistered(!!registrationData);
         
         // Get participant count
         const { count } = await supabase
@@ -247,7 +259,18 @@ export default function TournamentDetail() {
             </div>
 
             {/* Registration Button */}
-            <div className="hidden md:block">
+            <div className="hidden md:flex flex-col gap-2">
+              {isOfficer && (
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white/10 backdrop-blur-sm text-white border-white/20 hover:bg-white/20 px-6"
+                  onClick={() => navigate(`/tournaments/${tournamentId}/check-in`)}
+                >
+                  <Users className="w-5 h-5 mr-2" />
+                  Check-In
+                </Button>
+              )}
               {isUserRegistered ? (
                 <Badge className="bg-fishing-green text-white px-6 py-3 text-lg">
                   <CheckCircle className="w-5 h-5 mr-2" />
