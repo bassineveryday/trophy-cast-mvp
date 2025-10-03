@@ -1852,55 +1852,104 @@ export type Database = {
     Views: {
       v_aoy_best4: {
         Row: {
-          aoy_total_best4: number | null
-          blanks_fished: number | null
-          events_counted: number | null
-          events_fished: number | null
           member_id: string | null
+          member_name: string | null
+          season: number | null
+          total_points: number | null
         }
         Relationships: []
       }
       v_aoy_standings: {
         Row: {
-          aoy_points: number | null
           aoy_rank: number | null
-          blanks_fished: number | null
-          events_counted: number | null
-          events_fished: number | null
-          is_rookie: boolean | null
+          boater_status: string | null
           member_id: string | null
           member_name: string | null
+          season_year: number | null
+          total_aoy_points: number | null
+        }
+        Insert: {
+          aoy_rank?: number | null
+          boater_status?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          season_year?: number | null
+          total_aoy_points?: number | null
+        }
+        Update: {
+          aoy_rank?: number | null
+          boater_status?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          season_year?: number | null
+          total_aoy_points?: number | null
         }
         Relationships: []
       }
       v_event_points: {
         Row: {
+          aoy_points: number | null
           event_id: string | null
-          event_points: number | null
-          is_blank: boolean | null
           member_id: string | null
+          member_name: string | null
           place: number | null
+          season: number | null
+        }
+        Insert: {
+          aoy_points?: number | null
+          event_id?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          season?: number | null
+        }
+        Update: {
+          aoy_points?: number | null
+          event_id?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          season?: number | null
         }
         Relationships: []
       }
       v_event_rank: {
         Row: {
-          big_fish: number | null
+          big_bass_lbs: number | null
           event_id: string | null
           member_id: string | null
+          member_name: string | null
           place: number | null
+          season: number | null
           total_weight: number | null
+        }
+        Insert: {
+          big_bass_lbs?: number | null
+          event_id?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          season?: number | null
+          total_weight?: number | null
+        }
+        Update: {
+          big_bass_lbs?: number | null
+          event_id?: string | null
+          member_id?: string | null
+          member_name?: string | null
+          place?: number | null
+          season?: number | null
+          total_weight?: number | null
         }
         Relationships: []
       }
       v_rookie_of_year: {
         Row: {
-          blanks_fished: number | null
-          events_counted: number | null
           events_fished: number | null
+          member_id: string | null
           member_name: string | null
-          roy_points: number | null
-          roy_rank: number | null
+          season: number | null
+          total_points: number | null
         }
         Relationships: []
       }
