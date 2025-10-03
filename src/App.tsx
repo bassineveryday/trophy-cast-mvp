@@ -40,7 +40,7 @@ import AICoachPreTrip from "@/features/ai-coach/AICoachPreTripPlaceholder";
 import AICoachAtLake from "@/features/ai-coach/AICoachAtLakePlaceholder";
 
 // Tournament Features
-import TournamentDashboard from "@/features/tournaments/TournamentDashboardPlaceholder";
+import TournamentDashboard from "@/features/tournaments/TournamentDashboard";
 import TournamentDetail from "@/features/tournaments/TournamentDetailPlaceholder";
 
 // Club Features
