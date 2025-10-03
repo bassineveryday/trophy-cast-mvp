@@ -408,13 +408,7 @@ const Leaderboard = () => {
 
           {/* AOY */}
           <TabsContent value="aoy" className="space-y-4">
-            {userClubId ? (
-              <AOYStandings clubId={userClubId} />
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                Please join a club to view AOY standings
-              </div>
-            )}
+            <AOYStandings clubId={userClubId || undefined} />
           </TabsContent>
         </Tabs>
       </div>

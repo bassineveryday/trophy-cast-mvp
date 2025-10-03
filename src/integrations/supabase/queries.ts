@@ -34,3 +34,30 @@ export async function fetchAOYStandings(seasonYear?: number) {
   if (error) throw error;
   return data ?? [];
 }
+
+/**
+ * Fetch AOY standings for current user's club using RPC (lane-safe)
+ * No parameters needed - automatically filtered by user's lane and club
+ * TODO: Add to Supabase types when regenerating
+ */
+export async function fetchAOYForMyClub() {
+  const { data, error } = await (supabase.rpc as any)('aoy_for_current_user_demo');
+  
+  if (error) throw error;
+  return data ?? [];
+}
+
+/**
+ * Fetch event points for current user's club using RPC (lane-safe)
+ * Optionally filter by specific event ID
+ * TODO: Add to Supabase types when regenerating
+ */
+export async function fetchEventPointsForMyClub(eventId?: string) {
+  const { data, error } = await (supabase.rpc as any)(
+    'event_points_for_current_user_demo',
+    eventId ? { p_event_id: eventId } : {}
+  );
+  
+  if (error) throw error;
+  return data ?? [];
+}

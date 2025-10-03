@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAOYStandingsByClub } from "@/integrations/supabase/queries";
+import { fetchAOYStandingsByClub, fetchAOYForMyClub } from "@/integrations/supabase/queries";
 
 type AOYRow = {
   member_id: string;
@@ -11,22 +11,20 @@ type AOYRow = {
   club_id: string;
 };
 
-export default function AOYStandings({ clubId }: { clubId: string }) {
+export default function AOYStandings({ clubId }: { clubId?: string }) {
   const [rows, setRows] = useState<AOYRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!clubId) {
-      setErr("Missing clubId");
-      setLoading(false);
-      return;
-    }
     let alive = true;
     (async () => {
       try {
         setLoading(true);
-        const data = await fetchAOYStandingsByClub(clubId);
+        // Use RPC if no clubId provided (lane-safe fallback)
+        const data = clubId 
+          ? await fetchAOYStandingsByClub(clubId)
+          : await fetchAOYForMyClub();
         if (alive) setRows(data as AOYRow[]);
       } catch (e: any) {
         if (alive) setErr(e?.message ?? "Failed to load AOY standings");
