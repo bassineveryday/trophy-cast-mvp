@@ -2013,6 +2013,7 @@ export type Database = {
         Row: {
           aoy_rank: number | null
           boater_status: string | null
+          club_id: string | null
           member_id: string | null
           member_name: string | null
           season_year: number | null
